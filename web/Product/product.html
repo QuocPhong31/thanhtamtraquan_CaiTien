@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Chi tiết sản phẩm</title>
+  <link rel="stylesheet" href="../Style/styleProduct.css">
+</head>
+<body>
+  <div id="product-detail">Đang tải...</div>
+
+<script>
+  // nếu API của bạn chạy trên Flask ở 5000, để API_BASE = "http://127.0.0.1:5000"
+  // nếu bạn không có API, bạn có thể embed dữ liệu hoặc đọc JSON tĩnh.
+  const API_BASE = "http://127.0.0.1:5000"; // chỉnh theo môi trường
+
+  // Lấy id từ query string: ?id=1
+  const params = new URLSearchParams(location.search);
+  const productId = params.get('id');
+
+  function escapeHtml(s){ if(!s) return ""; return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+
+  if (!productId) {
+    document.getElementById('product-detail').innerHTML = "<p>Không xác định sản phẩm.</p>";
+  } else {
+    async function loadProduct() {
+      try {
+        const res = await fetch(`${API_BASE}/api/products/${productId}`);
+        if (!res.ok) throw new Error("Không tìm thấy sản phẩm (api trả lỗi " + res.status + ")");
+        const p = await res.json();
+
+        const img = p.image ? (p.image.startsWith('/') ? '.' + p.image : p.image) : '../images/placeholder.jpg';
+
+        const html = `
+          <div class="product-detail-box">
+            <img src="${img}" class="detail-img" alt="${escapeHtml(p.title)}">
+            <h1>${escapeHtml(p.title)}</h1>
+            <h2>${new Intl.NumberFormat('vi-VN').format(p.price||0)}đ</h2>
+            <p>${escapeHtml(p.description)}</p>
+            <p><a href="../index.html">Trở về trang chủ</a></p>
+          </div>
+        `;
+        document.getElementById('product-detail').innerHTML = html;
+      } catch (err) {
+        document.getElementById('product-detail').innerHTML = `<p style="color:red">Lỗi: ${err.message}</p>`;
+      }
+    }
+    loadProduct();
+  }
+</script>
+</body>
+</html>

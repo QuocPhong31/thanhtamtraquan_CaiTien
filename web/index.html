@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!--    <link
+      href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Pacifico&display=swap"
+      rel="stylesheet"
+    />  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Calistoga&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Favicon mặc định -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+
+    <!-- Apple Touch Icon (dành cho iOS) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.ico">
+
+    <!-- Favicon dự phòng cho URL tuyệt đối -->
+    <link rel="icon" href="https://shop.thanhtamtraquan.com/favicon.ico" type="image/x-icon">
+
+    <!-- custom css -->
+         <link rel="stylesheet" href="./style.css" />    
+         <!-- <style> </style>     -->
+          
+    <title>Thanh Tâm Trà Quán - Trà Ô Long & Đặc Sản Triều Châu</title>
+    <meta name="description" content="Thanh Tâm Trà Quán - Thưởng thức trà ô long, trà đặc sản Triều Châu. Mua hàng online, giao hàng toàn quốc." />
+    <meta name="keywords" content="trà oolong, trà thanh tâm, trà đặc sản, mua trà online, trà Triều Châu">
+    <meta name="author" content="Thanh Tâm Trà Quán">
+    <meta name="robots" content="index, follow">
+  </head>
+  <body>
+    <!-- nav button -->
+    <span class="nav-btn" id="nav-btn">
+      <i class="fas fa-bars" style="color: #2cf825;"></i>
+    </span>
+    <!-- end of nav button  -->
+
+   <!-- navbar-->
+<nav class="navbar" id="navbar" style="background-color: black; width: 200px; padding: 20px;">
+  <div class="navbar-header">
+    <span class="nav-close" id="nav-close">
+      <i class="fas fa-times" style="color: rgb(107, 235, 95);"></i>
+    </span>
+  </div>
+  <ul class="nav-items" style="list-style: none; padding: 0; margin: 0;">
+    <li style="margin-bottom: 15px;">
+      <a href="#home" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
+        <i class="fas fa-home" style="margin-right: 10px;"></i>Trang chủ
+      </a>
+    </li>
+    <li style="margin-bottom: 15px;">
+      <a href="#pageA" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
+        <i class="fas fa-info-circle" style="margin-right: 10px;"></i>Thông tin
+      </a>
+    </li>
+    <li style="margin-bottom: 15px;">
+      <a href="#product" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
+        <i class="fas fa-box-open" style="margin-right: 10px;"></i>Sản phẩm
+      </a>
+    </li>
+    <li style="margin-bottom: 15px;">
+      <a href="#contact" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
+        <i class="fas fa-envelope" style="margin-right: 10px;"></i>Liên hệ
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+
+    <!-- header -->
+    <header class="header" id="home">
+      <div class="banner">
+        
+        <h3 class="banner-subtitle" style="color: rgb(107, 235, 95); white-space: nowrap; font-family: 'Calistoga', cursive;">
+          Thanh Tâm Trà Quán🍵
+        </h3>
+        <h1 class="banner-title"></h1>
+        <a href="#" id="explore-btn" class="banner-btn">Cùng khám phá</a>
+      </div>
+    </header>
+    
+<!-- end of header -->
+
+<!-- Story section -->
+<section class="story" id="story">
+  <!-- Story Page 1 -->
+  <div id="page1" class="story-content active">
+    <h2 class="section-title">Câu chuyện của Thanh Tâm Trà Quán</h2>
+    <p>Giữa những bộn bề của cuộc sống, Thanh Tâm Trà Quán là nơi bạn có thể tìm về với sự tĩnh lặng. 
+      Mỗi chén trà mang đến một hương vị độc đáo, nhưng điểm chung là sự an yên trong từng hơi thở. 
+      Câu chuyện của quán bắt đầu từ những chén trà đơn giản, nhưng mỗi giọt lại chứa đựng bao tâm tư, 
+      cảm xúc của người pha trà và người thưởng trà.</p>
+
+    <p>Khi nhấp một ngụm trà, bạn sẽ nhận thấy vị đắng thoáng qua, nhưng ngay sau đó,
+       vị ngọt nhẹ nhàng lan tỏa, giống như cuộc sống, luôn có những khoảnh khắc khó khăn, 
+       nhưng nếu ta biết dừng lại và cảm nhận, sự an lạc sẽ đến từ chính bên trong.</p>
+
+    <p>Thanh Tâm Trà Quán không chỉ là nơi uống trà, mà còn là nơi lắng nghe 
+      và chia sẻ câu chuyện cuộc sống.</p>
+    <a href="#" id="continue-btn" class="banner-btn">Khám phá tiếp</a>
+  </div>
+
+  <!-- Story Page 2 -->
+  <div id="page2" class="story-content">
+    <h2 class="section-title">Tiếp tục câu chuyện</h2>
+    <p>Trong hành trình tìm hiểu về trà, bạn sẽ khám phá thêm nhiều điều thú vị về quy trình chế biến,
+       các loại trà khác nhau và cách chúng tạo ra trải nghiệm thưởng thức tuyệt vời. Mỗi câu chuyện
+       của các loại trà đều gắn liền với lịch sử và văn hóa của vùng đất nơi chúng được trồng.</p>
+    <p>Hãy cùng chúng tôi tiếp tục khám phá thế giới trà và tìm hiểu sâu hơn về những bí mật thú vị
+       mà mỗi chén trà mang lại.</p>
+    <a href="#" id="back-btn" class="banner-btn">Quay lại</a>
+  </div>
+</section>
+
+
+
+    <!-- content divider -->
+    <div class="content-divider"></div>
+    <!-- end of ontent divider -->
+
+    <!-- skills section -->
+    <section class="skills clearfix">
+      <!-- single skill -->
+      <article class="skill">
+        <span class="skill-icon">
+          <i class="fas fa-mug-hot"></i>
+        </span>
+        <h3 class="skill-title">Triều Châu</h3>
+        <p class="skill-text">
+          được biết đến với văn hóa trà đạo lâu đời mà còn là nơi 
+          sản xuất các sản phẩm gốm sứ và ấm trà cao cấp
+        </p>
+      </article>
+      <!-- end of single skill -->
+      <!-- single skill -->
+      <article class="skill">
+        <span class="skill-icon">
+          <i class="fas fa-glass-cheers"></i>
+        </span>
+        <h3 class="skill-title">Thư giãn</h3>
+        <p class="skill-text">
+          Một tách trà ấm, không gian yên tĩnh, và hương thơm nhẹ nhàng sẽ giúp
+         bạn quên đi mọi lo toan của cuộc sống, mang đến cảm giác an nhiên và bình yên
+        </p>
+      </article>
+      <!-- end of single skill -->
+      <!-- single skill -->
+      <article class="skill">
+        <span class="skill-icon">
+          <i class="fas fa-bomb"></i>
+        </span>
+        <h3 class="skill-title">Năng lượng</h3>
+        <p class="skill-text">
+          Năng lượng không chỉ đến từ dinh dưỡng mà còn từ sự kết nối giữa cơ thể và tinh thần. 
+          Trà không chỉ tiếp thêm sinh lực mà còn mang lại sự tập trung và tinh thần thoải mái.
+        </p>
+      </article>
+      <!-- end of single skill -->
+      <!-- single skill -->
+      <article class="skill">
+        <span class="skill-icon">
+          <i class="fas fa-mortar-pestle"></i>
+        </span>
+        <h3 class="skill-title">Công thức gia truyền</h3>
+        <p class="skill-text">
+         Mang đậm dấu ấn văn hóa và truyền thống. 
+         Những công thức này thường gắn bó với những khoảnh khắc sum vầy,
+          mang lại hương vị đặc biệt và cảm giác ấm cúng mỗi khi thưởng thức.
+        </p>
+      </article>
+      <!-- end of single skill -->
+    </section>
+    <!-- end of skills section -->
+
+<!-- about section -->
+<section class="about">
+  <div class="section-center clearfix">
+    <!-- first column -->
+    <article class="about-img">
+      <div class="about-pic-container">
+        <img src="./images/about-bcg.jpg" alt="tea" class="about-pic" loading="lazy"/>
+      </div>
+    </article>
+    <!-- second column -->
+    <article class="about-info">
+      <!-- section title -->
+       <!-- Phần nội dung của trang A -->
+      <div id="pageA" class="page active">
+      <div>
+        <h3 class="banner-subtitle" style="color: #46fc6d;">Trạm Trà</h3>
+        <h2 class="section-title">Nơi Hương Vị Hội Tụ</h2>
+      </div>
+      <!-- end of section title -->
+
+        <p class="about-text">
+          Thanh Tâm Trà Quán đã trải nghiệm thực tế tại núi Phượng Hoàng, 
+          Triều Châu nhằm tuyển lựa các khu vực trồng và chế biến trà ô long đơn tùng chất lượng tốt 
+          nhất phục vụ khách hàng yêu thích thức uống giản dị nhưng hàm chứa nhiều công dụng tốt cho sức khỏe.
+        </p>
+        <a onclick="showPage('pageB')" class="main-btn">Xem tiếp</a>
+      </div>
+
+      <!-- Phần nội dung của trang B -->
+      <div id="pageB" class="page" style="display: none;">
+        <div>
+          <h3 class="banner-subtitle"style="color: #46fc6d; font-size: 45px;">Khám phá câu chuyện của chúng tôi</h3>
+          <h2 class="section-title"></h2>
+        </div>
+        <!-- End of Section Title -->
+        <p class="about-text">
+          Núi Phượng Hoàng là một trong những vùng trồng trà Ô Long nổi tiếng nhất ở Triều Châu,Trung Quốc. Chúng tôi
+          đã bắt đầu hành trình đến khu vực thường được gọi là "Trà Phượng Hoàng" hoặc "Phoenix Tea" để mang đến cho bạn  
+          những loại trà ngon nhất với hương vị đặc biệt và chất lượng cao, nhờ vào sự kết hợp của đất đai, khí hậu, và kỹ thuật 
+          chế biến truyền thống ở núi Phượng Hoàng. Niềm đam mê trà đã giúp chúng tôi tìm ra những cách pha trộn và 
+          hương vị độc đáo mang lại cảm giác thoải mái và phấn khích cho người uống.
+        </p>
+        <p class="about-text">
+          Chúng tôi tin vào hương vị của trà trong việc gắn kết mọi người lại với nhau, 
+          xoa dịu tâm hồn và tiếp thêm sinh lực cho tâm trí. 
+          Hãy cùng chúng tôi khám phá những truyền thống phong phú và 
+          những đổi mới hiện đại trong thế giới trà.
+        </p>
+        <button onclick="showPage('pageA')" class="main-btn">Trở lại</button>
+      </div>
+    </article>
+  </div>
+</section>
+    
+    <!-- end of about section -->
+
+
+    <section class="products">
+      <div id="product" class="section-center clearfix">
+        <!-- product info -->
+        <article class="products-info">
+          <!-- section title -->
+          <div>
+            <h3 class="banner-subtitle" style="color: #46fc6d; text-align: center;" >Sản Phẩm Trà</h3>
+            <h2 class="section-title text-white"></h2>
+          </div>
+          <!-- end of section title -->
+          <p class="product-text" style="font-size: 20px;">
+            Mỗi ngụm trà không chỉ giúp thanh lọc cơ thể
+            mà còn mang lại cảm giác thư thái, giảm căng thẳng sau mỗi ngày làm việc.
+          </p>
+        </article>
+    
+        <!-- product inventory -->
+        <article class="products-inventory clearfix">
+          <!-- container sẽ được JS populate -->
+          <div id="products-container" class="products-grid clearfix"></div>
+
+    
+        <!-- Nút "Xem thêm" -->
+        <div class="view-more-btn" style="text-align: center;">
+          <button id="view-more" class="main-btn" onclick="showMoreProducts()">Xem thêm</button>
+        </div>
+      </div>
+    </section>
+    
+    
+
+<!-- teapots -->
+<section class="productsTeapot">
+  <div class="section-center clearfix">
+    <!-- product info -->
+    <article class="products-info">
+      <div>
+        <h3 class="banner-subtitle" style="color: #46fc6d; text-align: center;">Sản Phẩm Ấm Trà</h3>
+        <h2 class="section-title text-white"></h2>
+      </div>
+      <p class="product-text" style="font-size: 20px;">
+        Bộ sưu tập ấm trà độc đáo, mang đậm nét văn hóa trà đạo Triều Châu.<br>
+        Mỗi sản phẩm được chế tác từ chất liệu cao cấp, giúp giữ nhiệt và tăng cường hương vị cho từng tách trà.
+      </p>
+    </article>
+
+    <!-- teapot products -->
+    <article class="product">
+      <a href="./Product/productTea1.html" class="product-link">
+        <img src="./images/productTea1.jpg" alt="product" class="product-img" loading="lazy"/>
+        <span class="details-overlay">Chi tiết</span>
+      </a>
+      <a href="./Product/productTea1.html" class="product-link">
+      <h3 class="product-title">Bộ Khải pha trà</h3>
+      </a>
+      <h3 class="product-price">380.000đ</h3>
+    </article>
+
+    <article class="product">
+      <a href="./Product/productTea2.html" class="product-link">
+        <img src="./images/productTea2.jpg" alt="product" class="product-img" loading="lazy"/>
+        <span class="details-overlay">Chi tiết</span>
+      </a>
+      <a href="./Product/productTea2.html" class="product-link">
+      <h3 class="product-title">Ấm Tử Sa</h3>
+      </a>
+      <h3 class="product-price">728.000đ</h3>
+    </article>
+
+      <!-- <article class="product">
+        <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
+        <h3 class="product-title" style="color: rgb(247, 252, 247);">Ấm Trà Gốm</h3>
+        <h3 class="product-price">1.500.000đ</h3>
+      </article> -->
+
+      <!-- Các sản phẩm khác sẽ ẩn ban đầu -->
+      <!-- <div id="more-teapot-products" style="display: none; flex-wrap: wrap;">
+        <article class="product">
+          <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
+          <h3 class="product-title" style="color: rgb(255, 255, 255);">Ấm Trà Cao Cấp</h3>
+          <h3 class="product-price">2.000.000đ</h3>
+        </article> -->
+
+        <!-- <article class="product">
+          <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
+          <h3 class="product-title" style="color: rgb(253, 253, 253);">Ấm Trà Gốm Hoa</h3>
+          <h3 class="product-price">1.800.000đ</h3>
+        </article>
+
+        <article class="product">
+          <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
+          <h3 class="product-title" style="color: rgb(248, 253, 248);">Ấm Trà Thủ Công</h3>
+          <h3 class="product-price">2.200.000đ</h3>
+        </article>
+      </div>
+    </article> -->
+
+    <!-- Nút "Xem thêm" -->
+    <!-- <div class="view-more-btn" style="text-align: center;">
+      <button id="view-more-teapots" class="main-btn" onclick="showMoreTeapots()">Xem thêm</button>
+      <button id="collapse-teapots" class="main-btn" onclick="collapseTeapots()" style="display: none;">Thu gọn</button>
+    </div>   -->
+  </div> 
+</section>
+
+
+<!-- Section for Tea Brewing Technique -->
+<section class="tea-brewing" style="background: linear-gradient(135deg, #4caf50, #256928, #137918); padding: 50px 0; color: white;">
+  <div class="section-center clearfix">
+    <!-- Video container -->
+    <div class="video-container" style="float: left; width: 50%;">
+      <iframe width="100%" height="315" src="https://www.youtube.com/embed/_kpfNgTPwNE?vq=hd720&rel=0"
+        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+
+    </div>
+    <!-- Description -->
+    <div class="video-description" style="float: right; width: 50%;">
+      <h3 style="margin-bottom: 20px; text-align: center; color: #e9e655;">Nghệ Thuật Pha Trà Đều Vị Bằng Bình Công Bằng</h3>
+      <p>Pha trà bằng cách đổ ra bình công bằng là một kỹ thuật pha trà truyền thống được sử dụng để đảm bảo rằng mỗi tách trà có hương vị và nhiệt độ nhất quán. Đây là một phần của nghi lễ pha trà ở một số nền văn hóa, đặc biệt là trong trà đạo Trung Quốc.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- contact -->
+<section class="contact">
+  <div id="contact" class="section-center clearfix">
+    <!-- Hình ảnh dịch sang bên trái -->
+    <div class="contact-image" style="float: left; margin-right: 40px; margin-bottom: 20px;">
+      <img src="images/ava.jpg" alt="Contact Image" style="width: 430px; height: auto; object-fit: cover;" loading="lazy">
+    </div>
+     <!-- contact info -->
+     <article class="contact-info" style="float: right; text-align: left;">
+      <!-- contact item -->
+      <div class="contact-item" style="margin-bottom: 50px;">
+        <h3 class="contact-title">
+          <span class="contact-icon">
+            <i class="fas fa-location-arrow"></i>address
+          </span>
+        </h3>
+        <h3 class="contact-text">
+          CN1: 28/8 Phạm Huy Thông, Phường 7, Quận Gò Vấp, HCM
+        </h3>
+        <h3 class="contact-text">
+          CN2: Lô S8.03 Vinhome Grand Park, Quận 9, HCM 
+        </h3>
+        <h3 class="contact-text">
+          CN3: 567/4 Lê Quang Định, Phường 1, Quận Gò Vấp, HCM 
+        </h3>
+      </div>
+      <!-- end of contact item -->
+      
+      <!-- contact item -->
+      <div class="contact-item" style="margin-bottom: 50px;">
+        <h3 class="contact-title">
+          <span class="contact-icon">
+            <i class="fas fa-envelope"></i>e-mail
+          </span>
+        </h3>
+        <h3 class="contact-text">thanhtamtraquan.1996@gmail.com</h3>
+      </div>
+      <!-- end of contact item -->
+      
+      <!-- contact item -->
+      <div class="contact-item" style="margin-bottom: 50px;">
+        <h3 class="contact-title">
+          <span class="contact-icon">
+            <i class="fas fa-phone-alt"></i>phone / Zalo
+          </span>
+        </h3>
+        <h3 class="contact-text">039 5759357</h3>
+      </div>
+      <!-- end of contact item -->
+      <div class="section-left">
+    
+        <!-- Form Thanh Toán -->
+        <form id="payment-form" style="max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    
+          <label for="payment-method">Phương thức thanh toán:</label>
+          <select id="payment-method" name="payment-method" class="form-control">
+            <option value="cod"></option> 
+            <option value="bank">Chuyển khoản ngân hàng</option>
+            <option value="momo">Ví điện tử Momo</option>
+          </select>
+    
+          <!-- Hiển thị thông tin chuyển khoản khi chọn ngân hàng -->
+          <div id="bank-info">
+            <div>
+              <p><strong>Thông tin chuyển khoản:</strong></p>
+              <p>Ngân hàng: ACB</p>
+              <p>Số tài khoản: 1708746868</p>
+              <p>Chủ tài khoản: LE PHAN BAO CHAU</p>
+            </div>
+            <img id="bank-qr" src="./images/bankQR.jpg" alt="QR Chuyển khoản ngân hàng" style="width: 150px; height: auto; border-radius: 8px;">
+          </div>
+    
+          <!-- Hiển thị thông tin khi chọn Momo -->
+          <div id="momo-info">
+            <div>
+              <p><strong>Thông tin thanh toán qua Momo:</strong></p>
+              <p>Số điện thoại: <strong>0908 147 294</strong></p>
+              <p>Tên người nhận: <strong>Lê Phan Bảo Châu</strong></p>
+            </div>
+            <img id="momo-qr" src="./images/momoQR.jpg" alt="QR Chuyển khoản momo" style="width: 150px; height: auto; border-radius: 8px;">
+          </div>
+        </form>
+      </div>
+
+    </article>
+  </div>
+</section>
+
+<!-- end of contact -->
+
+
+    <!-- footer -->
+<footer class="footer">
+  <div class="section-center">
+    <div class="social-icons">
+      <!-- social icon: Facebook -->
+      <a href="https://www.facebook.com/thanhtamtraquan1996?mibextid=LQQJ4d" class="social-icon" target="_blank">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <!-- end of social icon -->
+      
+      <!-- social icon: Instagram -->
+      <a href="https://www.instagram.com/_bkhtrna_?igsh=azFucjFpMHZuZ2Ji&fbclid=IwY2xjawFJJY1leHRuA2FlbQIxMAABHdFxKqdFEiCI9IA25eQsyJw1YEIifVMdeOboz1uXNM6Wm5id-kEaUhzMWw_aem_MAN9C1u0cDI4vdPdpy26qQ" class="social-icon" target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <!-- end of social icon -->      
+      
+      <!-- social icon: TikTok -->
+      <a href="https://www.tiktok.com" class="social-icon" target="_blank">
+        <i class="fab fa-tiktok"></i>
+      </a>
+      <!-- end of social icon -->
+      
+      <!-- social icon: YouTube -->
+      <a href="https://www.youtube.com/@thanhtamtraquan" class="social-icon" target="_blank">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <!-- end of social icon -->
+    </div>
+    
+    
+    <p class="footer-text">
+      &copy; 2024 Thanh Tâm Trà Quán 🍵
+    </p-footer-text>
+  </div>
+</footer>
+<!-- end of footer -->
+
+     <script src="./app.js"></script>    
+      <!-- <script>   </script> -->
+      <div class="floating-icons">  
+        <!-- Messenger -->
+        <a href="https://m.me/thanhtamtraquan1996" target="_blank" class="icon messenger" title="Chat Messenger">
+            <img src="https://file.hstatic.net/200000525917/file/messenger-fb_8fcc524fbaad4b1195a150dc5e0575d7.png" alt="Messenger">
+        </a>
+    
+        <!-- Zalo -->
+        <a href="https://zalo.me/0395759357" target="_blank" class="icon zalo" title="Chat Zalo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/512px-Icon_of_Zalo.svg.png" alt="Zalo">
+        </a>
+    </div>
+    
+  </body>
+</html>
+
