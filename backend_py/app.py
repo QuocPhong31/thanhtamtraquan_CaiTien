@@ -1,38 +1,40 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, send_from_directory, render_template, redirect, session
 from flask_cors import CORS
-from config import get_connection
+
+from routes_public import public_bp
+from admin import admin_bp
+from user import user_bp
+from product import product_bp
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+
+# Thiết lập secret key để dùng session
+app.secret_key = "thay_the_ban_bang_mot_chuoi_rand_kho_hon"
 
 # Đường dẫn tới thư mục chứa frontend
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "web")
 
-@app.route("/api/products")
-def get_products():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM products")
-    data = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(data)
+# API cho user (bạn đang dùng)
+app.register_blueprint(public_bp)
 
-@app.route("/api/products/<int:id>")
-def get_product(id):
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM products WHERE id=%s", (id,))
-    p = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    return jsonify(p)
+# Admin routes
+app.register_blueprint(admin_bp)
+app.register_blueprint(user_bp)
+app.register_blueprint(product_bp)
 
-# Serve index.html
-@app.route("/")
+@app.get("/")
 def home():
-    return "API chạy OK"
+    return "API chạy OK + Admin OK"
+
+# Khi truy cập /admin/ cần phải có session admin, nếu chưa => redirect /admin/login
+@app.get("/admin/")
+def admin_page():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    # admin đã login -> show giao diện admin
+    return render_template("admin/index.html")
 
 # Serve trang product (1 file dùng chung)
 @app.route("/product/<int:id>")

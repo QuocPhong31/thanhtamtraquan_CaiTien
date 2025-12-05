@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Dashboard</title>
+  <!-- bootstrap CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding-top: 70px; }
+    .hide { display:none; }
+    .cursor-pointer { cursor: pointer; }
+    .small-img { width:60px; height:60px; object-fit:cover; border-radius:6px; }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Admin</a>
+    <div>
+      <button id="btn-logout" class="btn btn-outline-light btn-sm">Đăng xuất</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+
+    <!-- LEFT: Login / Info -->
+    <div class="col-lg-4 mb-4">
+      <div id="card-login" class="card">
+        <div class="card-header"><strong>Đăng nhập admin</strong></div>
+        <div class="card-body">
+          <div id="login-msg" class="mb-2 text-danger"></div>
+          <div class="mb-2">
+            <label class="form-label">Tài khoản</label>
+            <input id="login-username" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Mật khẩu</label>
+            <input id="login-password" type="password" class="form-control" />
+          </div>
+          <button id="btn-login" class="btn btn-primary">Đăng nhập</button>
+        </div>
+      </div>
+
+      <div id="card-admin-info" class="card hide mt-3">
+        <div class="card-header"><strong>Thông tin Admin</strong></div>
+        <div class="card-body">
+          <p id="admin-info"></p>
+          <hr>
+          <p class="small text-muted">Sử dụng các form để thêm user / product.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Management -->
+    <div class="col-lg-8">
+
+      <!-- Users -->
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Quản lý Người dùng</strong>
+          <button class="btn btn-sm btn-success" data-bs-toggle="collapse" data-bs-target="#user-form">Thêm user</button>
+        </div>
+        <div class="card-body">
+          <div id="user-form" class="collapse mb-3">
+            <div class="row g-2">
+              <div class="col-md-6"><input id="u-hoTen" class="form-control" placeholder="Họ tên"></div>
+              <div class="col-md-3"><select id="u-gioiTinh" class="form-select"><option value="1">Nam</option><option value="0">Nữ</option></select></div>
+              <div class="col-md-3"><input id="u-ngaySinh" type="date" class="form-control"></div>
+              <div class="col-12"><input id="u-diaChi" class="form-control" placeholder="Địa chỉ"></div>
+              <div class="col-md-6"><input id="u-SDT" class="form-control" placeholder="SĐT"></div>
+              <div class="col-md-6"><input id="u-email" class="form-control" placeholder="Email"></div>
+              <div class="col-md-6"><input id="u-taiKhoan" class="form-control" placeholder="Tài khoản"></div>
+              <div class="col-md-6"><input id="u-matKhau" class="form-control" placeholder="Mật khẩu"></div>
+              <div class="col-12 text-end"><button id="btn-create-user" class="btn btn-primary mt-2">Tạo User</button></div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped" id="tbl-users">
+              <thead><tr><th>#</th><th>Họ tên</th><th>SĐT</th><th>Email</th><th>Tài khoản</th><th>Role</th><th>Hành động</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Quản lý Sản phẩm</strong>
+          <button class="btn btn-sm btn-success" data-bs-toggle="collapse" data-bs-target="#product-form">Thêm product</button>
+        </div>
+        <div class="card-body">
+          <div id="product-form" class="collapse mb-3">
+            <div class="row g-2">
+              <div class="col-md-6"><input id="p-title" class="form-control" placeholder="Tiêu đề"></div>
+              <div class="col-md-3"><input id="p-price" class="form-control" placeholder="Giá"></div>
+              <div class="col-md-3"><input id="p-soLuong" class="form-control" placeholder="Số lượng" type="number"></div>
+              <div class="col-12"><input id="p-image" class="form-control" placeholder="Đường dẫn ảnh (vd /images/.. )"></div>
+              <div class="col-12"><textarea id="p-desc" class="form-control" placeholder="Mô tả"></textarea></div>
+              <div class="col-md-4">
+                <select id="p-trangThai" class="form-select">
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="HIDE">HIDE</option>
+                </select>
+              </div>
+              <div class="col-12 text-end"><button id="btn-create-product" class="btn btn-primary mt-2">Tạo Product</button></div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover" id="tbl-products">
+              <thead><tr><th>#</th><th>Ảnh</th><th>Tiêu đề</th><th>Giá</th><th>Số lượng</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- bootstrap and scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // -------- helpers ----------
+  function el(sel){ return document.querySelector(sel); }
+  function els(sel){ return Array.from(document.querySelectorAll(sel)); }
+  const apiBase = "";
+
+  // -------- admin login ----------
+  el("#btn-login").addEventListener("click", async () => {
+    const username = el("#login-username").value.trim();
+    const password = el("#login-password").value.trim();
+    if(!username || !password){ el("#login-msg").innerText = "Nhập tài khoản và mật khẩu"; return; }
+    try {
+      const res = await fetch("/admin/login", {
+        method: "POST",
+        headers: { "Content-Type":"application/json" },
+        credentials: "same-origin",        // <-- quan trọng: cho phép browser lưu cookie session
+        body: JSON.stringify({ username, password })
+      });
+      const j = await res.json();
+      if(!res.ok){ el("#login-msg").innerText = j.msg || "Lỗi login"; return; }
+      // thành công => chuyển trang để backend xác nhận session
+      window.location.href = "/admin/";
+    } catch(e){ console.error(e); el("#login-msg").innerText = "Không thể kết nối server"; }
+  });
+
+  // logout: gọi server xóa session rồi redirect
+  el("#btn-logout").addEventListener("click", async ()=>{
+    try {
+      await fetch("/admin/logout", { method: "GET", credentials: "same-origin" });
+    } catch(e) { console.error(e); }
+    // dù fetch thành công hay lỗi, chuyển về trang login
+    window.location.href = "/admin/login";
+  });
+
+  // -------- users functions ----------
+  async function loadUsers(){
+    try{
+      const res = await fetch(apiBase + "/admin/users");
+      const arr = await res.json();
+      const tbody = el("#tbl-users tbody");
+      tbody.innerHTML = "";
+      arr.forEach((u, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${idx+1}</td>
+          <td>${u.hoTen || ""}</td>
+          <td>${u.SDT || ""}</td>
+          <td>${u.email || ""}</td>
+          <td>${u.taiKhoan || ""}</td>
+          <td>${u.role || "USER"}</td>
+          <td>
+            <button class="btn btn-sm btn-danger btn-del-user" data-id="${u.id}">Xóa</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      els(".btn-del-user").forEach(btn=>{
+        btn.onclick = async ()=> {
+          const id = btn.dataset.id;
+          if(!confirm("Xác nhận xóa user?")) return;
+          await fetch(apiBase + "/admin/users/" + id, { method:"DELETE" });
+          loadUsers();
+        };
+      });
+    }catch(e){ console.error(e); }
+  }
+
+  el("#btn-create-user").addEventListener("click", async ()=>{
+    const obj = {
+      hoTen: el("#u-hoTen").value,
+      gioiTinh: el("#u-gioiTinh").value,
+      ngaySinh: el("#u-ngaySinh").value,
+      diaChi: el("#u-diaChi").value,
+      SDT: el("#u-SDT").value,
+      email: el("#u-email").value,
+      taiKhoan: el("#u-taiKhoan").value,
+      matKhau: el("#u-matKhau").value,
+      role: "USER"
+    };
+    try {
+      const res = await fetch(apiBase + "/admin/users", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(obj)
+      });
+      const j = await res.json();
+      if(res.ok){ alert(j.msg || "OK"); loadUsers(); }
+      else alert(j.msg || "Lỗi");
+    } catch(e){ console.error(e); alert("Lỗi tạo user"); }
+  });
+
+  // -------- products functions ----------
+  async function loadProducts(){
+    try{
+      const res = await fetch(apiBase + "/admin/products");
+      const arr = await res.json();
+      const tbody = el("#tbl-products tbody");
+      tbody.innerHTML = "";
+      arr.forEach((p, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${idx+1}</td>
+          <td>${p.image ? '<img src="'+p.image+'" class="small-img" />':''}</td>
+          <td>${p.title}</td>
+          <td>${p.price}</td>
+          <td>${p.soLuong || 0}</td>
+          <td>${p.trangThai || ''}</td>
+          <td>
+            <button class="btn btn-sm btn-warning btn-toggle" data-id="${p.id}" data-status="${p.trangThai}">${p.trangThai === 'ACTIVE' ? 'Ẩn' : 'Hiện'}</button>
+            <button class="btn btn-sm btn-danger btn-del" data-id="${p.id}">Xóa</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      els(".btn-toggle").forEach(btn=>{
+        btn.onclick = async ()=>{
+          const id = btn.dataset.id;
+          const current = btn.dataset.status;
+          const newStatus = current === "ACTIVE" ? "HIDE" : "ACTIVE";
+          await fetch(apiBase + "/admin/products/" + id, {
+            method: "PUT",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({ trangThai: newStatus })
+          });
+          loadProducts();
+        };
+      });
+
+      els(".btn-del").forEach(btn=>{
+        btn.onclick = async ()=>{
+          const id = btn.dataset.id;
+          if(!confirm("Xóa product?")) return;
+          await fetch(apiBase + "/admin/products/" + id, { method:"DELETE" });
+          loadProducts();
+        };
+      });
+
+    }catch(e){ console.error(e); }
+  }
+
+  el("#btn-create-product").addEventListener("click", async ()=>{
+    const obj = {
+      title: el("#p-title").value,
+      price: parseFloat(el("#p-price").value) || 0,
+      description: el("#p-desc").value,
+      image: el("#p-image").value,
+      soLuong: parseInt(el("#p-soLuong").value) || 0,
+      trangThai: el("#p-trangThai").value
+    };
+    try {
+      const res = await fetch(apiBase + "/admin/products", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(obj)
+      });
+      const j = await res.json();
+      if(res.ok){ alert(j.msg || "Tạo thành công"); loadProducts(); }
+      else alert(j.msg || "Lỗi tạo product");
+    } catch(e){ console.error(e); alert("Lỗi tạo product"); }
+  });
+
+  // If admin already logged (simple), try load lists
+  // (we don't implement token here; login required by UI)
+</script>
+</body>
+</html>

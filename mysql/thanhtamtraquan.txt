@@ -1,0 +1,25 @@
+use thanhtamtraquan;
+CREATE TABLE sanphams (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tenSanPham VARCHAR(255) NOT NULL,
+  gia DECIMAL(12,2) NOT NULL,
+  moTa TEXT,
+  soLuong INT,
+  anh VARCHAR(255),             -- đường dẫn tương đối: images/product1re.jpg
+  trangThai ENUM('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  ngayTao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE nguoidungs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  hoTen VARCHAR(255),
+  gioiTinh TINYINT,
+  ngaySinh DATE,
+  diaChi VARCHAR(255),
+  SDT VARCHAR(20),
+  email VARCHAR(255) UNIQUE,
+  taiKhoan VARCHAR(100) UNIQUE,
+  matKhau VARCHAR(255),
+  role ENUM('ADMIN','USER') DEFAULT 'USER',
+  ngayTao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
