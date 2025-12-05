@@ -33,8 +33,8 @@ def home():
 def admin_page():
     if not session.get("admin"):
         return redirect("/admin/login")
-    # admin đã login -> show giao diện admin
-    return render_template("admin/index.html")
+    # truyền admin từ session vào template (để Jinja có biến admin)
+    return render_template("admin/index.html", admin=session.get("admin"))
 
 # Serve trang product (1 file dùng chung)
 @app.route("/product/<int:id>")
