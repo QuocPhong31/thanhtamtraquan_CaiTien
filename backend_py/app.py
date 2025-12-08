@@ -36,6 +36,12 @@ def admin_page():
     # truyền admin từ session vào template (để Jinja có biến admin)
     return render_template("admin/index.html", admin=session.get("admin"))
 
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    # image dir là backend_py/image
+    image_dir = os.path.join(app.root_path, 'image')
+    return send_from_directory(image_dir, filename)
+
 # Serve trang product (1 file dùng chung)
 @app.route("/product/<int:id>")
 def product_page(id):

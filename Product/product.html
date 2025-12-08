@@ -3,48 +3,93 @@
 <head>
   <meta charset="utf-8" />
   <title>Chi tiết sản phẩm</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="../Style/styleProduct.css">
+  <style>
+    /* nhanh gọn cho layout chi tiết */
+    body { font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; min-height:100vh;
+      background: linear-gradient(135deg,#274e3f,#4f7a3b); color:#fff; }
+    .container { max-width:1100px; margin:40px auto; background:#fff; color:#222; border-radius:10px; padding:24px; box-shadow:0 8px 30px rgba(0,0,0,.2); }
+    .product-row { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+    .img-wrap img { width:360px; height:auto; border-radius:10px; object-fit:cover; display:block; }
+    .info { flex:1; min-width:260px; }
+    h1 { margin:0 0 12px 0; font-size:28px; }
+    .price { font-size:22px; color:#2b8a44; margin:8px 0 16px; font-weight:700; }
+    .desc { white-space:pre-wrap; line-height:1.6; color:#333; }
+    .back { display:inline-block; margin-top:18px; padding:8px 12px; background:#2b8a44; color:#fff; border-radius:6px; text-decoration:none; }
+    .loading { color:#fff; text-align:center; padding:120px 0; font-size:20px; }
+    @media(max-width:800px){
+      .img-wrap img { width:100%; max-width:360px; }
+      .product-row { flex-direction:column; align-items:center; }
+    }
+  </style>
 </head>
 <body>
-  <div id="product-detail">Đang tải...</div>
+  <div id="root">
+    <div id="product-detail" class="loading">Đang tải...</div>
+  </div>
 
 <script>
-  // nếu API của bạn chạy trên Flask ở 5000, để API_BASE = "http://127.0.0.1:5000"
-  // nếu bạn không có API, bạn có thể embed dữ liệu hoặc đọc JSON tĩnh.
-  const API_BASE = "http://127.0.0.1:5000"; // chỉnh theo môi trường
+  const API_BASE = "http://127.0.0.1:5000"; // nếu backend bạn chạy ở host khác thì đổi ở đây
 
-  // Lấy id từ query string: ?id=1
-  const params = new URLSearchParams(location.search);
-  const productId = params.get('id');
+  // build url cho ảnh: DB lưu '/images/...' hoặc 'images/...' hoặc URL đầy đủ
+  function buildImageUrl(raw) {
+    if (!raw) return API_BASE + "/images/placeholder.jpg";
+    raw = String(raw).trim();
+    if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+    if (raw.startsWith("/")) return API_BASE + raw;
+    // nếu DB lưu như 'images/products/..' hoặc 'image/products/..'
+    return API_BASE + "/" + raw.replace(/^\/+/, "");
+  }
 
   function escapeHtml(s){ if(!s) return ""; return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 
+  // lấy id từ query ?id=...
+  const params = new URLSearchParams(location.search);
+  const productId = params.get("id");
+
+  const root = document.getElementById("product-detail");
+
   if (!productId) {
-    document.getElementById('product-detail').innerHTML = "<p>Không xác định sản phẩm.</p>";
+    root.innerHTML = `<div class="container"><p>Không xác định sản phẩm. <a href="../index.html" class="back">Quay về</a></p></div>`;
   } else {
-    async function loadProduct() {
+    (async function load(){
       try {
-        const res = await fetch(`${API_BASE}/api/products/${productId}`);
-        if (!res.ok) throw new Error("Không tìm thấy sản phẩm (api trả lỗi " + res.status + ")");
+        const res = await fetch(`${API_BASE}/api/products/${productId}`, { credentials: "include" });
+        if (!res.ok) {
+          const txt = await res.text().catch(()=>"");
+          throw new Error("API trả lỗi " + res.status + (txt ? " — "+txt : ""));
+        }
         const p = await res.json();
 
-        const img = p.image ? (p.image.startsWith('/') ? '.' + p.image : p.image) : '../images/placeholder.jpg';
+        // nếu API trả object msg lỗi
+        if (p.msg && !p.id) {
+          throw new Error(p.msg || "Không tìm thấy sản phẩm");
+        }
+
+        const img = buildImageUrl(p.image || p.anh || p.anh || "");
 
         const html = `
-          <div class="product-detail-box">
-            <img src="${img}" class="detail-img" alt="${escapeHtml(p.title)}">
-            <h1>${escapeHtml(p.title)}</h1>
-            <h2>${new Intl.NumberFormat('vi-VN').format(p.price||0)}đ</h2>
-            <p>${escapeHtml(p.description)}</p>
-            <p><a href="../index.html">Trở về trang chủ</a></p>
+          <div class="container">
+            <div class="product-row">
+              <div class="img-wrap">
+                <img src="${escapeHtml(img)}" alt="${escapeHtml(p.title || p.tenSanPham || '')}" onerror="this.src='${API_BASE}/images/placeholder.jpg'"/>
+              </div>
+              <div class="info">
+                <h1>${escapeHtml(p.title || p.tenSanPham || '')}</h1>
+                <div class="price">${(p.price != null ? new Intl.NumberFormat('vi-VN').format(p.price) + 'đ' : '')}</div>
+                <div class="desc">${escapeHtml(p.description || p.moTa || '')}</div>
+                <a class="back" href="../index.html">← Quay về</a>
+              </div>
+            </div>
           </div>
         `;
-        document.getElementById('product-detail').innerHTML = html;
+        root.innerHTML = html;
       } catch (err) {
-        document.getElementById('product-detail').innerHTML = `<p style="color:red">Lỗi: ${err.message}</p>`;
+        console.error(err);
+        root.innerHTML = `<div class="container"><p style="color:red">Lỗi khi tải sản phẩm: ${escapeHtml(err.message || err)}</p><p><a class="back" href="../index.html">Quay về</a></p></div>`;
       }
-    }
-    loadProduct();
+    })();
   }
 </script>
 </body>

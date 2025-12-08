@@ -143,58 +143,60 @@ function showMoreProducts() {
   }
 }
 
-/*============  từ dòng 147 đến 236   =================*/
-// app.js (thêm / thay)
-const API_BASE = "http://127.0.0.1:5000"; // hoặc URL deploy của bạn
+/*============  từ dòng 147 đến 258   =================*/
+const API_BASE = "http://127.0.0.1:5000";
 const PRODUCTS_API = API_BASE + "/api/products";
 
+// biến lưu data
 let productsData = [];
 let showAll = false;
 
-async function fetchProducts() {
-  try {
-    const res = await fetch(PRODUCTS_API);
-    if (!res.ok) throw new Error(`API lỗi ${res.status}`);
-    productsData = await res.json();
-    renderProducts();
-  } catch (err) {
-    console.error("Lỗi khi gọi API products:", err);
-    // hiển thị message trên UI
-    document.getElementById("products-container").innerHTML =
-      `<p style="color: red;">Không tải được dữ liệu sản phẩm — ${err.message}</p>`;
-  }
+// build absolute image URL từ giá trị DB (p.anh có thể là '/images/...' hoặc 'images/...' hoặc full URL)
+function buildImageUrl(raw) {
+  if (!raw) return API_BASE + "/images/placeholder.jpg"; // nếu có placeholder trên backend
+  raw = String(raw).trim();
+  // nếu đã là url đầy đủ
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  // nếu bắt đầu bằng / -> nối trực tiếp vào API_BASE
+  if (raw.startsWith("/")) return API_BASE + raw;
+  // nếu không có / đầu (ví dụ 'images/...') -> thêm / trước
+  return API_BASE + "/" + raw.replace(/^\/+/, "");
 }
 
 function formatPrice(number) {
   if (number == null) return "";
-  // format VNĐ: 700000 -> 700.000đ
-  return new Intl.NumberFormat('vi-VN').format(number) + "đ";
-}
-
-function productCardHTML(p) {
-  let imgSrc = p.image || "./images/placeholder.jpg";
-  return `
-  <article class="product">
-    <!-- chuyển tới file product.html trong folder Product với query ?id=... -->
-    <a href="./Product/product.html?id=${p.id}" class="product-link">
-      <img src="${imgSrc}" alt="${escapeHtml(p.title)}" class="product-img" loading="lazy"/>
-      <span class="details-overlay">Chi tiết</span>
-    </a>
-    <a href="./Product/product.html?id=${p.id}" class="product-link">
-      <h3 class="product-title">${escapeHtml(p.title)}</h3>
-    </a>
-    <h3 class="product-price">${formatPrice(p.price)}</h3>
-  </article>`;
+  return new Intl.NumberFormat('vi-VN').format(Number(number || 0)) + "đ";
 }
 
 function escapeHtml(text) {
   if (!text) return "";
-  return text
+  return String(text)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function productCardHTML(p) {
+  // p là object đã chuẩn hóa ở fetchProducts
+  const imgSrc = buildImageUrl(p.image || p.anh || "");
+  const title = escapeHtml(p.title || p.tenSanPham || p.ten_san_pham || "Sản phẩm");
+  const price = formatPrice(p.price || p.gia);
+  const id = p.id || p.ID || "";
+  const detailLink = `./Product/product.html?id=${id}`;
+
+  return `
+  <article class="product">
+    <a href="${detailLink}" class="product-link">
+      <img src="${imgSrc}" alt="${title}" class="product-img" loading="lazy"/>
+      <span class="details-overlay">Chi tiết</span>
+    </a>
+    <a href="${detailLink}" class="product-link">
+      <h3 class="product-title">${title}</h3>
+    </a>
+    <h3 class="product-price">${price}</h3>
+  </article>`;
 }
 
 function renderProducts() {
@@ -207,12 +209,10 @@ function renderProducts() {
   }
 
   let toShow = productsData;
-  // mặc định hiển thị 3 cái, ấn Xem thêm sẽ show all
   if (!showAll) toShow = productsData.slice(0, 3);
 
   container.innerHTML = toShow.map(p => productCardHTML(p)).join("\n");
 
-  // ẩn nút Xem thêm nếu không có thêm sản phẩm
   const btn = document.getElementById("view-more");
   if (!btn) return;
   if (productsData.length <= 3) {
@@ -226,6 +226,30 @@ function renderProducts() {
 function showMoreProducts() {
   showAll = !showAll;
   renderProducts();
+}
+
+async function fetchProducts() {
+  try {
+    const res = await fetch(PRODUCTS_API);
+    if (!res.ok) throw new Error(`API lỗi ${res.status}`);
+    const arr = await res.json();
+
+    // Chuẩn hóa mỗi item về shape dùng trong frontend
+    productsData = arr.map(item => ({
+      id: item.id,
+      title: item.tenSanPham || item.title || item.name,
+      price: item.gia || item.price,
+      description: item.moTa || item.description,
+      anh: item.anh,        // giữ raw từ DB (vd '/images/products/xxx.jpg')
+      image: item.anh || item.image || ""
+    }));
+
+    renderProducts();
+  } catch (err) {
+    console.error("Lỗi khi gọi API products:", err);
+    const container = document.getElementById("products-container");
+    if (container) container.innerHTML = `<p style="color: red;">Không tải được dữ liệu sản phẩm — ${err.message}</p>`;
+  }
 }
 
 // chạy khi load
