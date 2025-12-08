@@ -3,8 +3,13 @@ CREATE TABLE sanphams (
   id INT AUTO_INCREMENT PRIMARY KEY,
   tenSanPham VARCHAR(255) NOT NULL,
   gia DECIMAL(12,2) NOT NULL,
-  moTa TEXT,
+  khoiLuongHop VARCHAR(64) NOT NULL,
   soLuong INT,
+  xuatXu VARCHAR(255) NOT NULL,
+  moTa TEXT,
+  huongVi TEXT NULL,
+  congDung TEXT NULL,
+  cachPha TEXT NULL,
   anh VARCHAR(255),             -- đường dẫn tương đối: images/product1re.jpg
   trangThai ENUM('ACTIVE','HIDE') DEFAULT 'ACTIVE',
   ngayTao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -14,7 +19,7 @@ CREATE TABLE nguoidungs (
   id INT AUTO_INCREMENT PRIMARY KEY,
   hoTen VARCHAR(255),
   gioiTinh TINYINT,
-  ngaySinh DATE,
+  ngaySinh DATE, 
   diaChi VARCHAR(255),
   SDT VARCHAR(20),
   email VARCHAR(255) UNIQUE,

@@ -234,13 +234,19 @@ async function fetchProducts() {
     if (!res.ok) throw new Error(`API lỗi ${res.status}`);
     const arr = await res.json();
 
+    // Lọc chỉ lấy sản phẩm có trạng thái ACTIVE (so sánh không phân biệt hoa thường)
+    const activeOnly = arr.filter(item => {
+      const status = String(item.trangThai || item.trang_thai || item.trangThai || "").trim().toUpperCase();
+      return status === "ACTIVE";
+    });
+
     // Chuẩn hóa mỗi item về shape dùng trong frontend
-    productsData = arr.map(item => ({
+    productsData = activeOnly.map(item => ({
       id: item.id,
       title: item.tenSanPham || item.title || item.name,
       price: item.gia || item.price,
       description: item.moTa || item.description,
-      anh: item.anh,        // giữ raw từ DB (vd '/images/products/xxx.jpg')
+      anh: item.anh,        // raw path từ DB (vd '/images/products/xxx.jpg')
       image: item.anh || item.image || ""
     }));
 

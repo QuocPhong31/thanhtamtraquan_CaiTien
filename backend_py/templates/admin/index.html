@@ -105,9 +105,12 @@
         <div class="card-body">
           <div id="product-form" class="collapse mb-3">
             <div class="row g-2">
-              <div class="col-md-6"><input id="p-title" class="form-control" placeholder="Tiêu đề"></div>
+              <div class="col-md-6"><input id="p-title" class="form-control" placeholder="Tên sản phẩm"></div>
               <div class="col-md-3"><input id="p-price" class="form-control" placeholder="Giá"></div>
+              <div class="col-md-3"><input id="p-khoiLuongHop" class="form-control" placeholder="Khối lượng (vd: 125g)"/></div>
               <div class="col-md-3"><input id="p-soLuong" class="form-control" placeholder="Số lượng" type="number"></div>
+              <div class="col-md-3"><input id="p-xuatXu" class="form-control" placeholder="Xuất xứ"/></div>
+
               <div class="col-12">
                   <div class="d-flex gap-2 align-items-center">
                     <div id="img-preview" class="border"
@@ -118,13 +121,16 @@
                     <!-- hidden file input -->
                     <input id="file-image" type="file" accept="image/*" class="d-none" />
 
-                    <!-- hidden input to store Cloudinary URL -->
+                    <!-- hidden input để chứa url sau khi upload -->
                     <input id="p-image" type="text" class="d-none" />
                   </div>
 
                   <div id="upload-status" class="small text-muted mt-1"></div>
                 </div>
               <div class="col-12"><textarea id="p-desc" class="form-control" placeholder="Mô tả"></textarea></div>
+              <div class="col-12"><textarea id="p-huongVi" class="form-control" placeholder="Hương vị (mô tả)"></textarea></div>
+              <div class="col-12"><textarea id="p-congDung" class="form-control" placeholder="Công dụng"></textarea></div>
+              <div class="col-12"><textarea id="p-cachPha" class="form-control" placeholder="Cách pha"></textarea></div>
               <div class="col-md-4">
                 <select id="p-trangThai" class="form-select">
                   <option value="ACTIVE">ACTIVE</option>
@@ -387,9 +393,14 @@
     const obj = {
       tenSanPham: el("#p-title").value.trim(),
       gia: parseFloat(el("#p-price").value) || 0,
-      moTa: el("#p-desc").value.trim(),
-      anh: el("#p-image").value.trim(),        // đường dẫn tương đối như /images/...
+      khoiLuongHop: el("#p-khoiLuongHop") ? el("#p-khoiLuongHop").value.trim() : null,
       soLuong: parseInt(el("#p-soLuong").value) || 0,
+      xuatXu: el("#p-xuatXu") ? el("#p-xuatXu").value.trim() : null,
+      moTa: el("#p-desc").value.trim(),
+      huongVi: el("#p-huongVi") ? el("#p-huongVi").value.trim() : null,
+      congDung: el("#p-congDung") ? el("#p-congDung").value.trim() : null,
+      cachPha: el("#p-cachPha") ? el("#p-cachPha").value.trim() : null,
+      anh: el("#p-image").value.trim(),        // đường dẫn tương đối như /images/...
       trangThai: el("#p-trangThai").value
     };
 
@@ -410,9 +421,14 @@
         // reset form (tuỳ thích)
         el("#p-title").value = "";
         el("#p-price").value = "";
+        el("#p-khoiLuongHop").value = "";
         el("#p-soLuong").value = "";
+        el("#p-xuatXu").value = "";
         el("#p-image").value = "";
         el("#p-desc").value = "";
+        el("#p-huongVi").value = "";
+        el("#p-congDung").value = "";
+        el("#p-cachPha").value = "";
         // load lại danh sách
         loadProducts();
       } else {

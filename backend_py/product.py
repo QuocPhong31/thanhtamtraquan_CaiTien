@@ -37,11 +37,21 @@ def admin_add_product():
     cur = conn.cursor()
 
     cur.execute("""
-        INSERT INTO sanphams (tenSanPham, gia, moTa, anh, soLuong, trangThai)
-        VALUES (%s,%s,%s,%s,%s,%s)
-    """, (
-        d.get("tenSanPham"), d.get("gia"), d.get("moTa"), d.get("anh"),
-        d.get("soLuong"), d.get("trangThai")
+                INSERT INTO sanphams
+                  (tenSanPham, gia, khoiLuongHop, soLuong, xuatXu, moTa, anh, trangThai, huongVi, congDung, cachPha)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (
+        d.get("tenSanPham"),
+        d.get("gia"),
+        d.get("khoiLuongHop"),
+        d.get("soLuong"),
+        d.get("xuatXu"),
+        d.get("moTa"),
+        d.get("anh"),
+        d.get("trangThai") or "ACTIVE",
+        d.get("huongVi"),
+        d.get("congDung"),
+        d.get("cachPha")
     ))
 
     conn.commit()
@@ -115,9 +125,14 @@ def update_product(id):
         mapping = {
             "tenSanPham": "tenSanPham",
             "gia": "gia",
-            "moTa": "moTa",
-            "anh": "anh",
+            "khoiLuongHop": "khoiLuongHop",
             "soLuong": "soLuong",
+            "xuatXu": "xuatXu",
+            "moTa": "moTa",
+            "huongVi": "huongVi",
+            "congDung": "congDung",
+            "cachPha": "cachPha",
+            "anh": "anh",
             "trangThai": "trangThai"
         }
         for key, col in mapping.items():
