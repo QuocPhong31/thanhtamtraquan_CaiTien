@@ -4,32 +4,56 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Dashboard</title>
-  <!-- bootstrap CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
   <style>
     body { padding-top: 70px; }
-    .hide { display:none; }
+    .hide { display:none !important; }
     .cursor-pointer { cursor: pointer; }
     .small-img { width:60px; height:60px; object-fit:cover; border-radius:6px; }
+    .admin-tabs { display:flex; gap:12px; align-items:center; margin-bottom:16px; }
+    .admin-tabs .tab { padding:8px 12px; border-radius:6px; cursor:pointer; }
+    .tab.active { background:#0d6efd; color:white; }
+    /* layout: left column narrow, right content wide */
+    .left-col { min-height: 200px; }
   </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Admin</a>
-    <div class="d-flex align-items-center">
-      <!-- greeting (nếu đã login) -->
+
+    <!-- NAVBAR TABS (moved here) -->
+    <div id="navbar-tabs" class="d-none d-md-flex align-items-center ms-3">
+      <div id="tab-overview" class="nav-tab active">Tổng quan</div>
+      <div id="tab-users" class="nav-tab">Người dùng</div>
+      <div id="tab-products" class="nav-tab">Sản phẩm</div>
+    </div>
+
+    <div class="d-flex align-items-center ms-auto">
       <span id="nav-greeting" class="text-light me-3"></span>
       <button id="btn-logout" class="btn btn-outline-light btn-sm">Đăng xuất</button>
+      <!-- small hamburger for mobile to show tabs -->
+      <div class="dropdown d-md-none ms-2">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" id="mobileTabBtn" data-bs-toggle="dropdown" aria-expanded="false">
+          Menu
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileTabBtn">
+          <li><a class="dropdown-item mobile-tab" data-target="overview" href="#">Tổng quan</a></li>
+          <li><a class="dropdown-item mobile-tab" data-target="users" href="#">Người dùng</a></li>
+          <li><a class="dropdown-item mobile-tab" data-target="products" href="#">Sản phẩm</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
 
+
 <div class="container">
   <div class="row">
 
-    <!-- LEFT: Login / Info -->
-    <div class="col-lg-4 mb-4">
+    <!-- LEFT: Info card (keeps greeting and helpers) -->
+    <div class="col-lg-4 mb-4 left-col">
       <div id="card-login" class="card">
         <div class="card-header"><strong>Đăng nhập admin</strong></div>
         <div class="card-body">
@@ -46,106 +70,224 @@
         </div>
       </div>
 
+<!--      <div id="card-admin-info" class="card hide mt-3">-->
+<!--        <div class="card-header"><strong>Thông tin Admin</strong></div>-->
+<!--        <div class="card-body">-->
+<!--          <p id="admin-info"></p>-->
+<!--          <hr>-->
+<!--          <p class="small text-muted">Sử dụng tabs trên để xem/ thêm người dùng và sản phẩm.</p>-->
+<!--        </div>-->
+<!--      </div>-->
+      <!-- REPLACE the existing #card-admin-info with this block -->
       <div id="card-admin-info" class="card hide mt-3">
         <div class="card-header"><strong>Thông tin Admin</strong></div>
         <div class="card-body">
           <p id="admin-info"></p>
           <hr>
-          <p class="small text-muted">Sử dụng các form để thêm user / product.</p>
+          <p class="small text-muted">Sử dụng tabs trên để xem/ thêm người dùng và sản phẩm.</p>
         </div>
       </div>
+
+      <!-- Product edit card (hidden until edit clicked) -->
+      <div id="card-product-edit" class="card hide mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Sửa sản phẩm</strong>
+          <small class="text-muted" id="edit-product-id"></small>
+        </div>
+        <div class="card-body">
+          <div id="edit-msg" class="mb-2 text-danger"></div>
+
+          <div class="mb-2">
+            <label class="form-label">Tiêu đề</label>
+            <input id="edit-title" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Giá</label>
+            <input id="edit-price" class="form-control" type="number" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Khối lượng (vd: 125g)</label>
+            <input id="edit-khoiLuongHop" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Số lượng</label>
+            <input id="edit-soLuong" class="form-control" type="number" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Xuất xứ</label>
+            <input id="edit-xuatXu" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Mô tả</label>
+            <textarea id="edit-moTa" class="form-control" rows="3"></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">Hương vị</label>
+            <textarea id="edit-huongVi" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">Công dụng</label>
+            <textarea id="edit-congDung" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">Cách pha</label>
+            <textarea id="edit-cachPha" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">Trạng thái</label>
+            <select id="edit-trangThai" class="form-select">
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="HIDE">HIDE</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">Ảnh (URL hoặc upload)</label>
+            <div class="d-flex gap-2 align-items-center">
+              <div id="edit-img-preview" style="width:100px;height:100px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;">
+                <span style="font-size:12px;color:#888">Preview</span>
+              </div>
+              <div>
+                <button id="btn-edit-upload" class="btn btn-sm btn-outline-primary">Upload ảnh mới</button>
+                <!-- reuse same file input #file-image already in page -->
+                <!-- and reuse hidden #p-image for storing url -->
+              </div>
+            </div>
+            <input id="edit-anh" type="text" class="form-control mt-2" placeholder="Đường dẫn ảnh (auto từ upload hoặc paste URL)" />
+            <div class="small text-muted mt-1">Nếu upload ảnh, URL sẽ được tự điền.</div>
+          </div>
+
+          <div class="mb-2 text-end">
+            <button id="btn-cancel-edit" class="btn btn-secondary me-2">Hủy</button>
+            <button id="btn-update-product" class="btn btn-primary">Cập nhật</button>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- RIGHT: Management -->
+    <!-- RIGHT: CONTENT AREA -->
     <div class="col-lg-8">
 
-      <!-- Users -->
-      <div class="card mb-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <strong>Quản lý Người dùng</strong>
-          <button class="btn btn-sm btn-success" data-bs-toggle="collapse" data-bs-target="#user-form">Thêm user</button>
-        </div>
-        <div class="card-body">
-          <div id="user-form" class="collapse mb-3">
-            <div class="row g-2">
-              <div class="col-md-6"><input id="u-hoTen" class="form-control" placeholder="Họ tên"></div>
-              <div class="col-md-3"><select id="u-gioiTinh" class="form-select"><option value="1">Nam</option><option value="0">Nữ</option></select></div>
-              <div class="col-md-3"><input id="u-ngaySinh" type="date" class="form-control"></div>
-              <div class="col-12"><input id="u-diaChi" class="form-control" placeholder="Địa chỉ"></div>
-              <div class="col-md-6"><input id="u-SDT" class="form-control" placeholder="SĐT"></div>
-              <div class="col-md-6"><input id="u-email" class="form-control" placeholder="Email"></div>
-              <!-- Role selector: mặc định ADMIN -->
-              <div class="col-md-6">
-                <select id="u-role" class="form-select">
-                  <option value="ADMIN" selected>ADMIN</option>
-                  <option value="USER">USER</option>
-                </select>
-              </div>
-              <div class="col-md-6"><input id="u-taiKhoan" class="form-control" placeholder="Tài khoản"></div>
-              <div class="col-md-6"><input id="u-matKhau" class="form-control" placeholder="Mật khẩu"></div>
-              <div class="col-12 text-end"><button id="btn-create-user" class="btn btn-primary mt-2">Tạo User</button></div>
+      <!-- OVERVIEW (mặc định hiển thị): hiển thị bảng users + products với hành động -->
+      <div id="view-overview">
+        <!-- Users summary (có hành động Xóa) -->
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Quản lý Người dùng</strong>
+            <small class="text-muted">Tổng quan</small>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped" id="tbl-users-overview">
+                <thead><tr><th>#</th><th>Họ tên</th><th>SĐT</th><th>Email</th><th>Tài khoản</th><th>Role</th><th>Hành động</th></tr></thead>
+                <tbody></tbody>
+              </table>
             </div>
           </div>
+        </div>
 
-          <div class="table-responsive">
-            <table class="table table-striped" id="tbl-users">
-              <thead><tr><th>#</th><th>Họ tên</th><th>SĐT</th><th>Email</th><th>Tài khoản</th><th>Role</th><th>Hành động</th></tr></thead>
-              <tbody></tbody>
-            </table>
+        <!-- Products summary (có hành động Ẩn/Hiện + Xóa) -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Quản lý Sản phẩm</strong>
+            <small class="text-muted">Tổng quan</small>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover" id="tbl-products-overview">
+                <thead><tr><th>#</th><th>Ảnh</th><th>Tiêu đề</th><th>Giá</th><th>Số lượng</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Products -->
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <strong>Quản lý Sản phẩm</strong>
-          <button class="btn btn-sm btn-success" data-bs-toggle="collapse" data-bs-target="#product-form">Thêm product</button>
-        </div>
-        <div class="card-body">
-          <div id="product-form" class="collapse mb-3">
-            <div class="row g-2">
-              <div class="col-md-6"><input id="p-title" class="form-control" placeholder="Tên sản phẩm"></div>
-              <div class="col-md-3"><input id="p-price" class="form-control" placeholder="Giá"></div>
-              <div class="col-md-3"><input id="p-khoiLuongHop" class="form-control" placeholder="Khối lượng (vd: 125g)"/></div>
-              <div class="col-md-3"><input id="p-soLuong" class="form-control" placeholder="Số lượng" type="number"></div>
-              <div class="col-md-3"><input id="p-xuatXu" class="form-control" placeholder="Xuất xứ"/></div>
+      <!-- USERS MANAGEMENT (form + full list) -->
+      <div id="view-users" class="hide">
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Quản lý Người dùng</strong>
+            <button class="btn btn-sm btn-success" id="btn-show-add-user">Thêm user</button>
+          </div>
+          <div class="card-body">
+            <div id="user-form" class="mb-3 hide">
+              <div class="row g-2">
+                <div class="col-md-6"><input id="u-hoTen" class="form-control" placeholder="Họ tên"></div>
+                <div class="col-md-3"><select id="u-gioiTinh" class="form-select"><option value="1">Nam</option><option value="0">Nữ</option></select></div>
+                <div class="col-md-3"><input id="u-ngaySinh" type="date" class="form-control"></div>
+                <div class="col-12"><input id="u-diaChi" class="form-control" placeholder="Địa chỉ"></div>
+                <div class="col-md-6"><input id="u-SDT" class="form-control" placeholder="SĐT"></div>
+                <div class="col-md-6"><input id="u-email" class="form-control" placeholder="Email"></div>
+                <div class="col-md-6">
+                  <select id="u-role" class="form-select"><option value="ADMIN">ADMIN</option><option value="USER">USER</option></select>
+                </div>
+                <div class="col-md-6"><input id="u-taiKhoan" class="form-control" placeholder="Tài khoản"></div>
+                <div class="col-md-6"><input id="u-matKhau" class="form-control" placeholder="Mật khẩu"></div>
+                <div class="col-12 text-end"><button id="btn-create-user" class="btn btn-primary mt-2">Tạo User</button></div>
+              </div>
+            </div>
 
-              <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-striped" id="tbl-users">
+                <thead><tr><th>#</th><th>Họ tên</th><th>SĐT</th><th>Email</th><th>Tài khoản</th><th>Role</th><th>Hành động</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS MANAGEMENT (form + full list) -->
+      <div id="view-products" class="hide">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Quản lý Sản phẩm</strong>
+            <button id="btn-show-add-product" class="btn btn-sm btn-success">Thêm product</button>
+          </div>
+          <div class="card-body">
+            <div id="product-form" class="collapse mb-3 hide">
+              <div class="row g-2">
+                <div class="col-md-6"><input id="p-title" class="form-control" placeholder="Tên sản phẩm"></div>
+                <div class="col-md-3"><input id="p-price" class="form-control" placeholder="Giá"></div>
+                <div class="col-md-3"><input id="p-khoiLuongHop" class="form-control" placeholder="Khối lượng (vd: 125g)"/></div>
+                <div class="col-md-3"><input id="p-soLuong" class="form-control" placeholder="Số lượng" type="number"></div>
+                <div class="col-md-3"><input id="p-xuatXu" class="form-control" placeholder="Xuất xứ"/></div>
+
+                <div class="col-12">
                   <div class="d-flex gap-2 align-items-center">
                     <div id="img-preview" class="border"
                          style="width:100px;height:100px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
                       <span>Click chọn ảnh</span>
                     </div>
-
-                    <!-- hidden file input -->
                     <input id="file-image" type="file" accept="image/*" class="d-none" />
-
-                    <!-- hidden input để chứa url sau khi upload -->
                     <input id="p-image" type="text" class="d-none" />
                   </div>
-
                   <div id="upload-status" class="small text-muted mt-1"></div>
                 </div>
-              <div class="col-12"><textarea id="p-desc" class="form-control" placeholder="Mô tả"></textarea></div>
-              <div class="col-12"><textarea id="p-huongVi" class="form-control" placeholder="Hương vị (mô tả)"></textarea></div>
-              <div class="col-12"><textarea id="p-congDung" class="form-control" placeholder="Công dụng"></textarea></div>
-              <div class="col-12"><textarea id="p-cachPha" class="form-control" placeholder="Cách pha"></textarea></div>
-              <div class="col-md-4">
-                <select id="p-trangThai" class="form-select">
-                  <option value="ACTIVE">ACTIVE</option>
-                  <option value="HIDE">HIDE</option>
-                </select>
-              </div>
-              <div class="col-12 text-end"><button id="btn-create-product" class="btn btn-primary mt-2">Tạo Product</button></div>
-            </div>
-          </div>
 
-          <div class="table-responsive">
-            <table class="table table-hover" id="tbl-products">
-              <thead><tr><th>#</th><th>Ảnh</th><th>Tiêu đề</th><th>Giá</th><th>Số lượng</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
-              <tbody></tbody>
-            </table>
+                <div class="col-12"><textarea id="p-desc" class="form-control" placeholder="Mô tả"></textarea></div>
+                <div class="col-12"><textarea id="p-huongVi" class="form-control" placeholder="Hương vị (mô tả)"></textarea></div>
+                <div class="col-12"><textarea id="p-congDung" class="form-control" placeholder="Công dụng"></textarea></div>
+                <div class="col-12"><textarea id="p-cachPha" class="form-control" placeholder="Cách pha"></textarea></div>
+                <div class="col-md-4">
+                  <select id="p-trangThai" class="form-select"><option value="ACTIVE">ACTIVE</option><option value="HIDE">HIDE</option></select>
+                </div>
+                <div class="col-12 text-end"><button id="btn-create-product" class="btn btn-primary mt-2">Tạo Product</button></div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover" id="tbl-products">
+                <thead><tr><th>#</th><th>Ảnh</th><th>Tiêu đề</th><th>Giá</th><th>Số lượng</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -155,145 +297,247 @@
   </div>
 </div>
 
-<!-- bootstrap and scripts -->
+<!-- scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-
-    // --- file input / upload logic ---
-    const fileInput = el("#file-image");
-    const preview = el("#img-preview");
-    const uploadStatus = el("#upload-status");
-    const pImageInput = el("#p-image");
-
-    // click preview => open file chooser
-    preview.addEventListener("click", () => fileInput.click());
-
-    // khi chọn file => preview + upload
-    fileInput.addEventListener("change", async (ev) => {
-      const file = ev.target.files[0];
-      if(!file) return;
-
-      // preview local
-      const reader = new FileReader();
-      reader.onload = () => {
-        preview.innerHTML = `<img src="${reader.result}" style="max-width:100%;max-height:100%;object-fit:cover;">`;
-      };
-      reader.readAsDataURL(file);
-
-      // upload file lên server
-      uploadStatus.innerText = "Đang tải ảnh lên...";
-      const fd = new FormData();
-      fd.append("image", file);
-
-      try {
-        const res = await fetch("/admin/upload-image", {
-          method: "POST",
-          body: fd,
-          credentials: "same-origin"
-        });
-        const j = await res.json();
-        if (res.ok && j.ok) {
-          pImageInput.value = j.url;         // gán URL Cloudinary vào ô p-image
-          uploadStatus.innerText = "Tải xong.";
-        } else {
-          uploadStatus.innerText = "Upload thất bại: " + (j.msg || j.error || res.statusText);
-        }
-      } catch (err) {
-        console.error(err);
-        uploadStatus.innerText = "Không thể kết nối để upload ảnh.";
-      }
-    });
-
-
-  // biến admin do server truyền vào (Flask render_template(..., admin=...))
+  // biến admin do Flask truyền vào
   const LOGGED_ADMIN = {{ admin|tojson | default('null') }};
 
-  // -------- helpers ----------
-  function el(sel){ return document.querySelector(sel); }
-  function els(sel){ return Array.from(document.querySelectorAll(sel)); }
+  // helper DOM
+  const el = sel => document.querySelector(sel);
+  const els = sel => Array.from(document.querySelectorAll(sel));
   const apiBase = "";
 
-  // Khi trang load: nếu đã đăng nhập -> ẩn form login, hiện admin info và load data
+  // TABS handlers + (không còn nút top-right nên không điều khiển hiển thị chúng nữa)
+  function showView(name) {
+    el("#view-overview").classList.toggle("hide", name !== "overview");
+    el("#view-users").classList.toggle("hide", name !== "users");
+    el("#view-products").classList.toggle("hide", name !== "products");
+
+    ["overview","users","products"].forEach(n=>{
+      const node = el("#tab-" + n);
+      if (node) node.classList.toggle("active", n === name);
+    });
+  }
+
+  // --- TAB event handlers (navbar tabs + mobile)
+  function showView(name) {
+    el("#view-overview").classList.toggle("hide", name !== "overview");
+    el("#view-users").classList.toggle("hide", name !== "users");
+    el("#view-products").classList.toggle("hide", name !== "products");
+
+    // desktop navbar tabs
+    const map = { overview: "#tab-overview", users: "#tab-users", products: "#tab-products" };
+    Object.keys(map).forEach(k => {
+      const node = el(map[k]);
+      if (node) node.classList.toggle("active", k === name);
+    });
+  }
+
+  // desktop tabs (in navbar)
+  el("#tab-overview")?.addEventListener("click", ()=> showView("overview"));
+  el("#tab-users")?.addEventListener("click", ()=> showView("users"));
+  el("#tab-products")?.addEventListener("click", ()=> showView("products"));
+
+  // mobile dropdown menu items
+  els(".mobile-tab").forEach(a => {
+    a.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const t = a.dataset.target || a.getAttribute("data-target");
+      if (t) showView(t);
+    });
+  });
+
+  // các nút mở form bên trong từng tab
+  el("#btn-show-add-user")?.addEventListener("click", ()=> el("#user-form").classList.toggle("hide"));
+  el("#btn-show-add-product")?.addEventListener("click", ()=> el("#product-form").classList.toggle("hide"));
+
+  // login / logout UI
   document.addEventListener("DOMContentLoaded", () => {
     if (LOGGED_ADMIN) {
-      // show greeting in navbar
       el("#nav-greeting").innerText = "Xin chào " + (LOGGED_ADMIN.hoTen || LOGGED_ADMIN.taiKhoan || "");
-      // hide form login, show admin info card
       el("#card-login").classList.add("hide");
       el("#card-admin-info").classList.remove("hide");
-      el("#admin-info").innerText = "Xin chào: " + (LOGGED_ADMIN.hoTen || LOGGED_ADMIN.taiKhoan);
-      // load data
-      loadUsers();
-      loadProducts();
-    } else {
-      // chưa đăng nhập: ẩn phần quản lý (nếu muốn), để mặc định: hiện form login, ẩn admin info
-      el("#card-login").classList.remove("hide");
-      el("#card-admin-info").classList.add("hide");
     }
+    // ensure inital view
+    showView("overview");
+    // always load summaries (for overview) and full lists
+    loadUsers();
+    loadProducts();
   });
 
-  // -------- admin login ----------
-  el("#btn-login").addEventListener("click", async () => {
-    const username = el("#login-username").value.trim();
-    const password = el("#login-password").value.trim();
-    if(!username || !password){ el("#login-msg").innerText = "Nhập tài khoản và mật khẩu"; return; }
-    try {
-      const res = await fetch("/admin/login", {
-        method: "POST",
-        headers: { "Content-Type":"application/json" },
-        credentials: "same-origin",        // <-- cho phép browser lưu cookie session
-        body: JSON.stringify({ username, password })
-      });
-      const j = await res.json();
-      if(!res.ok){ el("#login-msg").innerText = j.msg || "Lỗi login"; return; }
-      // thành công => chuyển trang để backend xác nhận session
-      window.location.href = "/admin/";
-    } catch(e){ console.error(e); el("#login-msg").innerText = "Không thể kết nối server"; }
-  });
-
-  // logout: gọi server xóa session rồi redirect
-  el("#btn-logout").addEventListener("click", async ()=> {
-    try {
-      await fetch("/admin/logout", { method: "GET", credentials: "same-origin" });
-    } catch(e) { console.error(e); }
-    window.location.href = "/admin/login";
-  });
-
-  // -------- users functions ----------
+  // fetch + render users (both overview and management)
   async function loadUsers(){
-    try{
+    try {
       const res = await fetch(apiBase + "/admin/users", { credentials: "same-origin" });
       const arr = await res.json();
-      const tbody = el("#tbl-users tbody");
-      tbody.innerHTML = "";
-      arr.forEach((u, idx) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+      const tbodyOverview = el("#tbl-users-overview tbody");
+      const tbodyManage = el("#tbl-users tbody");
+      tbodyOverview.innerHTML = ""; tbodyManage.innerHTML = "";
+      arr.forEach((u, idx)=> {
+        // overview row with action
+        const rOverview = document.createElement("tr");
+        rOverview.innerHTML = `
+          <td>${idx+1}</td>
+          <td>${u.hoTen||""}</td>
+          <td>${u.SDT||""}</td>
+          <td>${u.email||""}</td>
+          <td>${u.taiKhoan||""}</td>
+          <td>${u.role||"USER"}</td>
+          <td>
+            <button class="btn btn-sm btn-danger btn-del-user" data-id="${u.id}">Xóa</button>
+          </td>`;
+        tbodyOverview.appendChild(rOverview);
+
+        // management row
+        const rowManage = document.createElement("tr");
+        rowManage.innerHTML = `
           <td>${idx+1}</td>
           <td>${u.hoTen || ""}</td>
           <td>${u.SDT || ""}</td>
           <td>${u.email || ""}</td>
           <td>${u.taiKhoan || ""}</td>
           <td>${u.role || "USER"}</td>
-          <td>
-            <button class="btn btn-sm btn-danger btn-del-user" data-id="${u.id}">Xóa</button>
-          </td>
+          <td><button class="btn btn-sm btn-danger btn-del-user" data-id="${u.id}">Xóa</button></td>
         `;
-        tbody.appendChild(tr);
+        tbodyManage.appendChild(rowManage);
       });
+
+      // attach delete handlers (delegate through query)
       els(".btn-del-user").forEach(btn=>{
         btn.onclick = async ()=> {
           const id = btn.dataset.id;
           if(!confirm("Xác nhận xóa user?")) return;
           await fetch(apiBase + "/admin/users/" + id, { method:"DELETE", credentials: "same-origin" });
-          loadUsers();
+          await loadUsers();
         };
       });
-    }catch(e){ console.error(e); }
+    } catch(e){ console.error(e); }
   }
 
-  el("#btn-create-user").addEventListener("click", async ()=>{
+  // fetch + render products (both overview and management) -- updated with Edit button
+  async function loadProducts(){
+    try {
+      const res = await fetch(apiBase + "/admin/products", { credentials: "same-origin" });
+      const arr = await res.json();
+      const tbodyOverview = el("#tbl-products-overview tbody");
+      const tbodyManage = el("#tbl-products tbody");
+      tbodyOverview.innerHTML = ""; tbodyManage.innerHTML = "";
+
+      arr.forEach((p, idx) => {
+        const imgUrl = (p.anh || p.image || "") ;
+        const imgHtml = imgUrl ? `<img src="${imgUrl}" class="small-img"/>` : "";
+        const title = p.tenSanPham || p.ten_san_pham || p.title || "";
+        const price = (p.gia !== undefined && p.gia !== null) ? p.gia : (p.price || 0);
+        const qty = (p.soLuong !== undefined && p.soLuong !== null) ? p.soLuong : (p.so_luong || 0);
+        const status = p.trangThai || p.trang_thai || "";
+
+        // overview row (with actions)
+        const r1 = document.createElement("tr");
+        r1.innerHTML = `
+          <td>${idx+1}</td>
+          <td>${imgHtml}</td>
+          <td>${title}</td>
+          <td>${price}</td>
+          <td>${qty}</td>
+          <td>${status}</td>
+          <td>
+            <button class="btn btn-sm btn-success btn-edit" data-id="${p.id}">Sửa</button>
+            <button class="btn btn-sm btn-warning btn-toggle" data-id="${p.id}" data-status="${status}">${status === 'ACTIVE' ? 'Ẩn' : 'Hiện'}</button>
+            <button class="btn btn-sm btn-danger btn-del" data-id="${p.id}">Xóa</button>
+          </td>
+        `;
+        tbodyOverview.appendChild(r1);
+
+        // management row (right table)
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${idx+1}</td>
+          <td>${imgHtml}</td>
+          <td>${title}</td>
+          <td>${price}</td>
+          <td>${qty}</td>
+          <td>${status}</td>
+          <td>
+            <button class="btn btn-sm btn-success btn-edit" data-id="${p.id}">Sửa</button>
+            <button class="btn btn-sm btn-warning btn-toggle" data-id="${p.id}" data-status="${status}">${status === 'ACTIVE' ? 'Ẩn' : 'Hiện'}</button>
+            <button class="btn btn-sm btn-danger btn-del" data-id="${p.id}">Xóa</button>
+          </td>
+        `;
+        tbodyManage.appendChild(tr);
+      });
+
+      // attach edit handlers
+      els(".btn-edit").forEach(
+        btn=>{ btn.onclick = async () => {
+          const id = btn.dataset.id;
+          // fetch single product detail (endpoint exists at /api/products/<id>)
+          try {
+            const r = await fetch("/api/products/" + id, { credentials: "same-origin" });
+            if (!r.ok) { alert("Không lấy được sản phẩm"); return; }
+            const p = await r.json();
+            openEditProduct(p);
+          } catch(e) { console.error(e); alert("Lỗi khi lấy sản phẩm"); }
+        };
+      });
+
+      // attach toggle handlers
+      els(".btn-toggle").forEach(btn=>{
+        btn.onclick = async ()=> {
+          const id = btn.dataset.id;
+          const current = btn.dataset.status;
+          const newStatus = current === "ACTIVE" ? "HIDE" : "ACTIVE";
+          await fetch(apiBase + "/admin/products/" + id, {
+            method: "PUT",
+            headers: {"Content-Type":"application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({ trangThai: newStatus })
+          });
+          await loadProducts();
+        };
+      });
+
+      // attach delete handlers
+      els(".btn-del").forEach(btn=>{
+        btn.onclick = async ()=> {
+          const id = btn.dataset.id;
+          if(!confirm("Xóa product?")) return;
+          await fetch(apiBase + "/admin/products/" + id, { method:"DELETE", credentials: "same-origin" });
+          await loadProducts();
+        };
+      });
+
+    } catch(e){ console.error(e); }
+  }
+
+  // --- file upload logic (product image) ---
+  const fileInput = el("#file-image");
+  const preview = el("#img-preview");
+  const uploadStatus = el("#upload-status");
+  const pImageInput = el("#p-image");
+
+  preview?.addEventListener("click", () => fileInput?.click());
+
+  fileInput?.addEventListener("change", async (ev) => {
+    const file = ev.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => preview.innerHTML = `<img src="${reader.result}" style="max-width:100%;max-height:100%;object-fit:cover;">`;
+    reader.readAsDataURL(file);
+
+    if (!uploadStatus) return;
+    uploadStatus.innerText = "Đang tải ảnh lên...";
+    const fd = new FormData(); fd.append("image", file);
+    try {
+      const res = await fetch("/admin/upload-image", { method: "POST", body: fd, credentials: "same-origin" });
+      const j = await res.json();
+      if (res.ok && j.ok) { pImageInput.value = j.url; uploadStatus.innerText = "Tải xong."; }
+      else uploadStatus.innerText = "Upload thất bại: " + (j.msg || j.error || res.statusText);
+    } catch (err) { console.error(err); uploadStatus.innerText = "Không thể kết nối để upload ảnh."; }
+  });
+
+  // ---------- create user ----------
+  el("#btn-create-user")?.addEventListener("click", async ()=>{
     const obj = {
       hoTen: el("#u-hoTen").value,
       gioiTinh: el("#u-gioiTinh").value,
@@ -313,82 +557,12 @@
         body: JSON.stringify(obj)
       });
       const j = await res.json();
-      if(res.ok){ alert(j.msg || "OK"); loadUsers(); }
+      if(res.ok){ alert(j.msg || "OK"); loadUsers(); el("#user-form").classList.add("hide"); }
       else alert(j.msg || "Lỗi");
     } catch(e){ console.error(e); alert("Lỗi tạo user"); }
   });
 
-  // -------- products functions ----------
-  async function loadProducts(){
-    try{
-      // gọi API lấy danh sách sản phẩm
-      const res = await fetch(apiBase + "/admin/products", { credentials: "same-origin" });
-      const arr = await res.json();
-      const tbody = el("#tbl-products tbody");
-      tbody.innerHTML = "";
-
-      arr.forEach((p, idx) => {
-        // lấy nguồn ảnh (ưu tiên trường DB 'anh' hoặc 'image' hoặc 'hinh_anh')
-        const imgUrl = (p.anh || p.image || p.hinh_anh || "") ;
-        const imgHtml = imgUrl ? `<img src="${imgUrl}" class="small-img"/>` : "";
-
-        // lấy tiêu đề: ưu tiên tên cột thực tế trong DB
-        const title = p.tenSanPham || p.ten_san_pham || p.title || "";
-
-        // giá
-        const price = (p.gia !== undefined && p.gia !== null) ? p.gia : (p.price || 0);
-
-        // số lượng
-        const qty = (p.soLuong !== undefined && p.soLuong !== null) ? p.soLuong : (p.so_luong || 0);
-
-        // trạng thái
-        const status = p.trangThai || p.trang_thai || p.trangThai || "";
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${idx+1}</td>
-          <td>${imgHtml}</td>
-          <td>${title}</td>
-          <td>${price}</td>
-          <td>${qty}</td>
-          <td>${status}</td>
-          <td>
-            <button class="btn btn-sm btn-warning btn-toggle" data-id="${p.id}" data-status="${status}">${status === 'ACTIVE' ? 'Ẩn' : 'Hiện'}</button>
-            <button class="btn btn-sm btn-danger btn-del" data-id="${p.id}">Xóa</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      // Gắn event cho toggle / delete
-      els(".btn-toggle").forEach(btn=>{
-        btn.onclick = async ()=> {
-          const id = btn.dataset.id;
-          const current = btn.dataset.status;
-          const newStatus = current === "ACTIVE" ? "HIDE" : "ACTIVE";
-          await fetch(apiBase + "/admin/products/" + id, {
-            method: "PUT",
-            headers: {"Content-Type":"application/json"},
-            credentials: "same-origin",
-            body: JSON.stringify({ trangThai: newStatus })
-          });
-          loadProducts();
-        };
-      });
-
-      els(".btn-del").forEach(btn=>{
-        btn.onclick = async ()=> {
-          const id = btn.dataset.id;
-          if(!confirm("Xóa product?")) return;
-          await fetch(apiBase + "/admin/products/" + id, { method:"DELETE", credentials: "same-origin" });
-          loadProducts();
-        };
-      });
-
-    }catch(e){ console.error(e); }
-  }
-
-  // ----------------- Tạo product -----------------
+  // ---------- create product ----------
   el("#btn-create-product")?.addEventListener("click", async ()=>{
     const obj = {
       tenSanPham: el("#p-title").value.trim(),
@@ -400,11 +574,10 @@
       huongVi: el("#p-huongVi") ? el("#p-huongVi").value.trim() : null,
       congDung: el("#p-congDung") ? el("#p-congDung").value.trim() : null,
       cachPha: el("#p-cachPha") ? el("#p-cachPha").value.trim() : null,
-      anh: el("#p-image").value.trim(),        // đường dẫn tương đối như /images/...
+      anh: el("#p-image") ? el("#p-image").value.trim() : "",
       trangThai: el("#p-trangThai").value
     };
 
-    // kiểm tra cơ bản
     if (!obj.tenSanPham) { alert("Vui lòng nhập tiêu đề"); return; }
 
     try {
@@ -414,30 +587,143 @@
         credentials: "same-origin",
         body: JSON.stringify(obj)
       });
-
       const j = await res.json();
       if (res.ok) {
         alert(j.msg || "Tạo product thành công");
-        // reset form (tuỳ thích)
-        el("#p-title").value = "";
-        el("#p-price").value = "";
-        el("#p-khoiLuongHop").value = "";
-        el("#p-soLuong").value = "";
-        el("#p-xuatXu").value = "";
-        el("#p-image").value = "";
-        el("#p-desc").value = "";
-        el("#p-huongVi").value = "";
-        el("#p-congDung").value = "";
-        el("#p-cachPha").value = "";
-        // load lại danh sách
+        // reset form
+        el("#p-title").value = ""; el("#p-price").value = ""; el("#p-khoiLuongHop").value = ""; el("#p-soLuong").value = "";
+        el("#p-xuatXu").value = ""; el("#p-image").value = ""; el("#p-desc").value = ""; el("#p-huongVi").value = "";
+        el("#p-congDung").value = ""; el("#p-cachPha").value = ""; el("#p-trangThai").value = "ACTIVE";
         loadProducts();
-      } else {
-        alert(j.msg || "Lỗi tạo product");
+        el("#product-form").classList.add("hide");
+      } else alert(j.msg || "Lỗi tạo product");
+    } catch (e) { console.error(e); alert("Lỗi kết nối server khi tạo product"); }
+  });
+
+  // đảm bảo element tồn trước khi gắn
+  const btnUpdate = el("#btn-update-product");
+  if (btnUpdate) {
+    btnUpdate.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      console.log("[ADMIN] click update product");
+
+      const id = (el("#edit-product-id") && el("#edit-product-id").innerText.trim()) || "";
+      console.log("product id:", id);
+      if (!id) { alert("Không có sản phẩm để cập nhật"); return; }
+
+      const payload = {
+        tenSanPham: (el("#edit-title") && el("#edit-title").value.trim()) || "",
+        gia: parseFloat(el("#edit-price") && el("#edit-price").value) || 0,
+        khoiLuongHop: (el("#edit-khoiLuongHop") && el("#edit-khoiLuongHop").value.trim()) || null,
+        soLuong: parseInt(el("#edit-soLuong") && el("#edit-soLuong").value) || 0,
+        xuatXu: (el("#edit-xuatXu") && el("#edit-xuatXu").value.trim()) || null,
+        moTa: (el("#edit-moTa") && el("#edit-moTa").value.trim()) || null,
+        huongVi: (el("#edit-huongVi") && el("#edit-huongVi").value.trim()) || null,
+        congDung: (el("#edit-congDung") && el("#edit-congDung").value.trim()) || null,
+        cachPha: (el("#edit-cachPha") && el("#edit-cachPha").value.trim()) || null,
+        trangThai: (el("#edit-trangThai") && el("#edit-trangThai").value) || "ACTIVE",
+        anh: (el("#edit-anh") && el("#edit-anh").value.trim()) || ""
+      };
+
+      console.log("payload:", payload);
+
+      try {
+        const res = await fetch(`/admin/products/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify(payload)
+        });
+        console.log("response status:", res.status);
+        const j = await res.json().catch(()=>null);
+        if (!res.ok) {
+          console.error("update failed", j || res.statusText);
+          alert("Cập nhật thất bại: " + (j?.msg || res.statusText));
+          return;
+        }
+        alert("Cập nhật thành công");
+        // đóng form + refresh danh sách
+        if (el("#card-product-edit")) el("#card-product-edit").classList.add("hide");
+        if (el("#card-admin-info")) el("#card-admin-info").classList.remove("hide");
+        await loadProducts();
+      } catch (err) {
+        console.error("Network/JS error while updating:", err);
+        alert("Lỗi khi gửi yêu cầu cập nhật, xem console.");
       }
-    } catch (e) {
-      console.error(e);
-      alert("Lỗi kết nối server khi tạo product");
+    });
+  } else {
+    console.warn("btn-update-product không tồn tại khi gán event.");
+  }
+
+
+  // --- từ 601 đến 692: functions để mở form sửa, upload & cập nhật ---
+  // Mở form sửa sản phẩm và điền dữ liệu
+  function openEditProduct(p) {
+    // ẩn card admin info, hiện card edit
+    if (el("#card-admin-info")) el("#card-admin-info").classList.add("hide");
+    if (el("#card-product-edit")) el("#card-product-edit").classList.remove("hide");
+
+    // hiển thị id
+    if (el("#edit-product-id")) el("#edit-product-id").innerText = p.id || "";
+
+    // helper gán an toàn
+    const safeSet = (selector, value) => {
+      const node = el(selector);
+      if (!node) return;
+      if ('value' in node) node.value = value ?? "";
+      else node.innerText = value ?? "";
+    };
+
+    safeSet("#edit-title", p.title || p.tenSanPham || p.ten_san_pham || "");
+    safeSet("#edit-price", (p.price ?? p.gia) ?? 0);
+    safeSet("#edit-soLuong", (p.soLuong ?? p.so_luong) ?? 0);
+    safeSet("#edit-trangThai", p.trangThai || p.trang_thai || "ACTIVE");
+
+    // các trường mở rộng (nếu HTML có thì sẽ fill, nếu không có thì bỏ qua)
+    safeSet("#edit-khoiLuongHop", p.khoiLuongHop || p.khoi_luong_hop || p.khoi_luong || "");
+    safeSet("#edit-xuatXu", p.xuatXu || p.xuat_xu || "");
+    safeSet("#edit-moTa", p.description || p.moTa || p.mo_ta || "");
+    safeSet("#edit-huongVi", p.huongVi || p.huong_vi || "");
+    safeSet("#edit-congDung", p.congDung || p.cong_dung || "");
+    safeSet("#edit-cachPha", p.cachPha || p.cach_pha || "");
+
+    // ảnh
+    const imgUrl = p.image || p.anh || "";
+    safeSet("#edit-anh", imgUrl);
+    const preview = el("#edit-img-preview");
+    if (preview) {
+      preview.innerHTML = imgUrl
+        ? `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;">`
+        : `<span style="font-size:12px;color:#888">No image</span>`;
     }
+
+    // cuộn vào view
+    const card = el("#card-product-edit");
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  //==============================================
+
+
+  // login/logout (giữ nguyên logic như trước)
+  el("#btn-login").addEventListener("click", async () => {
+    const username = el("#login-username").value.trim();
+    const password = el("#login-password").value.trim();
+    if(!username || !password){ el("#login-msg").innerText = "Nhập tài khoản và mật khẩu"; return; }
+    try {
+      const res = await fetch("/admin/login", {
+        method: "POST",
+        headers: { "Content-Type":"application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ username, password })
+      });
+      const j = await res.json();
+      if(!res.ok){ el("#login-msg").innerText = j.msg || "Lỗi login"; return; }
+      window.location.href = "/admin/";
+    } catch(e){ console.error(e); el("#login-msg").innerText = "Không thể kết nối server"; }
+  });
+  el("#btn-logout").addEventListener("click", async ()=> {
+    try { await fetch("/admin/logout", { method: "GET", credentials: "same-origin" }); } catch(e) { console.error(e); }
+    window.location.href = "/admin/login";
   });
 
 </script>

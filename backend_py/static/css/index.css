@@ -1,0 +1,265 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+:root{
+  --bg-1: #f3fff8;     /* very pale mint */
+  --bg-2: #e7fff2;     /* soft mint */
+  --card: #ffffff;
+  --accent: #19c37d;   /* green accent */
+  --accent-2: #3be58b; /* brighter green */
+  --muted: #6b7280;
+  --nav-bg: rgba(15, 23, 42, 0.95);
+  --glass: rgba(255,255,255,0.6);
+  --soft-shadow: 0 10px 30px rgba(7, 20, 30, 0.08);
+  --soft-shadow-2: 0 6px 20px rgba(7,20,30,0.06);
+  --radius-xl: 18px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+}
+
+/* Page background and base font */
+html,body{
+  height:100%;
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 60%);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #0f1724;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-top: 72px; /* keep same spacing as bootstrap fixed-top */
+}
+
+/* NAVBAR */
+.navbar{
+  background: linear-gradient(90deg, rgba(10,20,30,0.95), rgba(8,18,30,0.85));
+  box-shadow: 0 6px 24px rgba(5,10,20,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  padding: 0.6rem 1rem;
+}
+.navbar-brand{
+  font-weight:700;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+#nav-greeting{ font-weight:600; color: rgba(255,255,255,0.9); }
+#btn-logout{ border-radius: 12px; }
+
+#navbar-tabs {
+  gap: 10px;
+  align-items: center;
+}
+.nav-tab {
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  font-weight:700;
+  margin-right:6px;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.nav-tab:hover { transform: translateY(-2px); background: rgba(255,255,255,0.09); }
+#navbar-tabs .nav-tab.active{
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 10px 24px rgba(27,198,120,0.12);
+}
+@media (max-width: 767px){
+  #navbar-tabs { display: none !important; } /* ensure mobile hides */
+}
+
+/* Admin tabs (top) */
+.admin-tabs{
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.admin-tabs .tab{
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45));
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight:600;
+  color: #0f1724;
+  box-shadow: var(--soft-shadow-2);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.admin-tabs .tab:hover{ transform: translateY(-3px); }
+.tab.active{
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 10px 30px rgba(27, 198, 120, 0.18);
+}
+
+/* Left column cards (login & info) */
+.left-col .card{
+  border: none;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.75));
+  box-shadow: var(--soft-shadow);
+  overflow: hidden;
+}
+.card-header{
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border-bottom: none;
+  font-weight:700;
+  padding: 14px 18px;
+}
+.card-body{
+  padding: 18px;
+}
+
+/* Login card special */
+#card-login{
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+  border-radius: 20px;
+}
+#card-login input.form-control{
+  border-radius: 12px;
+  border: 1px solid rgba(20,30,40,0.06);
+  padding: 12px 14px;
+  background: rgba(250,255,250,0.9);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+}
+#login-msg{ color: #e04747; font-weight:600; min-height:18px; }
+
+/* Action buttons */
+.btn {
+  border-radius: 12px;
+  font-weight:600;
+}
+.btn-primary{
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border: none;
+  box-shadow: 0 12px 24px rgba(27,198,120,0.12);
+}
+.btn-outline-light{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Cards on right content */
+.card.mb-3, .card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: none;
+  background: rgba(255,255,255,0.85);
+  box-shadow: var(--soft-shadow);
+}
+
+/* Tables: softer, modern look */
+.table {
+  background: transparent;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table thead th{
+  border-bottom: none;
+  color: #12202a;
+  font-weight:700;
+  padding: 16px 12px;
+}
+.table tbody tr{
+  border-bottom: 1px solid rgba(15,20,25,0.04);
+}
+.table td, .table th{
+  vertical-align: middle;
+  padding: 12px;
+}
+.table-striped tbody tr:nth-of-type(odd){
+  background: linear-gradient(180deg, rgba(255,255,255,0.0), rgba(255,255,255,0.0));
+}
+
+/* Product image small */
+.small-img{
+  width:56px;
+  height:56px;
+  object-fit:cover;
+  border-radius:10px;
+  border: 1px solid rgba(10,20,30,0.06);
+  box-shadow: 0 6px 14px rgba(9,18,25,0.06);
+}
+
+/* Action buttons in table */
+.table .btn-sm{
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-weight:700;
+}
+.btn-danger{ background: #ff6b6b; border:none; color:white; }
+.btn-warning{ background: #ffbf3b; border:none; color:#2b2b2b; }
+
+/* Forms inside cards */
+.form-control, .form-select, textarea {
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid rgba(15,20,25,0.06);
+  box-shadow: inset 0 2px 8px rgba(2,6,8,0.02);
+}
+
+/* File preview */
+#img-preview{
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(250,255,251,0.9), rgba(245,255,247,0.9));
+  display:flex; align-items:center; justify-content:center;
+  width:100px; height:100px; cursor:pointer;
+  transition: transform .12s ease;
+}
+#img-preview:hover{ transform: translateY(-4px); box-shadow: var(--soft-shadow-2); }
+
+/* Responsive tweaks */
+@media (max-width: 991px){
+  .left-col { margin-bottom: 18px; }
+  .admin-tabs { justify-content:center; flex-wrap:wrap; }
+}
+
+/* Tiny helpers */
+.hide{ display:none !important; }
+.cursor-pointer{ cursor:pointer; }
+
+/* subtle footer / small text */
+.small.text-muted{ color: rgba(10,20,30,0.45) !important; font-size:0.92rem; }
+
+/* Accent status badges */
+.status-badge {
+  display:inline-block;
+  font-weight:700;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:0.8rem;
+}
+.status-active{ background: rgba(27,198,120,0.14); color: #0f8a50; }
+.status-hide{ background: rgba(40,40,40,0.06); color: #444; }
+
+/* Make table actions slightly separated for touch */
+.table td > .btn + .btn { margin-left:8px; }
+
+/* improve modal-like look for product form when collapsed */
+#product-form.collapse, #user-form.hide {
+  transition: all .18s ease;
+}
+
+/* subtle focus ring */
+.form-control:focus, .form-select:focus {
+  outline: none;
+  box-shadow: 0 6px 18px rgba(26,188,130,0.12);
+  border-color: rgba(26,188,130,0.16);
+}
+
+/* Hover states for rows */
+.table-hover tbody tr:hover{
+  background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(250,255,250,0.6));
+  transform: translateY(-2px);
+  transition: all .12s ease;
+}
+
+/* Make header small note on cards */
+.card-header small{ color: var(--muted); font-weight:500; }
+
+/* final polish for buttons in header */
+#btn-show-add-user, #btn-show-add-product { border-radius: 12px; font-weight:700; }
+
+/* ensure login button stands out */
+#btn-login{
+  width:100%;
+  padding: 12px;
+  border-radius: 999px;
+  font-weight:800;
+  box-shadow: 0 14px 30px rgba(27,198,120,0.12);
+}
