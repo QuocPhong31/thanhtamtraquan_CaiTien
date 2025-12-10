@@ -4,54 +4,35 @@
   <meta charset="utf-8" />
   <title>Chi tiết sản phẩm</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- font hiện đại, hơi trẻ trung -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <!-- main product stylesheet (moved from inline) -->
   <link rel="stylesheet" href="../Style/styleProduct.css">
-  <style>
-    /* nhanh gọn cho layout chi tiết */
-    body { font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; min-height:100vh;
-      background: linear-gradient(135deg,#274e3f,#4f7a3b); color:#fff; }
-    .container { max-width:1100px; margin:40px auto; background:#fff; color:#222; border-radius:10px; padding:24px; box-shadow:0 8px 30px rgba(0,0,0,.2); }
-    .product-row { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
-    .img-wrap img { width:360px; height:auto; border-radius:10px; object-fit:cover; display:block; }
-    .info { flex:1; min-width:260px; }
-    h1 { margin:0 0 12px 0; font-size:28px; }
-    .price { font-size:22px; color:#2b8a44; margin:8px 0 16px; font-weight:700; }
-    .desc { white-space:pre-wrap; line-height:1.6; color:#333; }
-    .back { display:inline-block; margin-top:18px; padding:8px 12px; background:#2b8a44; color:#fff; border-radius:6px; text-decoration:none; }
-    .loading { color:#fff; text-align:center; padding:120px 0; font-size:20px; }
-    @media(max-width:800px){
-      .img-wrap img { width:100%; max-width:360px; }
-      .product-row { flex-direction:column; align-items:center; }
-    }
-  </style>
 </head>
 <body>
-  <div id="root">
+  <div class="wrap">
     <div id="product-detail" class="loading">Đang tải...</div>
   </div>
 
 <script>
-  const API_BASE = "http://127.0.0.1:5000"; // nếu backend bạn chạy ở host khác thì đổi ở đây
+  const API_BASE = "http://127.0.0.1:5000";
 
-  // build url cho ảnh: DB lưu '/images/...' hoặc 'images/...' hoặc URL đầy đủ
   function buildImageUrl(raw) {
     if (!raw) return API_BASE + "/images/placeholder.jpg";
     raw = String(raw).trim();
     if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
     if (raw.startsWith("/")) return API_BASE + raw;
-    // nếu DB lưu như 'images/products/..' hoặc 'image/products/..'
     return API_BASE + "/" + raw.replace(/^\/+/, "");
   }
 
-  function escapeHtml(s){ if(!s) return ""; return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+  function escapeHtml(s){ if(!s && s !== 0) return ""; return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 
-  // lấy id từ query ?id=...
   const params = new URLSearchParams(location.search);
   const productId = params.get("id");
-
   const root = document.getElementById("product-detail");
 
   if (!productId) {
-    root.innerHTML = `<div class="container"><p>Không xác định sản phẩm. <a href="../index.html" class="back">Quay về</a></p></div>`;
+    root.innerHTML = `<div class="card"><div style="padding:18px;">Không xác định sản phẩm. <a href="../index.html" class="back">Quay về</a></div></div>`;
   } else {
     (async function load(){
       try {
@@ -61,33 +42,55 @@
           throw new Error("API trả lỗi " + res.status + (txt ? " — "+txt : ""));
         }
         const p = await res.json();
+        if (p.msg && !p.id) throw new Error(p.msg || "Không tìm thấy sản phẩm");
 
-        // nếu API trả object msg lỗi
-        if (p.msg && !p.id) {
-          throw new Error(p.msg || "Không tìm thấy sản phẩm");
-        }
+        // map nhiều tên trường
+        const title = p.title || p.tenSanPham || p.ten_san_pham || p.name || "";
+        const priceVal = (p.price ?? p.gia ?? null);
+        const price = priceVal !== null && priceVal !== undefined && priceVal !== "" ? new Intl.NumberFormat('vi-VN').format(priceVal) + 'đ' : 'Liên hệ';
+        const desc = p.description || p.moTa || p.mo_ta || p.desc || "";
+        const qty = (p.soLuong ?? p.so_luong ?? p.quantity ?? null);
+        const origin = p.xuatXu || p.xuat_xu || p.origin || p.nguonGoc || "";
+        const huongVi = p.huongVi || p.huong_vi || p.flavor || "";
+        const congDung = p.congDung || p.cong_dung || p.uses || "";
+        const cachPha = p.cachPha || p.cach_pha || p.instructions || "";
+        const khoiLuongHop = p.khoiLuongHop || p.khoi_luong_hop || p.khoi_luong || "";
 
         const img = buildImageUrl(p.image || p.anh || p.anh || "");
 
         const html = `
-          <div class="container">
-            <div class="product-row">
-              <div class="img-wrap">
-                <img src="${escapeHtml(img)}" alt="${escapeHtml(p.title || p.tenSanPham || '')}" onerror="this.src='${API_BASE}/images/placeholder.jpg'"/>
+          <div class="card">
+            <div class="left">
+              <div class="prod-img">
+                <img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" onerror="this.src='${API_BASE}/images/placeholder.jpg'"/>
               </div>
-              <div class="info">
-                <h1>${escapeHtml(p.title || p.tenSanPham || '')}</h1>
-                <div class="price">${(p.price != null ? new Intl.NumberFormat('vi-VN').format(p.price) + 'đ' : '')}</div>
-                <div class="desc">${escapeHtml(p.description || p.moTa || '')}</div>
-                <a class="back" href="../index.html">← Quay về</a>
+            </div>
+
+            <div class="right">
+              <div class="title-row">
+                <h1 class="product-title">${escapeHtml(title)}</h1>
+                <div class="price-badge">${escapeHtml(price)}</div>
               </div>
+
+              <div class="attrs">
+                ${ qty !== null && qty !== undefined && qty !== "" ? `<div class="attr"><span class="label">Số lượng</span><span class="value">${escapeHtml(qty)}</span></div>` : "" }
+                ${ khoiLuongHop ? `<div class="attr"><span class="label">Khối lượng</span><span class="value">${escapeHtml(khoiLuongHop)}</span></div>` : "" }
+                ${ origin ? `<div class="attr" style="min-width:unset"><span class="label">Xuất xứ</span><span class="value origin-pill">${escapeHtml(origin)}</span></div>` : "" }
+              </div>
+
+              ${ desc ? `<div class="section"><h4>📝 Mô tả</h4><div class="desc">${escapeHtml(desc)}</div></div>` : "" }
+              ${ huongVi ? `<div class="section"><h4>🍃 Hương vị</h4><div class="desc">${escapeHtml(huongVi)}</div></div>` : "" }
+              ${ congDung ? `<div class="section"><h4>💪 Công dụng</h4><div class="desc">${escapeHtml(congDung)}</div></div>` : "" }
+              ${ cachPha ? `<div class="section"><h4>☕ Cách pha</h4><div class="desc">${escapeHtml(cachPha)}</div></div>` : "" }
+
+              <a class="back" href="../index.html">← Quay về</a>
             </div>
           </div>
         `;
         root.innerHTML = html;
       } catch (err) {
         console.error(err);
-        root.innerHTML = `<div class="container"><p style="color:red">Lỗi khi tải sản phẩm: ${escapeHtml(err.message || err)}</p><p><a class="back" href="../index.html">Quay về</a></p></div>`;
+        root.innerHTML = `<div class="card"><div style="padding:18px;color:#b00020">Lỗi khi tải sản phẩm: ${escapeHtml(err.message || err)}</div><div style="padding:18px;"><a class="back" href="../index.html">Quay về</a></div></div>`;
       }
     })();
   }
