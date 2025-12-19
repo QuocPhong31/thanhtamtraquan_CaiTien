@@ -157,3 +157,40 @@ body {
 .left .thumbnail:hover{ border-color: var(--accent); }
 
 .zoomed { transform: scale(1.5); cursor:zoom-out; transition: transform .25s; }
+
+/* Ẩn các section phụ lúc đầu */
+.hidden-section {
+  display: none !important;
+}
+
+/* giới hạn mô tả ban đầu */
+.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* khi mở rộng thì hiện toàn bộ */
+.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  overflow: visible;
+}
+
+/* nút xem thêm */
+.expand-btn {
+  display:inline-block;
+  margin-top:10px;
+  padding:6px 10px;
+  background: transparent;
+  border: 1px solid rgba(11,26,18,0.06);
+  color: var(--section);
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  transition: all .18s ease;
+}
+

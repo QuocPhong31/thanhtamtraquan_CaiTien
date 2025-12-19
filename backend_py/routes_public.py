@@ -42,3 +42,25 @@ def get_product(id):
         "trangThai": row.get("trangThai")
     }
     return jsonify(product)
+
+@public_bp.get("/api/backgrounds")
+def get_backgrounds():
+    """
+    Lấy danh sách ảnh nền đang ACTIVE
+    DB lưu đường dẫn dạng: /images/background/xxx.jpg
+    """
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id, duongDan
+        FROM anhnens
+        WHERE trangThai = 'ACTIVE'
+        ORDER BY ngayTao DESC
+    """)
+    data = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(data)

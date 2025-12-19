@@ -31,6 +31,23 @@
   const productId = params.get("id");
   const root = document.getElementById("product-detail");
 
+  // tạo section (wrapper id = wrap-sec-xxx, inner id = sec-xxx)
+  function mkSection(keyId, titleEmoji, titleText, content, hiddenByDefault=false) {
+    if (!content) return "";
+    const id = `sec-${keyId}`;
+    const wrapId = `wrap-${id}`;
+    const hiddenAttr = hiddenByDefault ? ' data-hidden="1" class="section hidden-section"' : ' class="section"';
+    const clampClass = hiddenByDefault ? '' : 'clamped';
+    const expandBtnHtml = hiddenByDefault ? '' : `<button class="expand-btn" data-target="${id}" data-reveals="sec-huong-vi,sec-cong-dung,sec-cach-pha">Xem thêm</button>`;
+    return `
+      <div id="${wrapId}" ${hiddenAttr}>
+        <h4>${titleEmoji} ${titleText}</h4>
+        <div id="${id}" class="desc ${clampClass}">${content}</div>
+        ${expandBtnHtml}
+      </div>
+    `;
+  }
+
   if (!productId) {
     root.innerHTML = `<div class="card"><div style="padding:18px;">Không xác định sản phẩm. <a href="../index.html" class="back">Quay về</a></div></div>`;
   } else {
@@ -38,56 +55,131 @@
       try {
         const res = await fetch(`${API_BASE}/api/products/${productId}`, { credentials: "include" });
         if (!res.ok) {
-          const txt = await res.text().catch(()=>"");
-          throw new Error("API trả lỗi " + res.status + (txt ? " — "+txt : ""));
+          const txt = await res.text().catch(()=> "");
+          throw new Error("API trả lỗi " + res.status + (txt ? " — " + txt : ""));
         }
         const p = await res.json();
         if (p.msg && !p.id) throw new Error(p.msg || "Không tìm thấy sản phẩm");
 
-        // map nhiều tên trường
-        const title = p.title || p.tenSanPham || p.ten_san_pham || p.name || "";
+        const title = escapeHtml(p.title || p.tenSanPham || p.ten_san_pham || p.name || "");
         const priceVal = (p.price ?? p.gia ?? null);
         const price = priceVal !== null && priceVal !== undefined && priceVal !== "" ? new Intl.NumberFormat('vi-VN').format(priceVal) + 'đ' : 'Liên hệ';
-        const desc = p.description || p.moTa || p.mo_ta || p.desc || "";
-        const qty = (p.soLuong ?? p.so_luong ?? p.quantity ?? null);
-        const origin = p.xuatXu || p.xuat_xu || p.origin || p.nguonGoc || "";
-        const huongVi = p.huongVi || p.huong_vi || p.flavor || "";
-        const congDung = p.congDung || p.cong_dung || p.uses || "";
-        const cachPha = p.cachPha || p.cach_pha || p.instructions || "";
-        const khoiLuongHop = p.khoiLuongHop || p.khoi_luong_hop || p.khoi_luong || "";
-
+        const descRaw = escapeHtml(p.description || p.moTa || p.mo_ta || p.desc || "");
+        const qty = escapeHtml((p.soLuong ?? p.so_luong ?? p.quantity ?? ""));
+        const origin = escapeHtml(p.xuatXu || p.xuat_xu || p.origin || p.nguonGoc || "");
+        const huongVi = escapeHtml(p.huongVi || p.huong_vi || p.flavor || "");
+        const congDung = escapeHtml(p.congDung || p.cong_dung || p.uses || "");
+        const cachPha = escapeHtml(p.cachPha || p.cach_pha || p.instructions || "");
+        const khoiLuongHop = escapeHtml(p.khoiLuongHop || p.khoi_luong_hop || p.khoi_luong || "");
         const img = buildImageUrl(p.image || p.anh || p.anh || "");
 
         const html = `
           <div class="card">
             <div class="left">
               <div class="prod-img">
-                <img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" onerror="this.src='${API_BASE}/images/placeholder.jpg'"/>
+                <img src="${escapeHtml(img)}" alt="${title}" onerror="this.src='${API_BASE}/images/placeholder.jpg'"/>
               </div>
             </div>
 
             <div class="right">
               <div class="title-row">
-                <h1 class="product-title">${escapeHtml(title)}</h1>
+                <h1 class="product-title">${title}</h1>
                 <div class="price-badge">${escapeHtml(price)}</div>
               </div>
 
               <div class="attrs">
-                ${ qty !== null && qty !== undefined && qty !== "" ? `<div class="attr"><span class="label">Số lượng</span><span class="value">${escapeHtml(qty)}</span></div>` : "" }
-                ${ khoiLuongHop ? `<div class="attr"><span class="label">Khối lượng</span><span class="value">${escapeHtml(khoiLuongHop)}</span></div>` : "" }
-                ${ origin ? `<div class="attr" style="min-width:unset"><span class="label">Xuất xứ</span><span class="value origin-pill">${escapeHtml(origin)}</span></div>` : "" }
+                ${ qty ? `<div class="attr"><span class="label">Số lượng</span><span class="value">${qty}</span></div>` : "" }
+                ${ khoiLuongHop ? `<div class="attr"><span class="label">Khối lượng</span><span class="value">${khoiLuongHop}</span></div>` : "" }
+                ${ origin ? `<div class="attr" style="min-width:unset"><span class="label">Xuất xứ</span><span class="value origin-pill">${origin}</span></div>` : "" }
               </div>
 
-              ${ desc ? `<div class="section"><h4>📝 Mô tả</h4><div class="desc">${escapeHtml(desc)}</div></div>` : "" }
-              ${ huongVi ? `<div class="section"><h4>🍃 Hương vị</h4><div class="desc">${escapeHtml(huongVi)}</div></div>` : "" }
-              ${ congDung ? `<div class="section"><h4>💪 Công dụng</h4><div class="desc">${escapeHtml(congDung)}</div></div>` : "" }
-              ${ cachPha ? `<div class="section"><h4>☕ Cách pha</h4><div class="desc">${escapeHtml(cachPha)}</div></div>` : "" }
+              ${ mkSection("mo-ta", "📝", "Mô tả", descRaw, false) }
+              ${ mkSection("huong-vi", "🍃", "Hương vị", huongVi, true) }
+              ${ mkSection("cong-dung", "💪", "Công dụng", congDung, true) }
+              ${ mkSection("cach-pha", "☕", "Cách pha", cachPha, true) }
 
               <a class="back" href="../index.html">← Quay về</a>
             </div>
           </div>
         `;
         root.innerHTML = html;
+
+        // đảm bảo các section ẩn thực sự bị ẩn (phòng CSS load muộn)
+        document.querySelectorAll('[data-hidden="1"]').forEach(w => w.classList.add('hidden-section'));
+
+        // xử lý nút Xem thêm (chỉ có trong wrap-sec-mo-ta)
+        const expandBtn = document.querySelector('#wrap-sec-mo-ta .expand-btn');
+        if (!expandBtn) return;
+
+        // helper: di chuyển nút vào cuối wrapper của id truyền vào
+        function moveBtnToWrapper(btn, wrapId) {
+          const wrapper = document.getElementById(wrapId);
+          if (!wrapper) return;
+          // append button at the end of wrapper (so it appears below that section)
+          wrapper.appendChild(btn);
+        }
+        // helper: move button back into mo-ta wrapper (it's originally there)
+        function moveBtnBackToMoTa(btn) {
+          const moWrap = document.getElementById('wrap-sec-mo-ta');
+          if (!moWrap) return;
+          // insert after the desc inside mo-ta wrapper
+          moWrap.appendChild(btn);
+        }
+
+        expandBtn.addEventListener('click', (ev) => {
+          const descId = expandBtn.getAttribute('data-target'); // sec-mo-ta
+          const reveals = (expandBtn.getAttribute('data-reveals') || '').split(',').map(s=>s.trim()).filter(Boolean);
+          const descEl = document.getElementById(descId);
+          if (!descEl) return;
+
+          const opening = !descEl.classList.contains('expanded');
+          if (opening) {
+            // mở: show mô tả đầy đủ
+            descEl.classList.remove('clamped');
+            descEl.classList.add('expanded');
+            expandBtn.innerText = 'Thu gọn';
+
+            // hiển thị các section ẩn lần lượt
+            reveals.forEach(rid => {
+              const wrap = document.getElementById('wrap-' + rid);
+              if (wrap) wrap.classList.remove('hidden-section');
+            });
+
+            // DI CHUYỂN nút xuống dưới cùng của section "cách pha" nếu tồn tại,
+            // nếu không thì xuống cuối "công dụng" hoặc "hương vị" tùy order
+            const preferred = ['wrap-sec-cach-pha','wrap-sec-cong-dung','wrap-sec-huong-vi'];
+            let moved = false;
+            for (const id of preferred) {
+              const w = document.getElementById(id);
+              if (w) { moveBtnToWrapper(expandBtn, id); moved = true; break; }
+            }
+            if (!moved) moveBtnBackToMoTa(expandBtn);
+
+            // đảm bảo cuộn xuống cho trải nghiệm: scroll tới nút sau khi reveal
+            setTimeout(()=> expandBtn.scrollIntoView({behavior:'smooth', block:'end'}), 150);
+          } else {
+            // đóng lại: gói mô tả & ẩn các section
+            descEl.classList.add('clamped');
+            descEl.classList.remove('expanded');
+            expandBtn.innerText = 'Xem thêm';
+
+            // ẩn các section đã reveal
+            reveals.forEach(rid => {
+              const wrap = document.getElementById('wrap-' + rid);
+              if (wrap) wrap.classList.add('hidden-section');
+            });
+
+            // chuyển nút trở về vị trí ban đầu (trong mo-ta)
+            moveBtnBackToMoTa(expandBtn);
+
+            // cuộn nhẹ tới mo-ta
+            setTimeout(()=> {
+              const moWrap = document.getElementById('wrap-sec-mo-ta');
+              if (moWrap) moWrap.scrollIntoView({behavior:'smooth', block:'nearest'});
+            }, 120);
+          }
+        });
+
       } catch (err) {
         console.error(err);
         root.innerHTML = `<div class="card"><div style="padding:18px;color:#b00020">Lỗi khi tải sản phẩm: ${escapeHtml(err.message || err)}</div><div style="padding:18px;"><a class="back" href="../index.html">Quay về</a></div></div>`;
@@ -95,5 +187,7 @@
     })();
   }
 </script>
+
+
 </body>
 </html>

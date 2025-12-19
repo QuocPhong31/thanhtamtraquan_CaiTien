@@ -5,6 +5,7 @@ from routes_public import public_bp
 from admin import admin_bp
 from user import user_bp
 from product import product_bp
+from background import background_bp
 import os
 
 app = Flask(__name__)
@@ -23,6 +24,7 @@ app.register_blueprint(public_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(product_bp)
+app.register_blueprint(background_bp)
 
 @app.get("/")
 def home():
