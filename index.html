@@ -51,56 +51,28 @@
     <meta name="robots" content="index, follow">
   </head>
   <body>
-    <!-- nav button -->
-    <span class="nav-btn" id="nav-btn">
-      <i class="fas fa-bars" style="color: #2cf825;"></i>
-    </span>
-    <!-- end of nav button  -->
-
-   <!-- navbar-->
-<nav class="navbar" id="navbar" style="background-color: black; width: 200px; padding: 20px;">
-  <div class="navbar-header">
-    <span class="nav-close" id="nav-close">
-      <i class="fas fa-times" style="color: rgb(107, 235, 95);"></i>
-    </span>
-  </div>
-  <ul class="nav-items" style="list-style: none; padding: 0; margin: 0;">
-    <li style="margin-bottom: 15px;">
-      <a href="#home" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
-        <i class="fas fa-home" style="margin-right: 10px;"></i>Trang chủ
-      </a>
-    </li>
-    <li style="margin-bottom: 15px;">
-      <a href="#pageA" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
-        <i class="fas fa-info-circle" style="margin-right: 10px;"></i>Thông tin
-      </a>
-    </li>
-    <li style="margin-bottom: 15px;">
-      <a href="#product" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
-        <i class="fas fa-box-open" style="margin-right: 10px;"></i>Sản phẩm
-      </a>
-    </li>
-    <li style="margin-bottom: 15px;">
-      <a href="#contact" class="nav-link" style="color: white; text-decoration: none; font-size: 14px;">
-        <i class="fas fa-envelope" style="margin-right: 10px;"></i>Liên hệ
-      </a>
-    </li>
-  </ul>
-</nav>
-
-
 
     <!-- header -->
-    <header class="header" id="home">
-      <div class="banner">
-        
-        <h3 class="banner-subtitle" style="color: rgb(107, 235, 95); white-space: nowrap; font-family: 'Calistoga', cursive;">
-          Thanh Tâm Trà Quán🍵
-        </h3>
-        <h1 class="banner-title"></h1>
-        <a href="#" id="explore-btn" class="banner-btn">Cùng khám phá</a>
+    <header class="main-header">
+      <div class="header-container">
+        <div class="logo"><a href="#home"><img src="images/ava.jpg"></a>Thanh Tâm Trà Quán</div>
+        <nav class="main-nav">
+          <a href="#home">Trang chủ</a>
+          <a href="#about">Thông tin</a>
+          <a href="#products">Sản phẩm</a>
+          <a href="#contact">Liên hệ</a>
+        </nav>
       </div>
     </header>
+
+    <!-- BANNER -->
+    <section class="header banner-section" id="home">
+      <div class="banner">
+        <h3 class="banner-subtitle">Thanh Tâm Trà Quán 🍵</h3>
+        <h1 class="banner-title"></h1>
+        <a href="#about" id="explore-btn" class="banner-btn">Cùng khám phá</a>
+      </div>
+    </section>
     
 <!-- end of header -->
 

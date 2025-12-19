@@ -1,52 +1,65 @@
-// Mảng chứa các đường dẫn ảnh nền
-const backgrounds = [
-  './images/checkout.jpg',
-  './images/checkout2.jpg',
-  './images/checkout3.jpg',
-];
+const API_BASE = "http://127.0.0.1:5000";
+
+// ================= BACKGROUND  từ dòng 4 đến 52 =================
+const header = document.querySelector(".header");
+
+let backgrounds = [];
 let currentBackgroundIndex = 0;
-const header = document.querySelector('.header');
 
-// Preload images to prevent delay during background switch
-backgrounds.forEach((src) => {
-  const img = new Image();
-  img.src = src;
-});
+// gọi API lấy ảnh nền
+async function fetchBackgrounds() {
+  try {
+    const res = await fetch(API_BASE + "/api/backgrounds");
+    if (!res.ok) throw new Error("Không lấy được background");
 
-// Hàm chuyển đổi ảnh nền
-function changeBackground() {
-  currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
-  header.style.backgroundImage = 
-    `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-     url(${backgrounds[currentBackgroundIndex]})`;
+    const data = await res.json();
+
+    // map sang url đầy đủ
+    backgrounds = data.map(item => API_BASE + item.duongDan);
+
+    if (backgrounds.length === 0) return;
+
+    // preload
+    backgrounds.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    // set ảnh đầu tiên
+    header.style.backgroundImage =
+      `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgrounds[0]})`;
+
+    // chạy slideshow cứ 3 giây đổi ảnh nếu ảnh nhiều hơn 1
+    setInterval(changeBackground, 3000);
+
+  } catch (err) {
+    console.error("Lỗi load background:", err);
+  }
 }
 
-// Chuyển đổi ảnh sau mỗi 3 giây
-setInterval(changeBackground, 3000);
+// đổi background
+function changeBackground() {
+  if (!backgrounds.length) return;
+  currentBackgroundIndex =
+    (currentBackgroundIndex + 1) % backgrounds.length;
+
+  header.style.backgroundImage =
+    `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgrounds[currentBackgroundIndex]})`;
+}
+
+// chạy khi load trang
+document.addEventListener("DOMContentLoaded", fetchBackgrounds);
+
+//=======================================================//
 
 
 
-
-        const navBtn = document.querySelector("#nav-btn");
-const navbar = document.querySelector("#navbar");
-const navClose = document.querySelector("#nav-close");
-
-navBtn.addEventListener("click", () => {
-  navbar.classList.add("showNav");
-});
-
-navClose.addEventListener("click", () => {
-  navbar.classList.remove("showNav");
-});
-
-
-
-document.getElementById('explore-btn').addEventListener('click', function(e) {
-  e.preventDefault();
-  // Cuộn mượt đến phần story
-  document.querySelector('#story').style.display = 'block'; // Hiển thị phần story
-  document.querySelector('#story').scrollIntoView({ behavior: 'smooth' });
-});
+// document.getElementById('explore-btn').addEventListener('click', function(e) {
+//   e.preventDefault();
+//   // Cuộn mượt đến phần story
+//   document.querySelector('#story').style.display = 'block'; // Hiển thị phần story
+//   document.querySelector('#story').scrollIntoView({ behavior: 'smooth' });
+// });
 
 
  // Hàm reset về trạng thái ban đầu
@@ -77,38 +90,50 @@ function showStory(pageId) {
 }
 
 // Thêm sự kiện cho nút "Cùng khám phá"
-document.getElementById('explore-btn').addEventListener('click', function(e) {
-  e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
-  showStory('page1');
-  document.querySelector('.banner-title').style.display = 'none'; // Ẩn tiêu đề chính
-  document.querySelector('#explore-btn').style.display = 'none'; // Ẩn nút "Cùng khám phá"
-});
+const exploreBtn = document.getElementById('explore-btn');
+if (exploreBtn) {
+  exploreBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    showStory('page1');
+
+    const bannerTitle = document.querySelector('.banner-title');
+    if (bannerTitle) bannerTitle.style.display = 'none';
+
+    exploreBtn.style.display = 'none';
+  });
+}
 
 // Thêm sự kiện cho nút "Khám phá tiếp"
-document.getElementById('continue-btn').addEventListener('click', function(e) {
-  e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
-  showStory('page2');
-});
+const continueBtn = document.getElementById('continue-btn');
+if (continueBtn) {
+  continueBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    showStory('page2');
+  });
+}
 
 // Thêm sự kiện cho nút "Quay lại"
-document.getElementById('back-btn').addEventListener('click', function(e) {
-  e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
-  resetToInitial(); // Reset lại trạng thái ban đầu
-});
+const backBtn = document.getElementById('back-btn');
+if (backBtn) {
+  backBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    resetToInitial();
+  });
+}
 
 // Khởi động ban đầu
 resetToInitial();
 
 
-//gỡ bỏ lớp active cho thanh menu khi người dùng nhấp vào nút mở hoặc đóng.
-document.getElementById('nav-btn').addEventListener('click', function() {
-  document.getElementById('navbar').classList.add('active');
-});
+// //gỡ bỏ lớp active cho thanh menu khi người dùng nhấp vào nút mở hoặc đóng.
+// document.getElementById('nav-btn').addEventListener('click', function() {
+//   document.getElementById('navbar').classList.add('active');
+// });
 
-document.getElementById('nav-close').addEventListener('click', function() {
-  document.getElementById('navbar').classList.remove('active');
-}); 
-/////////////////////////////
+// document.getElementById('nav-close').addEventListener('click', function() {
+//   document.getElementById('navbar').classList.remove('active');
+// }); 
+// /////////////////////////////
 
 
 function showPage(pageId) {
@@ -143,8 +168,7 @@ function showMoreProducts() {
   }
 }
 
-/*============  từ dòng 147 đến 258   =================*/
-const API_BASE = "http://127.0.0.1:5000";
+/*============  Product từ dòng 172 đến 290  =================*/
 const PRODUCTS_API = API_BASE + "/api/products";
 
 // biến lưu data
@@ -256,6 +280,9 @@ async function fetchProducts() {
     const container = document.getElementById("products-container");
     if (container) container.innerHTML = `<p style="color: red;">Không tải được dữ liệu sản phẩm — ${err.message}</p>`;
   }
+
+  console.log("productsData:", productsData);
+  console.log("container:", document.getElementById("products-container"));
 }
 
 // chạy khi load
@@ -266,58 +293,26 @@ document.addEventListener("DOMContentLoaded", () => {
 /*==========================================*/
 
 
-document.getElementById("payment-method").addEventListener("change", function() {
-  let bankInfo = document.getElementById("bank-info");
-  let momoInfo = document.getElementById("momo-info");
-
-  if (this.value === "bank") {
-      bankInfo.style.display = "block";
-      momoInfo.style.display = "none";
-  } else if (this.value === "momo") {
-      momoInfo.style.display = "block";
-      bankInfo.style.display = "none";
-  } else {
-      bankInfo.style.display = "none";
-      momoInfo.style.display = "none";
-  }
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("payment-method").addEventListener("change", function() {
-      let bankInfo = document.getElementById("bank-info");
-      bankInfo.style.display = this.value === "bank" ? "block" : "none";
-  });
-
-  document.getElementById("payment-form").addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      let name = document.getElementById("name").value;
-      let phone = document.getElementById("phone").value;
-      let address = document.getElementById("address").value;
-      let paymentMethod = document.getElementById("payment-method").value;
-
-      alert(`Cảm ơn bạn ${name}! Đơn hàng của bạn sẽ sớm được xử lý.\nSố điện thoại: ${phone}\nĐịa chỉ: ${address}\nPhương thức thanh toán: ${paymentMethod}`);
-  });
-});
-
 document.addEventListener("DOMContentLoaded", function () {
-  let bankInfo = document.getElementById("bank-info");
-  let momoInfo = document.getElementById("momo-info");
+  const paymentMethod = document.getElementById("payment-method");
+  const bankInfo = document.getElementById("bank-info");
+  const momoInfo = document.getElementById("momo-info");
 
-  // Ẩn tất cả phương thức thanh toán ban đầu
+  if (!paymentMethod) return;
+
   bankInfo.style.display = "none";
   momoInfo.style.display = "none";
 
-  document.getElementById("payment-method").addEventListener("change", function() {
+  paymentMethod.addEventListener("change", function () {
     if (this.value === "bank") {
-        bankInfo.style.display = "flex";  // Hiển thị theo kiểu flex
-        momoInfo.style.display = "none";  // Ẩn momo
+      bankInfo.style.display = "flex";
+      momoInfo.style.display = "none";
     } else if (this.value === "momo") {
-        momoInfo.style.display = "flex";  // Hiển thị momo
-        bankInfo.style.display = "none";  // Ẩn ngân hàng
+      momoInfo.style.display = "flex";
+      bankInfo.style.display = "none";
     } else {
-        bankInfo.style.display = "none";  // Ẩn cả hai khi không chọn gì
-        momoInfo.style.display = "none";
+      bankInfo.style.display = "none";
+      momoInfo.style.display = "none";
     }
   });
 });
