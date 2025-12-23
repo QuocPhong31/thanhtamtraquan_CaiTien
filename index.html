@@ -15,6 +15,7 @@
     <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -223,7 +224,7 @@
     
     <!-- end of about section -->
 
-
+    <!-- products -->
     <section class="products">
       <div id="product" class="section-center clearfix">
         <!-- product info -->
@@ -254,80 +255,37 @@
     </section>
     
     
+    <!-- teapots -->
+    <section class="productsTeapot">
+      <div class="section-center clearfix">
 
-<!-- teapots -->
-<section class="productsTeapot">
-  <div class="section-center clearfix">
-    <!-- product info -->
-    <article class="products-info">
-      <div>
-        <h3 class="banner-subtitle" style="color: #46fc6d; text-align: center;">Sản Phẩm Ấm Trà</h3>
-        <h2 class="section-title text-white"></h2>
-      </div>
-      <p class="product-text" style="font-size: 20px;">
-        Bộ sưu tập ấm trà độc đáo, mang đậm nét văn hóa trà đạo Triều Châu.<br>
-        Mỗi sản phẩm được chế tác từ chất liệu cao cấp, giúp giữ nhiệt và tăng cường hương vị cho từng tách trà.
-      </p>
-    </article>
-
-    <!-- teapot products -->
-    <article class="product">
-      <a href="./Product/productTea1.html" class="product-link">
-        <img src="./images/productTea1.jpg" alt="product" class="product-img" loading="lazy"/>
-        <span class="details-overlay">Chi tiết</span>
-      </a>
-      <a href="./Product/productTea1.html" class="product-link">
-      <h3 class="product-title">Bộ Khải pha trà</h3>
-      </a>
-      <h3 class="product-price">380.000đ</h3>
-    </article>
-
-    <article class="product">
-      <a href="./Product/productTea2.html" class="product-link">
-        <img src="./images/productTea2.jpg" alt="product" class="product-img" loading="lazy"/>
-        <span class="details-overlay">Chi tiết</span>
-      </a>
-      <a href="./Product/productTea2.html" class="product-link">
-      <h3 class="product-title">Ấm Tử Sa</h3>
-      </a>
-      <h3 class="product-price">728.000đ</h3>
-    </article>
-
-      <!-- <article class="product">
-        <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
-        <h3 class="product-title" style="color: rgb(247, 252, 247);">Ấm Trà Gốm</h3>
-        <h3 class="product-price">1.500.000đ</h3>
-      </article> -->
-
-      <!-- Các sản phẩm khác sẽ ẩn ban đầu -->
-      <!-- <div id="more-teapot-products" style="display: none; flex-wrap: wrap;">
-        <article class="product">
-          <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
-          <h3 class="product-title" style="color: rgb(255, 255, 255);">Ấm Trà Cao Cấp</h3>
-          <h3 class="product-price">2.000.000đ</h3>
-        </article> -->
-
-        <!-- <article class="product">
-          <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
-          <h3 class="product-title" style="color: rgb(253, 253, 253);">Ấm Trà Gốm Hoa</h3>
-          <h3 class="product-price">1.800.000đ</h3>
+        <!-- TEXT bên trái -->
+        <article class="products-info">
+          <div>
+            <h3 class="banner-subtitle" style="color:#46fc6d; text-align:center;">
+              Sản Phẩm Ấm Trà
+            </h3>
+          </div>
+          <p class="product-text" style="font-size:20px;">
+            Bộ sưu tập ấm trà độc đáo, mang đậm nét văn hóa trà đạo Triều Châu.
+          </p>
         </article>
 
-        <article class="product">
-          <img src="./images/product2.jpg" alt="product" class="product-img" loading="lazy" />
-          <h3 class="product-title" style="color: rgb(248, 253, 248);">Ấm Trà Thủ Công</h3>
-          <h3 class="product-price">2.200.000đ</h3>
-        </article>
-      </div>
-    </article> -->
+        <!-- GRID sản phẩm bên phải -->
+        <article class="products-inventory clearfix">
+          <div id="teapots-container" class="products-grid clearfix"></div>
 
-    <!-- Nút "Xem thêm" -->
-    <!-- <div class="view-more-btn" style="text-align: center;">
-      <button id="view-more-teapots" class="main-btn" onclick="showMoreTeapots()">Xem thêm</button>
-      <button id="collapse-teapots" class="main-btn" onclick="collapseTeapots()" style="display: none;">Thu gọn</button>
-    </div>   -->
-  </div> 
-</section>
+          <div class="text-center">
+            <button id="view-more-teapots"
+                    class="main-btn"
+                    onclick="showMoreTeapots()">
+              Xem thêm
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
 
 <!-- Section for Tea Brewing Technique -->
@@ -358,44 +316,34 @@
     </div>
      <!-- contact info -->
      <article class="contact-info" style="float: right; text-align: left;">
-      <!-- contact item -->
+      <!-- ADDRESS -->
       <div class="contact-item" style="margin-bottom: 50px;">
         <h3 class="contact-title">
           <span class="contact-icon">
-            <i class="fas fa-location-arrow"></i>address
+            <i class="fas fa-location-arrow"></i> Địa chỉ
           </span>
         </h3>
-        <h3 class="contact-text">
-          CN1: 28/8 Phạm Huy Thông, Phường 7, Quận Gò Vấp, HCM
-        </h3>
-        <h3 class="contact-text">
-          CN2: Lô S8.03 Vinhome Grand Park, Quận 9, HCM 
-        </h3>
-        <h3 class="contact-text">
-          CN3: 567/4 Lê Quang Định, Phường 1, Quận Gò Vấp, HCM 
-        </h3>
+        <div id="contact-address"></div>
       </div>
-      <!-- end of contact item -->
-      
-      <!-- contact item -->
+
+      <!-- EMAIL -->
       <div class="contact-item" style="margin-bottom: 50px;">
         <h3 class="contact-title">
           <span class="contact-icon">
-            <i class="fas fa-envelope"></i>e-mail
+            <i class="fas fa-envelope"></i> Email
           </span>
         </h3>
-        <h3 class="contact-text">thanhtamtraquan.1996@gmail.com</h3>
+        <div id="contact-email"></div>
       </div>
-      <!-- end of contact item -->
-      
-      <!-- contact item -->
+
+      <!-- PHONE -->
       <div class="contact-item" style="margin-bottom: 50px;">
         <h3 class="contact-title">
           <span class="contact-icon">
-            <i class="fas fa-phone-alt"></i>phone / Zalo
+            <i class="fas fa-phone-alt"></i> PHONE / ZALO
           </span>
         </h3>
-        <h3 class="contact-text">039 5759357</h3>
+        <div id="contact-phone"></div>
       </div>
       <!-- end of contact item -->
       <div class="section-left">

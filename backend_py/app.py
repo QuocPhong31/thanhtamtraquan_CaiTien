@@ -5,10 +5,14 @@ from routes_public import public_bp
 from admin import admin_bp
 from user import user_bp
 from product import product_bp
+from teapot import teapot_bp
 from background import background_bp
+from contact import contact_bp
 import os
 
 app = Flask(__name__)
+app.secret_key = "thanh_tam_tra_quan_secret_key"
+
 CORS(
     app,
     supports_credentials=True,
@@ -34,7 +38,9 @@ app.register_blueprint(public_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(product_bp)
+app.register_blueprint(teapot_bp)
 app.register_blueprint(background_bp)
+app.register_blueprint(contact_bp)
 
 @app.get("/")
 def home():

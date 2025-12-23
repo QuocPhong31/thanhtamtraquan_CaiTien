@@ -23,7 +23,7 @@ html {
   
   :root {
     --slantedText: "Pacifico", cursive;
-    --primaryColor: #d4d6d1;
+    --primaryColor: #12941f;
     --secondayColor: #fca311;
     --mainDark: #3a3e3b;
     --mainWhite: #fff;
@@ -126,13 +126,12 @@ height: auto;
 
 /* MENU ITEM */
 .main-nav a {
-  font-family: 'Inter', 'Roboto', sans-serif;
-  color: #231e1e;
-  font-size: 20px;
-  font-weight: 500;
-  text-transform: none;        
-  letter-spacing: 0.05em;
-  transition: color 0.3s ease;
+  font-family: 'Lora', serif;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #2b2b2b;
+  text-transform: capitalize;
 }
 
 .main-nav a:hover {
@@ -447,9 +446,15 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
       width: 100%; /* Đảm bảo sản phẩm hiển thị đủ trên màn hình nhỏ hơn */
     }
   }
+  .teapot-products .products-inventory {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
   .teapot-products .product {
-    width: 100%; /* Đảm bảo sản phẩm ấm trà chiếm toàn bộ chiều rộng màn hình nhỏ */
-    margin-bottom: 20px;
+    flex: 1 1 calc(33.333% - 20px);
+    padding: 2rem 1rem;
   }
   
   .product-img {
@@ -697,7 +702,7 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
     margin-bottom: 10px;
   }
   .contact-title {
-    color: var(--primaryColor);
+    color: #1f8f3a;
     font-family: var(--slantedText);
     text-transform: uppercase;
     letter-spacing: var(--letterSpacing);
@@ -706,6 +711,7 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
   }
   .contact-icon i {
     margin-right: 1rem;
+    color: #24bd45;
   }
   .contact-text {
     text-transform: uppercase;
@@ -794,7 +800,7 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
     .order-button {
         text-align: center; /* Căn giữa nút đặt hàng */
     }
-}
+  }
   /* end of contact */
   
   /* footer */
@@ -904,38 +910,32 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
   }
 
   .productsTeapot {
+    background: linear-gradient(
+      135deg,
+      #6d543c,   /* nâu đậm */
+      #6b4f2a,   /* nâu trà */
+      #ba8452    /* nâu đất */
+    );
+    padding: 80px 0;
+    color: #f5f5f5;
     position: relative;
-    padding: 50px 0;
-    background: linear-gradient(135deg, #3f2b07, #72531a, #045727); /* Màu gradient chuyển đổi từ xanh lá đến xanh nhạt */
-    background-size: 300% 300%; /* Tăng kích thước để tạo hiệu ứng sóng rộng hơn */
-    animation: gradientWave 8s ease infinite; /* Giảm tốc độ animation để sóng chậm hơn */
-    color: white;
   }
-  
-  @keyframes gradientWave {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
 
-  /* Styling for the teapot products section */
-  .teapot-products {
-    position: relative;
-    padding: 50px 0;
-    background: radial-gradient(circle at center, #854004, #18130f, #926e2f); /* Tăng sự tương phản với tông màu nâu và be */
-    background-size: 300% 300%;
-    animation: teapotWave 10s ease infinite; /* Điều chỉnh thời gian cho sóng chuyển động chậm hơn */
-    color: white;
+  /* làm chữ nổi hơn trên nền nâu */
+  .productsTeapot .product-text,
+  .productsTeapot .banner-subtitle {
+    color: #e8f5e9;
   }
-  
-  @keyframes teapotWave {
-    0% { background-position: 50% 0%; }
-    50% { background-position: 50% 100%; }
-    100% { background-position: 50% 0%; }
+
+  .productsTeapot .products-info {
+    float: left;
+    width: 30%;
   }
-  
-  
+
+  .productsTeapot .products-inventory {
+    float: left;
+    width: 70%;
+  }
   
   /* Overlay effect to darken the background for better readability */
   .products::before {

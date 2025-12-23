@@ -29,6 +29,7 @@
       <div id="tab-users" class="nav-tab">Người dùng</div>
       <div id="tab-products" class="nav-tab">Sản phẩm</div>
       <div id="tab-backgrounds" class="nav-tab">Ảnh nền (website)</div>
+      <div id="tab-contact" class="nav-tab">Liên hệ</div>
     </div>
 
     <div class="d-flex align-items-center ms-auto">
@@ -172,6 +173,76 @@
         </div>
       </div>
 
+
+      <div id="card-teapot-edit" class="card hide mt-3">
+      <div class="card-header d-flex justify-content-between">
+        <strong>Sửa bộ trà</strong>
+        <small id="edit-teapot-id"></small>
+      </div>
+
+      <div class="card-body">
+
+        <div class="mb-2">
+          <label class="form-label">Tên bộ trà</label>
+          <input id="edit-t-name" class="form-control">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Giá</label>
+          <input id="edit-t-price" type="number" class="form-control">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Số lượng</label>
+          <input id="edit-t-qty" type="number" class="form-control">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Xuất xứ</label>
+          <input id="edit-t-origin" class="form-control">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Mô tả</label>
+          <textarea id="edit-t-desc" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Chất liệu</label>
+          <textarea id="edit-t-material" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Thiết kế</label>
+          <textarea id="edit-t-design" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Cách sử dụng</label>
+          <textarea id="edit-t-usage" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Ảnh (URL)</label>
+          <input id="edit-t-image" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Trạng thái</label>
+          <select id="edit-t-status" class="form-select">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="HIDE">HIDE</option>
+          </select>
+        </div>
+
+        <div class="text-end">
+          <button class="btn btn-secondary" onclick="closeEditTeapot()">Hủy</button>
+          <button class="btn btn-success" onclick="updateTeapot()">Cập nhật</button>
+        </div>
+
+      </div>
+    </div>
+
     </div>
 
     <!-- RIGHT: CONTENT AREA -->
@@ -249,7 +320,7 @@
 
       <!-- PRODUCTS MANAGEMENT (form + full list) -->
       <div id="view-products" class="hide">
-        <div class="card">
+        <div class="card mb-3">
           <div class="card-header d-flex justify-content-between align-items-center">
             <strong>Quản lý Sản phẩm</strong>
             <button id="btn-show-add-product" class="btn btn-sm btn-success">Thêm product</button>
@@ -292,6 +363,67 @@
                 <tbody></tbody>
               </table>
             </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <strong>Quản lý Bộ Trà</strong>
+            <button class="btn btn-sm btn-success" id="btn-show-add-teapot">Thêm bộ trà</button>
+          </div>
+
+          <div class="card-body">
+            <div id="teapot-form" class="hide mb-3">
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <input id="t-name" class="form-control" placeholder="Tên bộ trà">
+                </div>
+                <div class="col-md-3">
+                  <input id="t-price" class="form-control" placeholder="Giá">
+                </div>
+                <div class="col-md-3">
+                  <input id="t-qty" class="form-control" placeholder="Số lượng" type="number">
+                </div>
+                <div class="col-md-6">
+                  <input id="t-origin" class="form-control" placeholder="Xuất xứ">
+                </div>
+                <div class="col-md-6">
+                  <select id="t-status" class="form-select">
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="HIDE">HIDE</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <textarea id="t-desc" class="form-control" placeholder="Mô tả"></textarea>
+                </div>
+                <div class="col-12">
+                  <textarea id="t-material" class="form-control" placeholder="Chất liệu"></textarea>
+                </div>
+                <div class="col-12">
+                  <textarea id="t-design" class="form-control" placeholder="Thiết kế"></textarea>
+                </div>
+                <div class="col-12">
+                  <textarea id="t-usage" class="form-control" placeholder="Cách sử dụng"></textarea>
+                </div>
+                <!-- upload ảnh -->
+                <div class="col-12">
+                  <input id="t-file" type="file" class="form-control">
+                  <input id="t-image" type="hidden">
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-primary" onclick="addTeapot()">Lưu bộ trà</button>
+                </div>
+              </div>
+            </div>
+
+            <table class="table table-hover" id="tbl-teapots">
+              <thead>
+                <tr>
+                  <th>#</th><th>Ảnh</th><th>Tên</th><th>Giá</th><th>Số lượng</th><th>Trạng thái</th><th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -338,6 +470,36 @@
         </div>
       </div>
 
+
+      <div id="view-contact" class="hide">
+        <div class="card mb-3">
+          <div class="card-header"><strong>Quản lý Address</strong></div>
+          <div class="card-body">
+            <textarea id="address-content" class="form-control" placeholder="Nhập địa chỉ"></textarea>
+            <button class="btn btn-success mt-2" onclick="addAddress()">Thêm</button>
+            <table class="table mt-3" id="tbl-address"></table>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header"><strong>Quản lý Email</strong></div>
+          <div class="card-body">
+            <input id="email-content" class="form-control" placeholder="Nhập email">
+            <button class="btn btn-success mt-2" onclick="addEmail()">Thêm</button>
+            <table class="table mt-3" id="tbl-email"></table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><strong>Quản lý Phone</strong></div>
+          <div class="card-body">
+            <input id="phone-content" class="form-control" placeholder="Nhập số điện thoại">
+            <button class="btn btn-success mt-2" onclick="addPhone()">Thêm</button>
+            <table class="table mt-3" id="tbl-phone"></table>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -360,16 +522,27 @@
     el("#view-users").classList.toggle("hide", name !== "users");
     el("#view-products").classList.toggle("hide", name !== "products");
     el("#view-backgrounds").classList.toggle("hide", name !== "backgrounds");
+    el("#view-contact").classList.toggle("hide", name !== "contact");
 
-    ["overview","users","products","backgrounds"].forEach(n=>{
+    ["overview","users","products","backgrounds","contact"].forEach(n=>{
       const node = el("#tab-" + n);
       if (node) node.classList.toggle("active", n === name);
 
     });
+    if (name === "products") {
+      loadProducts();
+      loadTeapots();
+    }
 
     if (name === "backgrounds") {
       loadBackgrounds();
     }
+    if (name === "contact") {
+      loadAddress();
+      loadEmail();
+      loadPhone();
+    }
+
   }
 
   // desktop tabs (in navbar)
@@ -377,6 +550,7 @@
   el("#tab-users")?.addEventListener("click", ()=> showView("users"));
   el("#tab-products")?.addEventListener("click", ()=> showView("products"));
   el("#tab-backgrounds")?.addEventListener("click", () => showView("backgrounds"));
+  el("#tab-contact")?.addEventListener("click", () => showView("contact"));
 
   // mobile dropdown menu items
   els(".mobile-tab").forEach(a => {
@@ -391,6 +565,7 @@
   el("#btn-show-add-user")?.addEventListener("click", ()=> el("#user-form").classList.toggle("hide"));
   el("#btn-show-add-product")?.addEventListener("click", ()=> el("#product-form").classList.toggle("hide"));
   el("#btn-show-add-bg")?.addEventListener("click", () => el("#bg-form").classList.toggle("hide"));
+  el("#btn-show-add-teapot")?.addEventListener("click", () => {el("#teapot-form").classList.toggle("hide");});
 
   // login / logout UI
   document.addEventListener("DOMContentLoaded", () => {
@@ -404,6 +579,7 @@
     // always load summaries (for overview) and full lists
     loadUsers();
     loadProducts();
+    loadTeapots();
   });
 
   // fetch + render users (both overview and management)
@@ -550,6 +726,68 @@
     } catch(e){ console.error(e); }
   }
 
+  // fetch + render Teapots
+  async function loadTeapots() {
+    const res = await fetch("/admin/teapots", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbody = el("#tbl-teapots tbody");
+    tbody.innerHTML = "";
+
+    data.forEach((t, i) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${i+1}</td>
+          <td><img src="${t.anh}" class="small-img"></td>
+          <td>${t.tenAmTra}</td>
+          <td>${t.gia}</td>
+          <td>${t.soLuong ?? 0}</td>
+          <td>${t.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-success" onclick="openEditTeapot(${t.id})">Sửa</button>
+            <button class="btn btn-sm btn-warning" onclick="toggleTeapot(${t.id}, '${t.trangThai}')"> ${t.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteTeapot(${t.id})">Xóa</button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  async function updateTeapot() {
+    const id = el("#edit-teapot-id").innerText;
+    if (!id) return;
+
+    const payload = {
+      tenAmTra: el("#edit-t-name").value.trim(),
+      gia: parseFloat(el("#edit-t-price").value) || 0,
+      soLuong: parseInt(el("#edit-t-qty").value) || 0,
+      xuatXu: el("#edit-t-origin").value.trim(),
+      moTa: el("#edit-t-desc").value.trim(),
+      chatLieu: el("#edit-t-material").value.trim(),
+      thietKe: el("#edit-t-design").value.trim(),
+      cachSuDung: el("#edit-t-usage").value.trim(),
+      anh: el("#edit-t-image").value.trim(),
+      trangThai: el("#edit-t-status").value
+    };
+
+    const res = await fetch(`/admin/teapots/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      alert("Cập nhật thất bại");
+      return;
+    }
+
+    alert("Cập nhật bộ trà thành công");
+    closeEditTeapot();
+    loadTeapots();
+  }
+
+
+  // fetch + render Backgrounds
   async function loadBackgrounds() {
     const tbody = el("#tbl-backgrounds tbody");
     tbody.innerHTML = "";
@@ -571,6 +809,112 @@
         </td>
       `;
       tbody.appendChild(tr);
+    });
+  }
+
+  // ================= fetch + render ADDRESS =================
+  async function loadAddress() {
+    const res = await fetch("/admin/address", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbl = document.getElementById("tbl-address");
+
+    tbl.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>Nội dung</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    `;
+
+    data.forEach((item, idx) => {
+      tbl.innerHTML += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.noiDung}</td>
+          <td>${item.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editAddress(${item.id}, \`${item.noiDung}\`)">Sửa</button>
+
+            <button class="btn btn-sm btn-warning"
+              onclick="toggleAddress(${item.id}, '${item.trangThai}')">
+              ${item.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+
+  // ================= fetch + render EMAIL  =================
+  async function loadEmail() {
+    const res = await fetch("/admin/email", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbl = document.getElementById("tbl-email");
+
+    tbl.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>Email</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    `;
+
+    data.forEach((item, idx) => {
+      tbl.innerHTML += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.noiDung}</td>
+          <td>${item.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editEmail(${item.id}, '${item.noiDung}')">Sửa</button>
+
+            <button class="btn btn-sm btn-warning"
+              onclick="toggleEmail(${item.id}, '${item.trangThai}')">
+              ${item.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  // ================= fetch + render PHONE =================
+  async function loadPhone() {
+    const res = await fetch("/admin/phone", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbl = document.getElementById("tbl-phone");
+
+    tbl.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>Số điện thoại</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    `;
+
+    data.forEach((item, idx) => {
+      tbl.innerHTML += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.noiDung}</td>
+          <td>${item.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editPhone(${item.id}, '${item.noiDung}')">Sửa</button>
+
+            <button class="btn btn-sm btn-warning"
+              onclick="togglePhone(${item.id}, '${item.trangThai}')">
+              ${item.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+            </button>
+          </td>
+        </tr>
+      `;
     });
   }
 
@@ -600,6 +944,7 @@
     } catch (err) { console.error(err); uploadStatus.innerText = "Không thể kết nối để upload ảnh."; }
   });
 
+
   // ---------- create user ----------
   el("#btn-create-user")?.addEventListener("click", async ()=>{
     const obj = {
@@ -625,6 +970,7 @@
       else alert(j.msg || "Lỗi");
     } catch(e){ console.error(e); alert("Lỗi tạo user"); }
   });
+
 
   // ---------- create product ----------
   el("#btn-create-product")?.addEventListener("click", async ()=>{
@@ -663,6 +1009,8 @@
       } else alert(j.msg || "Lỗi tạo product");
     } catch (e) { console.error(e); alert("Lỗi kết nối server khi tạo product"); }
   });
+
+
 
   // ================= UPLOAD BACKGROUND =================
   const btnUploadBg = document.getElementById("btn-upload-bg");
@@ -811,7 +1159,311 @@
     const card = el("#card-product-edit");
     if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
   }
+
+  async function openEditTeapot(id) {
+    const res = await fetch(`/admin/teapots`, { credentials: "same-origin" });
+    const data = await res.json();
+    const t = data.find(x => x.id === id);
+    if (!t) return alert("Không tìm thấy bộ trà");
+
+    el("#edit-teapot-id").innerText = t.id;
+    el("#edit-t-name").value = t.tenAmTra || "";
+    el("#edit-t-price").value = t.gia || 0;
+    el("#edit-t-qty").value = t.soLuong || 0;
+    el("#edit-t-origin").value = t.xuatXu || "";
+    el("#edit-t-desc").value = t.moTa || "";
+    el("#edit-t-material").value = t.chatLieu || "";
+    el("#edit-t-design").value = t.thietKe || "";
+    el("#edit-t-usage").value = t.cachSuDung || "";
+    el("#edit-t-image").value = t.anh || "";
+    el("#edit-t-status").value = t.trangThai || "ACTIVE";
+
+    el("#card-teapot-edit").classList.remove("hide");
+    el("#teapot-form").classList.add("hide");
+  }
+
+  function closeEditTeapot() {
+    // ẩn card sửa bộ trà
+    el("#card-teapot-edit")?.classList.add("hide");
+
+    // hiện lại form thêm bộ trà (nếu muốn)
+    // el("#teapot-form")?.classList.remove("hide");
+
+    // clear id đang sửa (cho an toàn)
+    if (el("#edit-teapot-id")) el("#edit-teapot-id").innerText = "";
+  }
+
   //==============================================
+
+  // ---------- create teapos ----------
+  async function addTeapot() {
+    const obj = {
+      tenAmTra: el("#t-name").value.trim(),
+      gia: parseFloat(el("#t-price").value) || 0,
+      soLuong: parseInt(el("#t-qty").value) || 0,
+      xuatXu: el("#t-origin").value.trim(),
+      moTa: el("#t-desc").value.trim(),
+      chatLieu: el("#t-material").value.trim(),
+      thietKe: el("#t-design").value.trim(),
+      cachSuDung: el("#t-usage").value.trim(),
+      anh: el("#t-image").value || "",
+      trangThai: el("#t-status").value
+    };
+
+    if (!obj.tenAmTra) {
+      alert("Vui lòng nhập tên bộ trà");
+      return;
+    }
+
+    const res = await fetch("/admin/teapots", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(obj)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm bộ trà");
+      return;
+    }
+
+    alert("Thêm bộ trà thành công");
+    el("#teapot-form").classList.add("hide");
+    loadTeapots();
+  }
+
+  //  ------ upload ảnh teapot ------
+  el("#t-file")?.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append("image", file);
+
+    const res = await fetch("/admin/upload-teapot-image", {
+      method: "POST",
+      body: fd,
+      credentials: "same-origin"
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.ok) {
+      el("#t-image").value = data.url;
+    } else {
+      alert("Upload ảnh thất bại");
+    }
+  });
+  //==============================================
+
+
+  // ---------- create Address _Contact ----------
+  async function addAddress() {
+    const textarea = document.getElementById("address-content");
+    const noiDung = textarea.value.trim();
+
+    if (!noiDung) {
+      alert("Vui lòng nhập địa chỉ");
+      return;
+    }
+
+    const res = await fetch("/admin/address", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm address");
+      return;
+    }
+
+    textarea.value = "";
+    loadAddress();
+  }
+
+  async function toggleAddress(id, trangThai) {
+    await fetch(`/admin/address/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: trangThai === "ACTIVE" ? "HIDE" : "ACTIVE"
+      })
+    });
+
+    loadAddress();
+  }
+  //==============================================
+
+
+  // ---------- create Email _Contact ----------
+  async function addEmail() {
+    const input = document.getElementById("email-content");
+    const noiDung = input.value.trim();
+
+    if (!noiDung) {
+      alert("Vui lòng nhập email");
+      return;
+    }
+
+    const res = await fetch("/admin/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm email");
+      return;
+    }
+
+    input.value = "";
+    loadEmail();
+  }
+
+  async function toggleEmail(id, trangThai) {
+    await fetch(`/admin/email/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: trangThai === "ACTIVE" ? "HIDE" : "ACTIVE"
+      })
+    });
+
+    loadEmail();
+  }
+  //==============================================
+
+
+  // ---------- create Phone _Contact ----------
+
+  async function addPhone() {
+    const input = document.getElementById("phone-content");
+    const noiDung = input.value.trim();
+
+    if (!noiDung) {
+      alert("Vui lòng nhập số điện thoại");
+      return;
+    }
+
+    const res = await fetch("/admin/phone", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm phone");
+      return;
+    }
+
+    input.value = "";
+    loadPhone();
+  }
+
+  async function togglePhone(id, trangThai) {
+    await fetch(`/admin/phone/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: trangThai === "ACTIVE" ? "HIDE" : "ACTIVE"
+      })
+    });
+
+    loadPhone();
+  }
+  //==============================================
+
+
+  // ---------- Edit address, email, phone _contact ----------
+
+  async function editAddress(id, oldValue) {
+    const noiDung = prompt("Sửa địa chỉ:", oldValue);
+    if (!noiDung || noiDung.trim() === oldValue) return;
+
+    await fetch(`/admin/address/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    loadAddress();
+  }
+
+  async function editEmail(id, oldValue) {
+    const noiDung = prompt("Sửa email:", oldValue);
+    if (!noiDung || noiDung.trim() === oldValue) return;
+
+    await fetch(`/admin/email/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    loadEmail();
+  }
+
+  async function editPhone(id, oldValue) {
+    const noiDung = prompt("Sửa số điện thoại:", oldValue);
+    if (!noiDung || noiDung.trim() === oldValue) return;
+
+    await fetch(`/admin/phone/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    loadPhone();
+  }
+
+  //==============================================
+
+
+  // ẩn / hiện trạng thái bộ trà
+  async function toggleTeapot(id, trangThai) {
+    const newStatus = trangThai === "ACTIVE" ? "HIDE" : "ACTIVE";
+
+    const res = await fetch(`/admin/teapots/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: newStatus
+      })
+    });
+
+    if (!res.ok) {
+      alert("Đổi trạng thái bộ trà thất bại");
+      return;
+    }
+
+    loadTeapots();
+  }
+
+  // Hủy sửa sản phẩm
+  const btnCancelEdit = document.getElementById("btn-cancel-edit");
+  if (btnCancelEdit) {
+    btnCancelEdit.addEventListener("click", () => {
+      // ẩn form sửa
+      el("#card-product-edit")?.classList.add("hide");
+      // hiện lại card điều hướng
+      el("#card-admin-info")?.classList.remove("hide");
+    });
+  }
 
 
   // login/logout (giữ nguyên logic như trước)

@@ -1,4 +1,5 @@
-const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+// const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+const API_BASE = "http://127.0.0.1:5000/";
 
 // ================= BACKGROUND  từ dòng 4 đến 52 =================
 const header = document.querySelector(".header");
@@ -51,15 +52,6 @@ function changeBackground() {
 document.addEventListener("DOMContentLoaded", fetchBackgrounds);
 
 //=======================================================//
-
-
-
-// document.getElementById('explore-btn').addEventListener('click', function(e) {
-//   e.preventDefault();
-//   // Cuộn mượt đến phần story
-//   document.querySelector('#story').style.display = 'block'; // Hiển thị phần story
-//   document.querySelector('#story').scrollIntoView({ behavior: 'smooth' });
-// });
 
 
  // Hàm reset về trạng thái ban đầu
@@ -123,17 +115,6 @@ if (backBtn) {
 
 // Khởi động ban đầu
 resetToInitial();
-
-
-// //gỡ bỏ lớp active cho thanh menu khi người dùng nhấp vào nút mở hoặc đóng.
-// document.getElementById('nav-btn').addEventListener('click', function() {
-//   document.getElementById('navbar').classList.add('active');
-// });
-
-// document.getElementById('nav-close').addEventListener('click', function() {
-//   document.getElementById('navbar').classList.remove('active');
-// }); 
-// /////////////////////////////
 
 
 function showPage(pageId) {
@@ -289,6 +270,118 @@ async function fetchProducts() {
 document.addEventListener("DOMContentLoaded", () => {
   fetchProducts();
 });
+
+/*==========================================*/
+
+
+/*============ TEAPOTS ============*/
+const TEAPOTS_API = API_BASE + "/api/teapots";
+let teapotsData = [];
+let teapotsShowAll = false;
+
+function teapotCardHTML(p) {
+  const imgSrc = buildImageUrl(p.image || p.anh || "");
+  const title = escapeHtml(p.tenAmTra || p.title || "Ấm trà");
+  const price = formatPrice(p.gia || p.price);
+  const id = p.id;
+
+  const detailLink = `./Product/productTea.html?id=${id}`;
+
+  return `
+  <article class="product">
+    <a href="${detailLink}" class="product-link">
+      <img src="${imgSrc}" alt="${title}" class="product-img" loading="lazy"/>
+      <span class="details-overlay">Chi tiết</span>
+    </a>
+    <a href="${detailLink}" class="product-link">
+      <h3 class="product-title">${title}</h3>
+    </a>
+    <h3 class="product-price">${price}</h3>
+  </article>`;
+}
+
+function renderTeapots() {
+  const container = document.getElementById("teapots-container");
+  const btn = document.getElementById("view-more-teapots");
+
+  if (!container) return;
+
+  let toShow = teapotsData;
+  if (!teapotsShowAll) toShow = teapotsData.slice(0, 3);
+
+  container.innerHTML = toShow.map(p => teapotCardHTML(p)).join("");
+
+  if (!btn) return;
+
+  if (teapotsData.length <= 3) {
+    btn.style.display = "none";
+  } else {
+    btn.style.display = "inline-block";
+    btn.textContent = teapotsShowAll ? "Thu gọn" : "Xem thêm";
+  }
+}
+
+function showMoreTeapots() {
+  teapotsShowAll = !teapotsShowAll;
+  renderTeapots();
+}
+
+async function fetchTeapots() {
+  try {
+    const res = await fetch(TEAPOTS_API);
+    if (!res.ok) throw new Error("Không load được teapots");
+
+    const arr = await res.json();
+
+    teapotsData = arr.filter(item =>
+      String(item.trangThai || "").toUpperCase() === "ACTIVE"
+    );
+
+    renderTeapots();
+
+  } catch (err) {
+    console.error("Teapots error:", err);
+  }
+}
+
+// chạy khi load
+document.addEventListener("DOMContentLoaded", fetchTeapots);
+/*==========================================*/
+
+
+// ================= CONTACT =================
+async function fetchContact() {
+  try {
+    const res = await fetch(API_BASE + "/api/contact");
+    if (!res.ok) throw new Error("Không load được contact");
+
+    const data = await res.json();
+
+    // ADDRESS
+    const addrBox = document.getElementById("contact-address");
+    addrBox.innerHTML = data.address
+      .map(item => `<h3 class="contact-text">${item.noiDung}</h3>`)
+      .join("");
+
+    // EMAIL
+    const emailBox = document.getElementById("contact-email");
+    emailBox.innerHTML = data.email
+      .map(item => `<h3 class="contact-text">${item.noiDung}</h3>`)
+      .join("");
+
+    // PHONE
+    const phoneBox = document.getElementById("contact-phone");
+    phoneBox.innerHTML = data.phone
+      .map(item => `<h3 class="contact-text">${item.noiDung}</h3>`)
+      .join("");
+
+  } catch (err) {
+    console.error("Contact error:", err);
+  }
+}
+
+// chạy khi load trang
+document.addEventListener("DOMContentLoaded", fetchContact);
 
 /*==========================================*/
 
