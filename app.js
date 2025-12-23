@@ -1,5 +1,5 @@
-// const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
-const API_BASE = "http://127.0.0.1:5000/";
+const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+// const API_BASE = "http://127.0.0.1:5000/";
 
 // ================= BACKGROUND  từ dòng 4 đến 52 =================
 const header = document.querySelector(".header");
