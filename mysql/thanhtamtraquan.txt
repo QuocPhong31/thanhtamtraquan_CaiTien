@@ -15,6 +15,21 @@ CREATE TABLE sanphams (
   ngayTao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE amtras (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tenAmTra VARCHAR(255) NOT NULL,
+  gia DECIMAL(12,2) NOT NULL,
+  soLuong INT,
+  xuatXu VARCHAR(255) NOT NULL,
+  moTa TEXT,
+  chatLieu TEXT NULL,
+  thietKe TEXT NULL,
+  cachSuDung TEXT NULL,
+  anh VARCHAR(255),             -- đường dẫn tương đối: images/product1re.jpg
+  trangThai ENUM('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  ngayTao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE nguoidungs (
   id INT AUTO_INCREMENT PRIMARY KEY,
   hoTen VARCHAR(255),
@@ -34,4 +49,28 @@ CREATE TABLE anhnens (
   duongDan VARCHAR(255) NOT NULL,
   trangThai ENUM('ACTIVE', 'HIDE') DEFAULT 'ACTIVE',
   ngayTao DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bảng Address
+CREATE TABLE address_contact (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    noiDung TEXT NOT NULL,
+    trangThai ENUM('ACTIVE', 'HIDE') DEFAULT 'ACTIVE',
+    ngayTao DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bảng Email
+CREATE TABLE email_contact (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    noiDung VARCHAR(255) NOT NULL,
+    trangThai ENUM('ACTIVE', 'HIDE') DEFAULT 'ACTIVE',
+    ngayTao DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bảng Phone
+CREATE TABLE phone_contact (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    noiDung VARCHAR(50) NOT NULL,
+    trangThai ENUM('ACTIVE', 'HIDE') DEFAULT 'ACTIVE',
+    ngayTao DATETIME DEFAULT CURRENT_TIMESTAMP
 );

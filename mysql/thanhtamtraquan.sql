@@ -16,6 +16,66 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `address_contact`
+--
+
+DROP TABLE IF EXISTS `address_contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `address_contact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `noiDung` text NOT NULL,
+  `trangThai` enum('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  `ngayTao` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `address_contact`
+--
+
+LOCK TABLES `address_contact` WRITE;
+/*!40000 ALTER TABLE `address_contact` DISABLE KEYS */;
+INSERT INTO `address_contact` VALUES (1,'CN1: 28/8 Phạm Huy Thông, Phường 7, Quận Gò Vấp, HCM','ACTIVE','2025-12-23 10:18:13'),(2,'CN2: Lô S8.03 Vinhome Grand Park, Quận 9, HCM','ACTIVE','2025-12-23 10:34:59'),(3,'CN3: 567/4 Lê Quang Định, Phường 1, Quận Gò Vấp, HCM ','ACTIVE','2025-12-23 10:35:08');
+/*!40000 ALTER TABLE `address_contact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `amtras`
+--
+
+DROP TABLE IF EXISTS `amtras`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `amtras` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tenAmTra` varchar(255) NOT NULL,
+  `gia` decimal(12,2) NOT NULL,
+  `soLuong` int DEFAULT NULL,
+  `xuatXu` varchar(255) NOT NULL,
+  `moTa` text,
+  `chatLieu` text,
+  `thietKe` text,
+  `cachSuDung` text,
+  `anh` varchar(255) DEFAULT NULL,
+  `trangThai` enum('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  `ngayTao` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `amtras`
+--
+
+LOCK TABLES `amtras` WRITE;
+/*!40000 ALTER TABLE `amtras` DISABLE KEYS */;
+INSERT INTO `amtras` VALUES (1,'Bộ Khải pha trà',380000.00,3,'Triều Châu, Trung Quốc','Bộ khải pha trà là một sản phẩm truyền thống tinh tế được thiết kế để thể hiện nghệ thuật thưởng trà độc đáo của khu vực này. Bộ trà Triều Châu thường mang trong mình nét đẹp tinh xảo và sự đơn giản mộc mạc, phản ánh văn hóa trà đạo lâu đời của Trung Quốc.','Bộ khải pha trà được làm từ đất sét nung hoặc sứ, hai loại chất liệu phổ biến trong sản xuất đồ trà. Chất liệu này giúp giữ nhiệt tốt và truyền tải hương vị trà một cách tự nhiên và tinh khiết.','Bộ trà Triều Châu thường có kích thước nhỏ gọn, lý tưởng cho việc pha những loại trà có hương vị tinh tế như trà ô long hoặc trà xanh. Từng chi tiết được chăm chút kỹ lưỡng, từ đường nét của ấm trà cho đến hoa văn trên các chén trà.\nẤm trà có nắp khít, vòi trà được thiết kế để chảy đều và mượt, không gây đổ tràn. Tay cầm thường nhỏ, vừa đủ để cầm tay mà không gây nóng.\nChén trà (khải) thường có hình dạng đơn giản, với đường viền mảnh, nhẹ nhàng để dễ dàng cầm khi thưởng thức.','Các bước pha trà bằng bộ khải này thường bao gồm việc đun nước, tráng ấm và chén trà bằng nước sôi.\nSau đó đổ trà vào ấm và thưởng thức từng ngụm trà nhỏ để cảm nhận hương thơm và vị ngọt nhẹ của trà.','/images/teapots/productTea1_1766487203_d60040.jpg','ACTIVE','2025-12-23 10:53:41'),(2,'Ấm Tử Sa',728000.00,5,'Triều Châu, Trung Quốc','Ấm Tử Sa là một loại ấm trà nổi tiếng và quý giá, được làm từ đất sét đặc biệt có nguồn gốc từ khu vực Tử Sa, thuộc tỉnh Giang Tô, Trung Quốc. Ấm Tử Sa không chỉ là một công cụ pha trà đơn thuần mà còn là một tác phẩm nghệ thuật tinh xảo, được yêu thích trong văn hóa thưởng trà Trung Hoa, đặc biệt là ở Triều Châu.','Đất Tử Sa có đặc điểm độc đáo là không có chất tráng men, nhưng nhờ cấu trúc đất sét vi thể, ấm vẫn có khả năng \"thở\", giúp giữ lại và phát huy hương vị tự nhiên của trà.','Ấm Tử Sa thường có nhiều hình dạng khác nhau, từ kiểu dáng tròn truyền thống đến các thiết kế vuông, đa giác, hoặc hình dáng độc đáo như hình cây, hoa quả, động vật, tùy thuộc vào tay nghề của nghệ nhân.\nDung tích ấm Tử Sa thường nhỏ gọn, phù hợp cho việc pha trà trong những buổi trà nhỏ, mang tính cá nhân hoặc nhóm nhỏ.\nNắp ấm được thiết kế khít với miệng ấm để giữ nhiệt độ và hương vị trà bên trong. Tay cầm được làm chắc chắn, vừa vặn để người dùng có thể cầm mà không bị nóng tay.','Trước khi sử dụng lần đầu, ấm Tử Sa thường được \"nuôi ấm\" bằng cách đun nước sôi và tráng nhiều lần để làm sạch và \"đánh thức\" đất sét.\nSau đó, ấm được dùng để pha trà, thường sử dụng một loại trà cố định để không làm lẫn lộn hương vị.','/images/teapots/productTea2_1766495214_161b84.jpg','ACTIVE','2025-12-23 13:06:58');
+/*!40000 ALTER TABLE `amtras` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `anhnens`
 --
 
@@ -39,6 +99,32 @@ LOCK TABLES `anhnens` WRITE;
 /*!40000 ALTER TABLE `anhnens` DISABLE KEYS */;
 INSERT INTO `anhnens` VALUES (1,'/images/background/bg_1766101631_sp-tea.jpg','ACTIVE','2025-12-19 06:47:11'),(2,'/images/background/bg_1766108055_checkout.jpg','ACTIVE','2025-12-19 08:34:15');
 /*!40000 ALTER TABLE `anhnens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `email_contact`
+--
+
+DROP TABLE IF EXISTS `email_contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `email_contact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `noiDung` varchar(255) NOT NULL,
+  `trangThai` enum('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  `ngayTao` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `email_contact`
+--
+
+LOCK TABLES `email_contact` WRITE;
+/*!40000 ALTER TABLE `email_contact` DISABLE KEYS */;
+INSERT INTO `email_contact` VALUES (1,'thanhtamtraquan.1996@gmail.com','ACTIVE','2025-12-23 10:34:29');
+/*!40000 ALTER TABLE `email_contact` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -74,6 +160,32 @@ LOCK TABLES `nguoidungs` WRITE;
 /*!40000 ALTER TABLE `nguoidungs` DISABLE KEYS */;
 INSERT INTO `nguoidungs` VALUES (1,'Quoc Phong',1,'1990-01-01','HCM','0123456789','admin@example.com','admin','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92','ADMIN','2025-12-08 09:29:54'),(2,'Trần Thanh Bảo Khánh',0,'2004-10-20','Gò Vấp, TPHCM','','','khanh','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92','ADMIN','2025-12-09 02:37:01');
 /*!40000 ALTER TABLE `nguoidungs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phone_contact`
+--
+
+DROP TABLE IF EXISTS `phone_contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `phone_contact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `noiDung` varchar(50) NOT NULL,
+  `trangThai` enum('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  `ngayTao` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phone_contact`
+--
+
+LOCK TABLES `phone_contact` WRITE;
+/*!40000 ALTER TABLE `phone_contact` DISABLE KEYS */;
+INSERT INTO `phone_contact` VALUES (1,'039 5759357','ACTIVE','2025-12-23 10:34:40');
+/*!40000 ALTER TABLE `phone_contact` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -120,4 +232,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-22 16:45:42
+-- Dump completed on 2025-12-23 20:09:59
