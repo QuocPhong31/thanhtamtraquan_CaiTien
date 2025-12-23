@@ -1,0 +1,89 @@
+1_:
+git clone https://github.com/QuocPhong31/thanhtamtraquan_CaiTien.git
+
+
+2_:
+ls
+cd thanhtamtraquan_CaiTien/backend_py
+ls
+
+3_:
+cd ~
+python3.10 -m venv venv
+source venv/bin/activate
+
+4_:
+pip install cloudinary
+pip install flask flask-cors mysql-connector-python
+
+5_:
+sau đó vào web (nếu chưa có thì phải tạo)
+nhấn vào var/www/thanhtamtraquanp_pythonanywhere_com_wsgi.py
+xóa hết và dán đoạn này vào:
+
+############################################################
+import sys
+import os
+
+project_home = '/home/thanhtamtraquanp/thanhtamtraquan_CaiTien/backend_py'
+if project_home not in sys.path:
+    sys.path.append(project_home)
+
+os.environ['FLASK_ENV'] = 'production'
+
+from app import app as application
+
+############################################################
+
+Sau đó nhấn Save
+rồi Kéo xuống mục Virtualenv
+điền "/home/thanhtamtraquanp/venv" rồi tick V
+
+Sau đó kéo lên đầu trang rồi Reload - bấm nút xanh
+
+6_:
+tạo database 
+tạo password
+sau đó quay lại console
+(lúc này phải ở venv)
+sau đó dán nguyên đoạn này vào:
+"
+
+mysql -u thanhtamtraquanp -h thanhtamtraquanp.mysql.pythonanywhere-services.com -p thanhtamtraquanp\$thanhtamtraquan < /home/thanhtamtraquanp/thanhtamtraquan_CaiTien/mysql/thanhtamtraquan.sql
+
+"
+
+7_:
+kiểm tra database
+trong console thì dán: (ở venv)
+"
+
+mysql -u thanhtamtraquanp -h thanhtamtraquanp.mysql.pythonanywhere-services.com -p
+
+"
+sau đó dán 
+SHOW DATABASES;
+
+USE `thanhtamtraquanp$thanhtamtraquan`;
+SHOW TABLES;
+exit;  
+
+8_:
+vào config.py trong pythonanywhere
+dán cái này vào 
+"
+
+import mysql.connector
+import os
+import cloudinary.uploader
+
+def get_connection():
+    return mysql.connector.connect(
+        host="thanhtamtraquanp.mysql.pythonanywhere-services.com",
+        user="thanhtamtraquanp",
+        password="MẬT_KHẨU_MYSQL_BẠN_ĐÃ_SET_TRÊN_PYTHONANYWHERE",
+        database="thanhtamtraquanp$thanhtamtraquan",
+        autocommit=True
+    )
+
+"

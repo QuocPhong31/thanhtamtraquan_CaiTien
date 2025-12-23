@@ -9,10 +9,20 @@ from background import background_bp
 import os
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
-
-# Thiết lập secret key để dùng session
-app.secret_key = "thay_the_ban_bang_mot_chuoi_rand_kho_hon"
+CORS(
+    app,
+    supports_credentials=True,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "https://quocphong31.github.io",
+                "https://shop.thanhtamtraquan.com",
+                "http://127.0.0.1:5500",
+                "http://localhost:5500"
+            ]
+        }
+    }
+)
 
 # Đường dẫn tới thư mục chứa frontend
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "web")

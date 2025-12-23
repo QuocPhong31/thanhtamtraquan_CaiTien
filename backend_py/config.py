@@ -1,6 +1,5 @@
 import mysql.connector
 import os
-import cloudinary.uploader
 
 def get_connection():
     return mysql.connector.connect(

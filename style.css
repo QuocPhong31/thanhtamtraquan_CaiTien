@@ -23,7 +23,7 @@ html {
   
   :root {
     --slantedText: "Pacifico", cursive;
-    --primaryColor: #698f3f;
+    --primaryColor: #d4d6d1;
     --secondayColor: #fca311;
     --mainDark: #3a3e3b;
     --mainWhite: #fff;
@@ -85,8 +85,9 @@ height: auto;
   left: 0;
   width: 100%;
   height: 70px;
-  background: #111; /* đen đồng nhất */
+  background: #ffffff; /* đen đồng nhất */
   z-index: 1000;
+  border-bottom: 1px solid #e5e5e5;/* viền nhẹ cho sang */
 }
 
 /* container full width */
@@ -95,8 +96,8 @@ height: auto;
   height: 100%;
   display: flex;
   align-items: center;
-  position: relative;
-  padding: 0 20px;
+  justify-content: space-between; 
+  padding: 0 32px;
 }
 
 /* LOGO sát trái */
@@ -104,8 +105,6 @@ height: auto;
   display: flex;
   align-items: center;
   gap: 10px;
-  position: absolute;
-  left: 20px;
   font-weight: bold;
   font-size: 18px;
   color: #1f8f3a; /* xanh lá đậm */
@@ -120,17 +119,19 @@ height: auto;
 
 /* MENU căn giữa */
 .main-nav {
-  margin: 0 auto;
+  margin-left: auto;
   display: flex;
   gap: 30px;
 }
 
 /* MENU ITEM */
 .main-nav a {
-  color: #fff;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  color: #231e1e;
+  font-size: 20px;
+  font-weight: 500;
+  text-transform: none;        
+  letter-spacing: 0.05em;
   transition: color 0.3s ease;
 }
 
