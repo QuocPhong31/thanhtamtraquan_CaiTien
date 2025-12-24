@@ -8,6 +8,7 @@ from product import product_bp
 from teapot import teapot_bp
 from background import background_bp
 from contact import contact_bp
+from cart import cart_bp
 import os
 
 app = Flask(__name__)
@@ -41,6 +42,7 @@ app.register_blueprint(product_bp)
 app.register_blueprint(teapot_bp)
 app.register_blueprint(background_bp)
 app.register_blueprint(contact_bp)
+app.register_blueprint(cart_bp)
 
 @app.get("/")
 def home():

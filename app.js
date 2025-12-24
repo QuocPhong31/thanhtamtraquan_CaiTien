@@ -1,5 +1,5 @@
-const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
-// const API_BASE = "http://127.0.0.1:5000/";
+// const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+const API_BASE = "http://127.0.0.1:5000/";
 
 // ================= BACKGROUND  từ dòng 4 đến 52 =================
 const header = document.querySelector(".header");
@@ -50,6 +50,56 @@ function changeBackground() {
 
 // chạy khi load trang
 document.addEventListener("DOMContentLoaded", fetchBackgrounds);
+
+//=======================================================//
+
+
+// ================= Giỏ hàng =================
+function openCart(){
+  fetch(API_BASE + "/api/cart", { credentials: "include" })
+    .then(res => res.json())
+    .then(renderCart);
+
+  document.getElementById("cart-modal").classList.remove("hidden");
+}
+
+function closeCart(){
+  document.getElementById("cart-modal").classList.add("hidden");
+}
+
+function renderCart(cart) {
+  const box = document.getElementById("cart-items");
+
+  if (!cart || cart.length === 0) {
+    box.innerHTML = "<p>Giỏ hàng trống</p>";
+    return;
+  }
+
+  box.innerHTML = cart.map((item, index) => `
+    <div class="cart-item">
+      <div class="cart-item-left">
+        <img src="${API_BASE + item.image}">
+        <div>
+          <div><strong>${item.name}</strong></div>
+          <div>${item.qty} × ${item.price.toLocaleString()}đ</div>
+        </div>
+      </div>
+
+      <div class="cart-remove" onclick="removeCartItem(${index})">✕</div>
+    </div>
+  `).join("");
+}
+
+function removeCartItem(index) {
+  fetch(API_BASE + "/api/cart/remove", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ index })
+  })
+    .then(res => res.json())
+    .then(renderCart);
+}
 
 //=======================================================//
 

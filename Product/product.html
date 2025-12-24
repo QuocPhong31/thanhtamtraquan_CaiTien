@@ -15,8 +15,8 @@
   </div>
 
 <script>
-  const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
-  // const API_BASE = "http://127.0.0.1:5000/";
+  // const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+  const API_BASE = "http://127.0.0.1:5000/";
 
   function buildImageUrl(raw) {
     if (!raw) return API_BASE + "/images/placeholder.jpg";
@@ -48,6 +48,31 @@
       </div>
     `;
   }
+
+  async function addToCartAPI(item){
+    const res = await fetch(API_BASE + "/api/cart/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(item)
+    });
+
+    if(!res.ok){
+      alert("Thêm vào giỏ thất bại");
+      return;
+    }
+
+    const data = await res.json();
+
+    const badge = document.getElementById("cart-count");
+    if (badge) {
+      badge.innerText = data.cart.length;
+    }
+
+    alert("Đã thêm vào giỏ");
+  }
+
+
 
   if (!productId) {
     root.innerHTML = `<div class="card"><div style="padding:18px;">Không xác định sản phẩm. <a href="../index.html" class="back">Quay về</a></div></div>`;
@@ -94,6 +119,17 @@
                 ${ origin ? `<div class="attr" style="min-width:unset"><span class="label">Xuất xứ</span><span class="value origin-pill">${origin}</span></div>` : "" }
               </div>
 
+              <div class="qty-cart-row">
+  
+                <div class="qty-line">
+                  <button id="minus">-</button>
+                  <input id="qty" value="1" min="1" type="number">
+                  <button id="plus">+</button>
+                </div>
+                <button id="addCartBtn" class="add-cart-btn">THÊM VÀO GIỎ</button>
+              </div>
+
+
               ${ mkSection("mo-ta", "📝", "Mô tả", descRaw, false) }
               ${ mkSection("huong-vi", "🍃", "Hương vị", huongVi, true) }
               ${ mkSection("cong-dung", "💪", "Công dụng", congDung, true) }
@@ -104,6 +140,37 @@
           </div>
         `;
         root.innerHTML = html;
+
+        // Đoạn thêm vào giỏ hàng
+        const stock = Number(p.soLuong || 1);
+
+        const qtyInput = document.getElementById("qty");
+        document.getElementById("minus").onclick = () => {
+          let v = Number(qtyInput.value);
+          if(v > 1) qtyInput.value = v-1;
+        };
+        document.getElementById("plus").onclick = () => {
+          let v = Number(qtyInput.value);
+          if(v < stock) qtyInput.value = v+1;
+        };
+
+        document.getElementById("addCartBtn").onclick = () => {
+          const qty = Number(qtyInput.value);
+          if(qty < 1 || qty > stock){
+            alert("Số lượng không hợp lệ!");
+            return;
+          }
+
+          addToCartAPI({
+            type: "tea",
+            id: p.id,
+            name: p.title,
+            price: p.price,
+            image: p.image,
+            qty: qty
+          });
+        };
+        //=================================================
 
         // đảm bảo các section ẩn thực sự bị ẩn (phòng CSS load muộn)
         document.querySelectorAll('[data-hidden="1"]').forEach(w => w.classList.add('hidden-section'));

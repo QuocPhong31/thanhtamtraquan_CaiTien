@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Chi tiết Bộ Trà</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Style/styleProduct.css">
+</head>
+
+<body>
+<div class="wrap">
+  <div id="product-detail" class="loading">Đang tải...</div>
+</div>
+
+<script>
+// const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+const API_BASE = "http://127.0.0.1:5000/";
+
+function buildImageUrl(raw) {
+  if (!raw) return API_BASE + "/images/placeholder.jpg";
+  raw = String(raw).trim();
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  if (raw.startsWith("/")) return API_BASE + raw;
+  return API_BASE + "/" + raw.replace(/^\/+/, "");
+}
+
+function escapeHtml(s){
+  if(!s && s !== 0) return "";
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+const params = new URLSearchParams(location.search);
+const productId = params.get("id");
+const root = document.getElementById("product-detail");
+
+// tạo section
+function mkSection(keyId, icon, title, content, hidden=false){
+  if(!content) return "";
+  const id = `sec-${keyId}`;
+  const wrap = `wrap-${id}`;
+  const hiddenAttr = hidden ? ' data-hidden="1" class="section hidden-section"' : ' class="section"';
+  const clamp = hidden ? '' : 'clamped';
+  const btn = hidden ? '' : `<button class="expand-btn" data-target="${id}" data-reveals="sec-chat-lieu,sec-thiet-ke,sec-cach-su-dung">Xem thêm</button>`;
+  return `
+    <div id="${wrap}" ${hiddenAttr}>
+      <h4>${icon} ${title}</h4>
+      <div id="${id}" class="desc ${clamp}">${content}</div>
+      ${btn}
+    </div>
+  `;
+}
+
+async function addToCartAPI(item){
+  const res = await fetch(API_BASE + "/api/cart/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(item)
+  });
+
+  if(!res.ok){
+    alert("Thêm vào giỏ thất bại");
+    return;
+  }
+
+  const data = await res.json();
+
+  // update badge nếu có
+  const badge = document.getElementById("cart-count");
+  if (badge) {
+    badge.innerText = data.cart.length;
+  }
+
+  alert("Đã thêm vào giỏ");
+}
+
+
+if(!productId){
+  root.innerHTML = `<div class="card"><div style="padding:18px">Không xác định sản phẩm. <a href="../index.html" class="back">Quay về</a></div></div>`;
+} else {
+  (async ()=>{
+    try{
+      const res = await fetch(`${API_BASE}/api/teapots/${productId}`, { credentials:"include" });
+      if(!res.ok) throw new Error("Không lấy được dữ liệu ("+res.status+")");
+      const p = await res.json();
+      if(p.msg && !p.id) throw new Error(p.msg);
+
+      const title = escapeHtml(p.title || p.tenAmTra || "");
+      const priceVal = p.price ?? p.gia ?? null;
+      const price = priceVal !== null && priceVal !== undefined && priceVal !== ""
+          ? new Intl.NumberFormat('vi-VN').format(priceVal) + 'đ'
+          : 'Liên hệ';
+
+      const qty = escapeHtml(p.soLuong ?? "");
+      const origin = escapeHtml(p.xuatXu || "");
+      const desc = escapeHtml(p.description || p.moTa || "");
+      const chatLieu = escapeHtml(p.chatLieu || "");
+      const thietKe = escapeHtml(p.thietKe || "");
+      const cachSuDung = escapeHtml(p.cachSuDung || "");
+      const img = buildImageUrl(p.image || p.anh || "");
+
+      root.innerHTML = `
+        <div class="card">
+          <div class="left">
+            <div class="prod-img">
+              <img src="${img}" alt="${title}" onerror="this.src='${API_BASE}/images/placeholder.jpg'"/>
+            </div>
+          </div>
+
+          <div class="right">
+            <div class="title-row">
+              <h1 class="product-title">${title}</h1>
+              <div class="price-badge">${price}</div>
+            </div>
+
+            <div class="attrs">
+              ${ qty ? `<div class="attr"><span class="label">Số lượng</span><span class="value">${qty}</span></div>` : "" }
+              ${ origin ? `<div class="attr"><span class="label">Xuất xứ</span><span class="value origin-pill">${origin}</span></div>` : "" }
+            </div>
+
+            <div class="qty-cart-row">
+              <div class="qty-line">
+                <button id="minus">-</button>
+                <input id="qty" value="1" min="1" type="number">
+                <button id="plus">+</button>
+              </div>
+                <button id="addCartBtn" class="add-cart-btn">THÊM VÀO GIỎ</button>
+            </div>
+
+            ${ mkSection("mo-ta","📝","Mô tả", desc,false) }
+            ${ mkSection("chat-lieu","🏺","Chất liệu", chatLieu,true) }
+            ${ mkSection("thiet-ke","🎨","Thiết kế", thietKe,true) }
+            ${ mkSection("cach-su-dung","☕","Cách sử dụng", cachSuDung,true) }
+
+            <a class="back" href="../index.html">← Quay về</a>
+          </div>
+        </div>
+      `;
+
+      // ================== HANDLE ADD TO CART ==================
+      const stock = Number(p.soLuong || 1);
+
+      const qtyInput = document.getElementById("qty");
+      document.getElementById("minus").onclick = () => {
+      let v = Number(qtyInput.value);
+      if(v > 1) qtyInput.value = v-1;
+      };
+      document.getElementById("plus").onclick = () => {
+      let v = Number(qtyInput.value);
+      if(v < stock) qtyInput.value = v+1;
+      };
+
+      document.getElementById("addCartBtn").onclick = () => {
+        const qty = Number(qtyInput.value);
+        if(qty < 1 || qty > stock){
+          alert("Số lượng không hợp lệ!");
+          return;
+        }
+
+        addToCartAPI({
+          type: "teapot", // KHÁC SO VỚI product.html
+          id: p.id,
+          name: p.title,
+          price: p.price,
+          image: p.image,
+          qty: qty
+        });
+      };
+
+
+      document.querySelectorAll('[data-hidden="1"]').forEach(w => w.classList.add('hidden-section'));
+
+      const expandBtn = document.querySelector('#wrap-sec-mo-ta .expand-btn');
+      if(!expandBtn) return;
+
+      function move(btn,id){
+        const w=document.getElementById(id);
+        if(w) w.appendChild(btn);
+      }
+
+      expandBtn.addEventListener("click", ()=>{
+        const desc=document.getElementById("sec-mo-ta");
+        const reveals=["wrap-sec-chat-lieu","wrap-sec-thiet-ke","wrap-sec-cach-su-dung"];
+        const open=!desc.classList.contains("expanded");
+
+        if(open){
+          desc.classList.remove("clamped");
+          desc.classList.add("expanded");
+          expandBtn.innerText="Thu gọn";
+
+          reveals.forEach(id=>{
+            const w=document.getElementById(id);
+            if(w) w.classList.remove("hidden-section");
+          });
+
+          move(expandBtn,"wrap-sec-cach-su-dung");
+        } else {
+          desc.classList.add("clamped");
+          desc.classList.remove("expanded");
+          expandBtn.innerText="Xem thêm";
+
+          reveals.forEach(id=>{
+            const w=document.getElementById(id);
+            if(w) w.classList.add("hidden-section");
+          });
+
+          move(expandBtn,"wrap-sec-mo-ta");
+        }
+      });
+
+    }catch(e){
+      root.innerHTML = `<div class="card"><div style="padding:18px;color:#b00020">${e}</div></div>`;
+    }
+  })();
+}
+</script>
+</body>
+</html>

@@ -62,6 +62,26 @@
           <a href="#about">Thông tin</a>
           <a href="#products">Sản phẩm</a>
           <a href="#contact">Liên hệ</a>
+          <div class="cart-icon" onclick="openCart()">
+            🛒 Giỏ hàng
+            <span id="cart-count" class="cart-badge">0</span>
+          </div>
+          <!-- CART MODAL -->
+          <div id="cart-modal" class="cart-modal hidden">
+            <div class="cart-box">
+              <div class="cart-header">
+                <h3>🛒 Giỏ hàng</h3>
+              </div>
+
+              <div id="cart-items" class="cart-items">
+                <!-- JS render -->
+              </div>
+
+              <div class="cart-footer">
+                <button onclick="closeCart()">Đóng</button>
+              </div>
+            </div>
+          </div>
         </nav>
       </div>
     </header>
