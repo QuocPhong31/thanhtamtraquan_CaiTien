@@ -55,13 +55,6 @@ document.addEventListener("DOMContentLoaded", fetchBackgrounds);
 
 
 // ================= Giỏ hàng =================
-function openCart(){
-  fetch(API_BASE + "/api/cart", { credentials: "include" })
-    .then(res => res.json())
-    .then(renderCart);
-
-  document.getElementById("cart-modal").classList.remove("hidden");
-}
 
 function closeCart(){
   document.getElementById("cart-modal").classList.add("hidden");
@@ -69,26 +62,40 @@ function closeCart(){
 
 function renderCart(cart) {
   const box = document.getElementById("cart-items");
+  const totalBox = document.getElementById("cart-total");
+
+  updateCartBadge(cart);
 
   if (!cart || cart.length === 0) {
-    box.innerHTML = "<p>Giỏ hàng trống</p>";
+    box.innerHTML = "<p>Hiện chưa có sản phẩm</p>";
+    if (totalBox) totalBox.textContent = "0đ";
     return;
   }
 
-  box.innerHTML = cart.map((item, index) => `
-    <div class="cart-item">
-      <div class="cart-item-left">
-        <img src="${API_BASE + item.image}">
-        <div>
-          <div><strong>${item.name}</strong></div>
-          <div>${item.qty} × ${item.price.toLocaleString()}đ</div>
-        </div>
-      </div>
+  let total = 0;
 
-      <div class="cart-remove" onclick="removeCartItem(${index})">✕</div>
-    </div>
-  `).join("");
+  box.innerHTML = cart.map((item, index) => {
+    total += item.qty * item.price;
+
+    return `
+      <div class="cart-item">
+        <div class="cart-item-left" style="display:flex;gap:10px">
+          <img src="${API_BASE + item.image}">
+          <div>
+            <div><strong>${item.name}</strong></div>
+            <div>${item.qty} × ${item.price.toLocaleString()}đ</div>
+          </div>
+        </div>
+        <div class="cart-remove" onclick="removeCartItem(${index})">✕</div>
+      </div>
+    `;
+  }).join("");
+
+  if (totalBox) {
+    totalBox.textContent = total.toLocaleString("vi-VN") + "đ";
+  }
 }
+
 
 function removeCartItem(index) {
   fetch(API_BASE + "/api/cart/remove", {
@@ -100,6 +107,44 @@ function removeCartItem(index) {
     .then(res => res.json())
     .then(renderCart);
 }
+
+function toggleCart(e) {
+  e.stopPropagation();
+
+  const cart = document.getElementById("cart-modal");
+  cart.classList.toggle("hidden");
+
+  fetch(API_BASE + "/api/cart", { credentials: "include" })
+    .then(res => res.json())
+    .then(renderCart);
+}
+
+
+// cập nhật số lượng sản phẩm đang trong giỏ 
+function updateCartBadge(cart) {
+  const badge = document.getElementById("cart-count");
+  if (!badge) return;
+
+  if (!cart || cart.length === 0) {
+    badge.textContent = "0";
+    return;
+  }
+  // TÍNH TỔNG SỐ LƯỢNG (qty)
+  const totalQty = cart.reduce((sum, item) => {
+    return sum + Number(item.qty || 0);
+  }, 0);
+
+  badge.textContent = totalQty;
+}
+
+function closeCart() {
+  document.getElementById("cart-modal").classList.add("hidden");
+}
+
+/* click ra ngoài thì đóng */
+document.addEventListener("click", () => {
+  document.getElementById("cart-modal")?.classList.add("hidden");
+});
 
 //=======================================================//
 
