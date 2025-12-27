@@ -64,6 +64,36 @@ document.addEventListener("DOMContentLoaded", fetchBackgrounds);
 
 //=======================================================//
 
+/* ================= CART LOCALSTORAGE ================= */
+
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart(cart);
+}
+
+function addToCart(item) {
+  const cart = getCart();
+
+  const exist = cart.find(
+    p => p.id === item.id && p.type === item.type
+  );
+
+  if (exist) {
+    exist.qty += item.qty;
+  } else {
+    cart.push(item);
+  }
+
+  saveCart(cart);
+}
 
 // ================= Giỏ hàng =================
 
@@ -108,28 +138,37 @@ function renderCart(cart) {
 }
 
 
+// function removeCartItem(index) {
+//   fetch(API_BASE + "/api/cart/remove", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     credentials: "include",
+//     body: JSON.stringify({ index })
+//   })
+//     .then(res => res.json())
+//     .then(renderCart);
+// }
 function removeCartItem(index) {
-  fetch(API_BASE + "/api/cart/remove", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ index })
-  })
-    .then(res => res.json())
-    .then(renderCart);
+  const cart = getCart();
+  cart.splice(index, 1);
+  saveCart(cart);
 }
 
+// function toggleCart(e) {
+//   e.stopPropagation();
+
+//   const cart = document.getElementById("cart-modal");
+//   cart.classList.toggle("hidden");
+
+//   fetch(API_BASE + "/api/cart", { credentials: "include" })
+//     .then(res => res.json())
+//     .then(renderCart);
+// }
 function toggleCart(e) {
   e.stopPropagation();
-
-  const cart = document.getElementById("cart-modal");
-  cart.classList.toggle("hidden");
-
-  fetch(API_BASE + "/api/cart", { credentials: "include" })
-    .then(res => res.json())
-    .then(renderCart);
+  document.getElementById("cart-modal").classList.toggle("hidden");
+  renderCart(getCart());
 }
-
 
 // cập nhật số lượng sản phẩm đang trong giỏ 
 function updateCartBadge(cart) {
@@ -157,6 +196,10 @@ document.addEventListener("click", () => {
   document.getElementById("cart-modal")?.classList.add("hidden");
 });
 
+//UPDATE BADGE KHI LOAD TRANG
+document.addEventListener("DOMContentLoaded", () => {
+  renderCart(getCart());
+});
 //=======================================================//
 
 

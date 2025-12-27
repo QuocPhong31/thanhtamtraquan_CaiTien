@@ -14,8 +14,9 @@
     <div id="product-detail" class="loading">Đang tải...</div>
   </div>
 
+<script src="../app.js"></script>
 <script>
-  const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+  // const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
   // const API_BASE = "http://127.0.0.1:5000/";
 
   function buildImageUrl(raw) {
@@ -49,28 +50,28 @@
     `;
   }
 
-  async function addToCartAPI(item){
-    const res = await fetch(API_BASE + "/api/cart/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(item)
-    });
+  // async function addToCartAPI(item){
+  //   const res = await fetch(API_BASE + "/api/cart/add", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     credentials: "include",
+  //     body: JSON.stringify(item)
+  //   });
 
-    if(!res.ok){
-      alert("Thêm vào giỏ thất bại");
-      return;
-    }
+  //   if(!res.ok){
+  //     alert("Thêm vào giỏ thất bại");
+  //     return;
+  //   }
 
-    const data = await res.json();
+  //   const data = await res.json();
 
-    const badge = document.getElementById("cart-count");
-    if (badge) {
-      badge.innerText = data.cart.length;
-    }
+  //   const badge = document.getElementById("cart-count");
+  //   if (badge) {
+  //     badge.innerText = data.cart.length;
+  //   }
 
-    alert("Đã thêm vào giỏ");
-  }
+  //   alert("Đã thêm vào giỏ");
+  // }
 
 
 
@@ -161,12 +162,20 @@
             return;
           }
 
-          addToCartAPI({
+          // addToCartAPI({
+          //   type: "tea",
+          //   id: p.id,
+          //   name: p.title,
+          //   price: p.price,
+          //   image: p.image,
+          //   qty: qty
+          // });
+          addToCart({
             type: "tea",
             id: p.id,
-            name: p.title,
-            price: p.price,
-            image: p.image,
+            name: p.title || p.tenSanPham,
+            price: p.price || p.gia,
+            image: p.image || p.anh,
             qty: qty
           });
         };
@@ -255,7 +264,6 @@
     })();
   }
 </script>
-
 
 </body>
 </html>

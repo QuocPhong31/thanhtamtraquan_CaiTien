@@ -109,3 +109,4 @@ exit;
 
 10_: xóa File (python) để update cái mới
 vào File sau đó bên dưới Directories hãy xóa toàn bộ là xong
+sau đó muốn update mới thì quay lại bước 1 ở trên

@@ -14,7 +14,7 @@
 </div>
 
 <script>
-const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
+// const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
 // const API_BASE = "http://127.0.0.1:5000/";
 
 function buildImageUrl(raw) {
@@ -56,29 +56,29 @@ function mkSection(keyId, icon, title, content, hidden=false){
   `;
 }
 
-async function addToCartAPI(item){
-  const res = await fetch(API_BASE + "/api/cart/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(item)
-  });
+// async function addToCartAPI(item){
+//   const res = await fetch(API_BASE + "/api/cart/add", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     credentials: "include",
+//     body: JSON.stringify(item)
+//   });
 
-  if(!res.ok){
-    alert("Thêm vào giỏ thất bại");
-    return;
-  }
+//   if(!res.ok){
+//     alert("Thêm vào giỏ thất bại");
+//     return;
+//   }
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  // update badge nếu có
-  const badge = document.getElementById("cart-count");
-  if (badge) {
-    badge.innerText = data.cart.length;
-  }
+//   // update badge nếu có
+//   const badge = document.getElementById("cart-count");
+//   if (badge) {
+//     badge.innerText = data.cart.length;
+//   }
 
-  alert("Đã thêm vào giỏ");
-}
+//   alert("Đã thêm vào giỏ");
+// }
 
 
 if(!productId){
@@ -163,12 +163,21 @@ if(!productId){
           return;
         }
 
-        addToCartAPI({
-          type: "teapot", // KHÁC SO VỚI product.html
+        // addToCartAPI({
+        //   type: "teapot", // KHÁC SO VỚI product.html
+        //   id: p.id,
+        //   name: p.title,
+        //   price: p.price,
+        //   image: p.image,
+        //   qty: qty
+        // });
+
+        addToCart({
+          type: "teapot",
           id: p.id,
-          name: p.title,
-          price: p.price,
-          image: p.image,
+          name: p.title || p.tenAmTra,
+          price: p.price || p.gia,
+          image: p.image || p.anh,
           qty: qty
         });
       };
@@ -220,5 +229,7 @@ if(!productId){
   })();
 }
 </script>
+<script src="../app.js"></script>
+
 </body>
 </html>
