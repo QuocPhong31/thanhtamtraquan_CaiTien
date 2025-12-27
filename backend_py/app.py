@@ -1,7 +1,9 @@
-from flask import Flask, send_from_directory, render_template, redirect, session
+from flask import Flask, send_from_directory, render_template, redirect, session, request
 from flask_cors import CORS
+from config import get_connection
 
 from routes_public import public_bp
+from cron_aggregate_visits import rollup_daily_logs
 from admin import admin_bp
 from user import user_bp
 from product import product_bp
@@ -9,10 +11,17 @@ from teapot import teapot_bp
 from background import background_bp
 from contact import contact_bp
 from cart import cart_bp
+from stats import stats_bp
 import os
 
 app = Flask(__name__)
 app.secret_key = "thanh_tam_tra_quan_secret_key"
+
+# auto rollup khi app start
+try:
+    rollup_daily_logs()
+except Exception as e:
+    print("ROLLUP ERROR:", e)
 
 CORS(
     app,
@@ -43,10 +52,29 @@ app.register_blueprint(teapot_bp)
 app.register_blueprint(background_bp)
 app.register_blueprint(contact_bp)
 app.register_blueprint(cart_bp)
+app.register_blueprint(stats_bp)
 
 @app.get("/")
 def home():
     return "API chạy OK + Admin OK"
+
+@app.post("/api/track-view")
+def track_view():
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    if ip:
+        ip = ip.split(",")[0].strip()
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO truycap_logs (ip_address) VALUES (%s)",
+        (ip,)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return {"ok": True}
 
 # Khi truy cập /admin/ cần phải có session admin, nếu chưa => redirect /admin/login
 @app.get("/admin/")

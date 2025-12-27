@@ -1,0 +1,348 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="row">
+
+  <!-- LEFT -->
+  <div class="col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-header"><strong>Nút điều hướng</strong></div>
+      <div class="card-body d-grid gap-2">
+        <a href="https://shop.thanhtamtraquan.com" target="_blank" class="btn btn-outline-primary">
+          🌐 Website
+        </a>
+        <a href="https://dangkylich.thanhtamtraquan.com" target="_blank" class="btn btn-outline-success">
+          📅 Đăng ký lịch
+        </a>
+        <a href="https://kanban.thanhtamtraquan.com" target="_blank" class="btn btn-outline-dark">
+          📋 Kanban
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="col-lg-8">
+
+    <!-- ADDRESS -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Quản lý Address</strong></div>
+      <div class="card-body">
+        <textarea id="address-content" class="form-control" placeholder="Nhập địa chỉ"></textarea>
+        <button class="btn btn-success mt-2" onclick="addAddress()">Thêm</button>
+        <table class="table mt-3" id="tbl-address"></table>
+      </div>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Quản lý Email</strong></div>
+      <div class="card-body">
+        <input id="email-content" class="form-control" placeholder="Nhập email">
+        <button class="btn btn-success mt-2" onclick="addEmail()">Thêm</button>
+        <table class="table mt-3" id="tbl-email"></table>
+      </div>
+    </div>
+
+    <!-- PHONE -->
+    <div class="card">
+      <div class="card-header"><strong>Quản lý Phone</strong></div>
+      <div class="card-body">
+        <input id="phone-content" class="form-control" placeholder="Nhập số điện thoại">
+        <button class="btn btn-success mt-2" onclick="addPhone()">Thêm</button>
+        <table class="table mt-3" id="tbl-phone"></table>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    loadAddress();
+    loadEmail();
+    loadPhone();
+  });
+
+  // ================= fetch + render ADDRESS =================
+  async function loadAddress() {
+    const res = await fetch("/admin/address", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbl = document.getElementById("tbl-address");
+
+    tbl.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>Nội dung</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    `;
+
+    data.forEach((item, idx) => {
+      tbl.innerHTML += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.noiDung}</td>
+          <td>${item.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editAddress(${item.id}, \`${item.noiDung}\`)">Sửa</button>
+
+            <button class="btn btn-sm btn-warning"
+              onclick="toggleAddress(${item.id}, '${item.trangThai}')">
+              ${item.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+
+  // ================= fetch + render EMAIL  =================
+  async function loadEmail() {
+    const res = await fetch("/admin/email", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbl = document.getElementById("tbl-email");
+
+    tbl.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>Email</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    `;
+
+    data.forEach((item, idx) => {
+      tbl.innerHTML += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.noiDung}</td>
+          <td>${item.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editEmail(${item.id}, '${item.noiDung}')">Sửa</button>
+
+            <button class="btn btn-sm btn-warning"
+              onclick="toggleEmail(${item.id}, '${item.trangThai}')">
+              ${item.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  // ================= fetch + render PHONE OF Contact =================
+  async function loadPhone() {
+    const res = await fetch("/admin/phone", { credentials: "same-origin" });
+    const data = await res.json();
+    const tbl = document.getElementById("tbl-phone");
+
+    tbl.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>Số điện thoại</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    `;
+
+    data.forEach((item, idx) => {
+      tbl.innerHTML += `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.noiDung}</td>
+          <td>${item.trangThai}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editPhone(${item.id}, '${item.noiDung}')">Sửa</button>
+
+            <button class="btn btn-sm btn-warning"
+              onclick="togglePhone(${item.id}, '${item.trangThai}')">
+              ${item.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  // ---------- create Address _Contact ----------
+  async function addAddress() {
+    const textarea = document.getElementById("address-content");
+    const noiDung = textarea.value.trim();
+
+    if (!noiDung) {
+      alert("Vui lòng nhập địa chỉ");
+      return;
+    }
+
+    const res = await fetch("/admin/address", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm address");
+      return;
+    }
+
+    textarea.value = "";
+    loadAddress();
+  }
+
+  async function toggleAddress(id, trangThai) {
+    await fetch(`/admin/address/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: trangThai === "ACTIVE" ? "HIDE" : "ACTIVE"
+      })
+    });
+
+    loadAddress();
+  }
+  //==============================================
+
+
+  // ---------- create Email _Contact ----------
+  async function addEmail() {
+    const input = document.getElementById("email-content");
+    const noiDung = input.value.trim();
+
+    if (!noiDung) {
+      alert("Vui lòng nhập email");
+      return;
+    }
+
+    const res = await fetch("/admin/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm email");
+      return;
+    }
+
+    input.value = "";
+    loadEmail();
+  }
+
+  async function toggleEmail(id, trangThai) {
+    await fetch(`/admin/email/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: trangThai === "ACTIVE" ? "HIDE" : "ACTIVE"
+      })
+    });
+
+    loadEmail();
+  }
+  //==============================================
+
+
+  // ---------- create Phone _Contact ----------
+
+  async function addPhone() {
+    const input = document.getElementById("phone-content");
+    const noiDung = input.value.trim();
+
+    if (!noiDung) {
+      alert("Vui lòng nhập số điện thoại");
+      return;
+    }
+
+    const res = await fetch("/admin/phone", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.msg || "Lỗi thêm phone");
+      return;
+    }
+
+    input.value = "";
+    loadPhone();
+  }
+
+  async function togglePhone(id, trangThai) {
+    await fetch(`/admin/phone/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        trangThai: trangThai === "ACTIVE" ? "HIDE" : "ACTIVE"
+      })
+    });
+
+    loadPhone();
+  }
+  //==============================================
+
+
+  // ---------- Edit address, email, phone _contact ----------
+
+  async function editAddress(id, oldValue) {
+    const noiDung = prompt("Sửa địa chỉ:", oldValue);
+    if (!noiDung || noiDung.trim() === oldValue) return;
+
+    await fetch(`/admin/address/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    loadAddress();
+  }
+
+  async function editEmail(id, oldValue) {
+    const noiDung = prompt("Sửa email:", oldValue);
+    if (!noiDung || noiDung.trim() === oldValue) return;
+
+    await fetch(`/admin/email/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    loadEmail();
+  }
+
+  async function editPhone(id, oldValue) {
+    const noiDung = prompt("Sửa số điện thoại:", oldValue);
+    if (!noiDung || noiDung.trim() === oldValue) return;
+
+    await fetch(`/admin/phone/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ noiDung })
+    });
+
+    loadPhone();
+  }
+
+  //==============================================
+</script>
+{% endblock %}

@@ -47,3 +47,50 @@ def upload_background():
         "ok": True,
         "url": db_path
     })
+
+@background_bp.get("/admin/api/backgrounds")
+def get_backgrounds():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+    cur.execute("SELECT id, duongDan, trangThai FROM anhnens ORDER BY id DESC")
+    data = cur.fetchall()
+    cur.close()
+    conn.close()
+    return jsonify(data)
+
+@background_bp.put("/admin/backgrounds/<int:id>")
+def update_background_status(id):
+    if not session.get("admin"):
+        return jsonify({"msg": "Unauthorized"}), 401
+
+    data = request.get_json()
+    trangThai = data.get("trangThai")
+
+    if trangThai not in ("ACTIVE", "HIDE"):
+        return jsonify({"msg": "Trạng thái không hợp lệ"}), 400
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE anhnens SET trangThai=%s WHERE id=%s",
+        (trangThai, id)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({"msg": "Cập nhật trạng thái thành công"})
+
+@background_bp.delete("/admin/backgrounds/<int:id>")
+def delete_background(id):
+    if not session.get("admin"):
+        return jsonify({"msg": "Unauthorized"}), 401
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM anhnens WHERE id=%s", (id,))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({"msg": "Đã xóa ảnh nền"})

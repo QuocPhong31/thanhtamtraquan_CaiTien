@@ -55,3 +55,27 @@ def admin_login():
 def admin_logout():
     session.pop("admin", None)
     return redirect("/admin/login")
+
+@admin_bp.route("/admin/users-page")
+def admin_users_page():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    return render_template("admin/user.html", admin=session.get("admin"))
+
+@admin_bp.get("/admin/products-page")
+def admin_products_page():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    return render_template("admin/product.html", admin=session.get("admin"))
+
+@admin_bp.get("/admin/backgrounds-page")
+def admin_backgrounds_page():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    return render_template("admin/background.html", admin=session.get("admin"))
+
+@admin_bp.get("/admin/contacts-page")
+def admin_contacts_page():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    return render_template("admin/contact.html", admin=session.get("admin"))

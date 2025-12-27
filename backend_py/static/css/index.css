@@ -9,7 +9,6 @@
   --muted: #6b7280;
   --nav-bg: rgba(15, 23, 42, 0.95);
   --glass: rgba(255,255,255,0.6);
-  --soft-shadow: 0 10px 30px rgba(7, 20, 30, 0.08);
   --soft-shadow-2: 0 6px 20px rgba(7,20,30,0.06);
   --radius-xl: 18px;
   --radius-lg: 12px;
@@ -268,4 +267,23 @@ html,body{
   border-radius: 12px;
   padding: 10px;
   font-weight: 500;
+}
+
+#edit-layout .hide {
+  display: none !important;
+}
+
+.editing #edit-column {
+  display: block !important;
+}
+
+.editing #list-column {
+  width: 66.666666%;
+}
+
+@media (max-width: 992px) {
+  .editing #edit-column,
+  .editing #list-column {
+    width: 100%;
+  }
 }
