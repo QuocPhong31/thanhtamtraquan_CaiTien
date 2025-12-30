@@ -20,6 +20,7 @@ let currentBackgroundIndex = 0;
 
 // gọi API lấy ảnh nền
 async function fetchBackgrounds() {
+  if (!header) return;
   try {
     const res = await fetch(API_BASE + "/api/backgrounds");
     if (!res.ok) throw new Error("Không lấy được background");
@@ -60,7 +61,10 @@ function changeBackground() {
 }
 
 // chạy khi load trang
-document.addEventListener("DOMContentLoaded", fetchBackgrounds);
+// document.addEventListener("DOMContentLoaded", fetchBackgrounds);
+if (header) {
+  document.addEventListener("DOMContentLoaded", fetchBackgrounds);
+}
 
 //=======================================================//
 
@@ -106,6 +110,8 @@ function renderCart(cart) {
   const totalBox = document.getElementById("cart-total");
 
   updateCartBadge(cart);
+
+  if (!box || !totalBox) return;
 
   if (!cart || cart.length === 0) {
     box.innerHTML = "<p>Hiện chưa có sản phẩm</p>";
@@ -164,6 +170,29 @@ function removeCartItem(index) {
 //     .then(res => res.json())
 //     .then(renderCart);
 // }
+
+function showAddToCartToast(msg = "Đã thêm vào giỏ hàng") {
+  let toast = document.getElementById("cart-toast");
+
+  // nếu chưa có thì tạo
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "cart-toast";
+    toast.className = "cart-toast hidden";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = "✅ " + msg;
+  toast.classList.remove("hidden");
+  toast.classList.add("show");
+
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.classList.add("hidden"), 300);
+  }, 1800);
+}
+
 function toggleCart(e) {
   e.stopPropagation();
   document.getElementById("cart-modal").classList.toggle("hidden");
@@ -263,7 +292,12 @@ if (backBtn) {
 }
 
 // Khởi động ban đầu
-resetToInitial();
+// resetToInitial();
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.querySelector(".story")) {
+    resetToInitial();
+  }
+});
 
 
 function showPage(pageId) {

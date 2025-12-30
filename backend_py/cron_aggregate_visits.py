@@ -7,7 +7,7 @@ def rollup_daily_logs():
     # 1️. kiểm tra hôm qua đã rollup chưa
     cur.execute("""
         SELECT 1 FROM rollup_log
-        WHERE date = CURDATE() - INTERVAL 1 DAY
+        WHERE date = CURDATE()  
     """)
     existed = cur.fetchone()
 
@@ -16,13 +16,13 @@ def rollup_daily_logs():
         cur.execute("""
             INSERT INTO luottruycap_ngay (date, total)
             SELECT
-              DATE(visited_at),
+              CURDATE() - INTERVAL 1 DAY,
               COUNT(*)
             FROM truycap_logs
-            WHERE DATE(visited_at) = CURDATE() - INTERVAL 1 DAY
-            GROUP BY DATE(visited_at)
+            WHERE visited_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+              AND visited_at < CURDATE()
             ON DUPLICATE KEY UPDATE
-              total = VALUES(total)
+              total = VALUES(total);
         """)
 
         # 3️. xóa log cũ

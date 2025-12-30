@@ -13,6 +13,7 @@
   <div id="product-detail" class="loading">Đang tải...</div>
 </div>
 
+<script src="../app.js"></script>
 <script>
 // const API_BASE = "https://thanhtamtraquanp.pythonanywhere.com/";
 // const API_BASE = "http://127.0.0.1:5000/";
@@ -180,6 +181,7 @@ if(!productId){
           image: p.image || p.anh,
           qty: qty
         });
+        showAddToCartToast();
       };
 
 
@@ -229,7 +231,5 @@ if(!productId){
   })();
 }
 </script>
-<script src="../app.js"></script>
-
 </body>
 </html>
