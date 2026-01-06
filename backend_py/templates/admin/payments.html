@@ -1,0 +1,138 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <strong>Quản lý thanh toán</strong>
+    <button class="btn btn-success btn-sm" id="btn-show-form">
+      Thêm tài khoản
+    </button>
+  </div>
+
+  <div class="card-body">
+
+    <!-- FORM -->
+    <div id="pay-form" class="mb-3 d-none">
+      <select class="form-control mb-2" id="bank">
+          <option value="">-- Chọn ngân hàng / ví --</option>
+          <option value="MoMo">MoMo</option>
+          <option value="Vietcombank">Vietcombank</option>
+          <option value="Techcombank">Techcombank</option>
+          <option value="ACB">ACB</option>
+          <option value="BIDV">BIDV</option>
+          <option value="VietinBank">VietinBank</option>
+          <option value="MB Bank">MB Bank</option>
+          <option value="Sacombank">Sacombank</option>
+          <option value="TPBank">TPBank</option>
+          <option value="VPBank">VPBank</option>
+          <option value="Agribank">Agribank</option>
+          <option value="ZaloPay">ZaloPay</option>
+        </select>
+      <input class="form-control mb-2" placeholder="Số tài khoản" id="account">
+      <input class="form-control mb-2" placeholder="Chủ tài khoản" id="owner">
+      <input type="file" id="qr" class="form-control mb-2" accept="image/*">
+      <button class="btn btn-primary" id="btn-save">Lưu</button>
+    </div>
+
+    <!-- TABLE -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>QR</th>
+          <th>Ngân hàng</th>
+          <th>Số TK</th>
+          <th>Chủ TK</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="tbl"></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const $ = s => document.querySelector(s);
+
+$("#btn-show-form").onclick = () => $("#pay-form").classList.toggle("d-none");
+
+async function load() {
+  const res = await fetch("/admin/api/payments");
+  const data = await res.json();
+  $("#tbl").innerHTML = "";
+
+  data.forEach((p,i)=>{
+    $("#tbl").innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td><img src="${p.anhQR}" style="width:80px"></td>
+        <td>${p.nganHang}</td>
+        <td>${p.soTaiKhoan}</td>
+        <td>${p.chuTaiKhoan}</td>
+        <td>${p.trangThai}</td>
+        <td>
+          <button class="btn btn-warning btn-sm"
+            onclick="toggle(${p.id}, '${p.trangThai}')">
+            ${p.trangThai === "ACTIVE" ? "Ẩn" : "Hiện"}
+          </button>
+          <button class="btn btn-danger btn-sm"
+            onclick="del(${p.id})">Xóa</button>
+        </td>
+      </tr>`;
+  });
+}
+
+$("#btn-save").onclick = async () => {
+  if (!$("#bank").value) {
+    alert("Vui lòng chọn ngân hàng");
+    return;
+  }
+  if (!$("#account").value || !$("#owner").value) {
+    alert("Vui lòng nhập đầy đủ thông tin tài khoản");
+    return;
+  }
+  if (!$("#qr").files.length) {
+    alert("Vui lòng upload ảnh QR");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append("nganHang", $("#bank").value);
+  fd.append("soTaiKhoan", $("#account").value);
+  fd.append("chuTaiKhoan", $("#owner").value);
+  fd.append("image", $("#qr").files[0]);
+
+  const res = await fetch("/admin/upload-payment", {
+    method: "POST",
+    body: fd
+  });
+
+  if (res.ok) {
+    $("#pay-form").classList.add("d-none");
+    load();
+  }
+};
+
+async function toggle(id, st) {
+  await fetch(`/admin/payments/${id}`, {
+    method: "PUT",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      trangThai: st === "ACTIVE" ? "HIDE" : "ACTIVE"
+    })
+  });
+  load();
+}
+
+async function del(id) {
+  if(!confirm("Xóa?")) return;
+  await fetch(`/admin/payments/${id}`, { method:"DELETE" });
+  load();
+}
+
+load();
+</script>
+{% endblock %}

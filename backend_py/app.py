@@ -12,6 +12,7 @@ from background import background_bp
 from contact import contact_bp
 from cart import cart_bp
 from stats import stats_bp
+from payment import payment_bp
 import os
 
 app = Flask(__name__)
@@ -33,7 +34,9 @@ CORS(
                 "https://shop.thanhtamtraquan.com",
                 "http://127.0.0.1:5500",
                 "http://localhost:5500"
-            ]
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
         }
     }
 )
@@ -53,6 +56,7 @@ app.register_blueprint(background_bp)
 app.register_blueprint(contact_bp)
 app.register_blueprint(cart_bp)
 app.register_blueprint(stats_bp)
+app.register_blueprint(payment_bp)
 
 @app.get("/")
 def home():

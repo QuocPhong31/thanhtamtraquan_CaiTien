@@ -1,4 +1,5 @@
 from flask import Blueprint, request, session, jsonify
+from config import get_connection
 
 cart_bp = Blueprint("cart", __name__)
 
@@ -62,6 +63,27 @@ def remove_item():
 
     return jsonify(cart)
 
-@cart_bp.get("/api/cart")
-def get_cart_api():
-    return jsonify(get_cart())
+# @cart_bp.get("/api/cart")
+# def get_cart_api():
+#     return jsonify(get_cart())
+
+
+# @cart_bp.post("/api/order/create")
+# def create_order():
+#     data = request.json
+#
+#     conn = get_connection()
+#     cur = conn.cursor()
+#     cur.execute("""
+#       INSERT INTO orders (order_code, amount, payment_method, status)
+#       VALUES (%s, %s, %s, 'WAITING_CONFIRM')
+#     """, (
+#       data["order_code"],
+#       data["amount"],
+#       data["method"]
+#     ))
+#     conn.commit()
+#     cur.close()
+#     conn.close()
+#
+#     return {"ok": True}

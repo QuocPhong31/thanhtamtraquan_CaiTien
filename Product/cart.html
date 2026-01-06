@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Giỏ hàng</title>
+  <link rel="stylesheet" href="../Style/styleProduct.css">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../app.js"></script>
+  <link rel="stylesheet" href="../Style/cart.css">
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="site-header"></div>
+
+<h2 style="margin:40px">Giỏ hàng</h2>
+
+<div class="cart-wrap">
+
+  <!-- LEFT -->
+  <div class="cart-left" id="cart-list"></div>
+
+  <!-- RIGHT -->
+  <div class="cart-right">
+    <h3>Thông tin đơn hàng</h3>
+    <p>Tổng tiền: <b id="cart-total">0đ</b></p>
+
+    <label>
+      <input type="checkbox"> Xuất hóa đơn
+    </label>
+
+    <br><br>
+    <textarea placeholder="Ghi chú đơn hàng" style="width:100%"></textarea>
+    <br><br>
+
+    <button id="checkoutBtn" style="width:100%;padding:15px;background:black;color:white">
+      THANH TOÁN NGAY
+    </button>
+  </div>
+
+</div>
+
+<script>
+fetch("/header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("site-header").innerHTML = html;
+      renderCart(getCart()); // đảm bảo badge + modal đúng
+    });
+
+function buildImageUrl(raw) {
+  if (!raw) return API_BASE + "/images/placeholder.jpg";
+  raw = String(raw).trim();
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  if (raw.startsWith("/")) return API_BASE + raw;
+  return API_BASE + "/" + raw.replace(/^\/+/, "");
+}
+
+function renderCart() {
+  const cart = getCart();
+  const list = document.getElementById("cart-list");
+  const totalBox = document.getElementById("cart-total");
+
+  list.innerHTML = "";
+
+  if (!cart || cart.length === 0) {
+    list.innerHTML = "<p>Giỏ hàng trống</p>";
+    totalBox.innerText = "0đ";
+    updateCartBadge?.([]);
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach((p, i) => {
+    const imgSrc = buildImageUrl(p.image || p.anh || "");
+    const itemTotal = p.price * p.qty;
+    total += itemTotal;
+
+    list.innerHTML += `
+      <div class="cart-item">
+        <img src="${imgSrc}" alt="${p.name}">
+
+        <div class="cart-info">
+          <h4>${p.name}</h4>
+          <p class="unit-price">${formatPrice(p.price)}</p>
+
+          <div class="qty">
+            <button onclick="updateQty(${i}, -1)">−</button>
+            <span>${p.qty}</span>
+            <button onclick="updateQty(${i}, 1)">+</button>
+          </div>
+
+          <!-- ✅ NÚT XÓA -->
+          <button class="remove-btn" onclick="removeItem(${i})">
+            ❌ Xóa sản phẩm
+          </button>
+        </div>
+
+        <div class="item-total">
+          ${formatPrice(itemTotal)}
+        </div>
+      </div>
+    `;
+  });
+
+  // CẬP NHẬT TỔNG TIỀN BÊN PHẢI
+  totalBox.innerText = formatPrice(total);
+
+  // CẬP NHẬT BADGE HEADER
+  updateCartBadge?.(cart);
+}
+
+document.getElementById("checkoutBtn").onclick = () => {
+  const cart = getCart();
+  if (!cart || cart.length === 0) {
+    alert("Giỏ hàng trống");
+    return;
+  }
+
+  // lưu tổng tiền + cart để trang payment dùng
+  localStorage.setItem("checkout_cart", JSON.stringify(cart));
+
+  window.location.href = "/Product/payment.html";
+};
+
+
+function updateQty(i, d) {
+  let cart = getCart();
+  cart[i].qty += d;
+  if (cart[i].qty < 1) cart[i].qty = 1;
+  saveCart(cart);
+  renderCart();
+}
+
+function removeItem(i) {
+  let cart = getCart();
+  cart.splice(i, 1);
+  saveCart(cart);
+  renderCart();
+}
+
+renderCart();
+</script>
+
+</body>
+</html>

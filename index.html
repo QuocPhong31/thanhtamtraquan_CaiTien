@@ -42,8 +42,7 @@
     <link rel="icon" href="https://shop.thanhtamtraquan.com/favicon.ico" type="image/x-icon">
 
     <!-- custom css -->
-         <link rel="stylesheet" href="./style.css" />    
-         <!-- <style> </style>     -->
+    <link rel="stylesheet" href="./style.css" />    
           
     <title>Thanh Tâm Trà Quán - Trà Ô Long & Đặc Sản Triều Châu</title>
     <meta name="description" content="Thanh Tâm Trà Quán - Thưởng thức trà ô long, trà đặc sản Triều Châu. Mua hàng online, giao hàng toàn quốc." />
@@ -53,47 +52,7 @@
   </head>
   <body>
 
-    <!-- header -->
-    <header class="main-header">
-      <div class="header-container">
-        <div class="logo"><a href="#home"><img src="images/ava.jpg"></a>Thanh Tâm Trà Quán</div>
-        <nav class="main-nav">
-          <a href="#home">Trang chủ</a>
-          <a href="#about">Thông tin</a>
-          <a href="#products">Sản phẩm</a>
-          <a href="#contact">Liên hệ</a>
-          <!-- CART MODAL -->
-          <div class="cart-icon" onclick="toggleCart(event)">
-            🛒 Giỏ hàng
-            <span id="cart-count" class="cart-badge">0</span>
-
-            <!-- CART DROPDOWN -->
-            <div id="cart-modal" class="cart-dropdown hidden">
-              <div class="cart-box">
-                <div class="cart-header">
-                  <h3>🛒 Giỏ hàng</h3>
-                </div>
-
-                <div id="cart-items" class="cart-items"></div>
-
-                <div class="cart-footer">
-                  <div class="cart-total">
-                    <span>TỔNG TIỀN:</span>
-                    <strong id="cart-total">0đ</strong>
-                  </div>
-                  <div class="cart-actions">
-                    <a href="./cart.html" class="btn-view-cart">Xem giỏ hàng</a>
-                    <a href="./checkout.html" class="btn-checkout">Thanh toán</a>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-        </nav>
-      </div>
-    </header>
+    <div id="site-header"></div>
 
     <!-- BANNER -->
     <section class="header banner-section" id="home">
@@ -454,7 +413,19 @@
 </footer>
 <!-- end of footer -->
 
-     <script src="./app.js"></script>    
+     <script src="./app.js"></script>
+     <script>
+      fetch("/header.html")
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("site-header").innerHTML = html;
+
+          // 🔥 CẬP NHẬT BADGE NGAY SAU KHI HEADER LOAD
+          if (typeof updateCartBadge === "function") {
+            updateCartBadge(getCart());
+          }
+        });
+    </script>    
       <!-- <script>   </script> -->
       <div class="floating-icons">  
         <!-- Messenger -->

@@ -1,0 +1,45 @@
+<header class="main-header">
+  <div class="header-container">
+    <div class="logo">
+      <a href="/index.html">
+        <img src="/images/ava.jpg">
+      </a>
+      Thanh Tâm Trà Quán
+    </div>
+
+    <nav class="main-nav">
+      <a href="/index.html#home">Trang chủ</a>
+      <a href="/index.html#about">Thông tin</a>
+      <a href="/index.html#products">Sản phẩm</a>
+      <a href="/index.html#contact">Liên hệ</a>
+
+      <!-- CART -->
+      <div class="cart-icon" onclick="toggleCart(event)">
+        🛒 Giỏ hàng
+        <span id="cart-count" class="cart-badge">0</span>
+
+        <div id="cart-modal" class="cart-dropdown hidden">
+          <div class="cart-box">
+            <div class="cart-header">
+              <h3>🛒 Giỏ hàng</h3>
+            </div>
+
+            <div id="cart-items" class="cart-items"></div>
+
+            <div class="cart-footer">
+              <div class="cart-total">
+                <span>TỔNG TIỀN:</span>
+                <strong id="cart-total">0đ</strong>
+              </div>
+              <div class="cart-actions">
+                <a href="/Product/cart.html" class="btn-view-cart">Xem giỏ hàng</a>
+                <a href="/Product/payment.html" class="btn-checkout">Thanh toán</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>

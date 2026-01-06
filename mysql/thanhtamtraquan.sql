@@ -102,6 +102,39 @@ INSERT INTO `anhnens` VALUES (1,'/images/background/bg_1766101631_sp-tea.jpg','A
 UNLOCK TABLES;
 
 --
+-- Table structure for table `donthanhtoan`
+--
+
+DROP TABLE IF EXISTS `donthanhtoan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `donthanhtoan` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `hoTen` varchar(100) NOT NULL,
+  `sdt` varchar(20) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `diaChi` text NOT NULL,
+  `tenSanPham` text NOT NULL,
+  `soLuong` text NOT NULL,
+  `thongTinCK` varchar(20) NOT NULL,
+  `soTien` decimal(12,0) NOT NULL,
+  `trangThai` enum('choXacNhan','daXacNhan','huyXacNhan') DEFAULT 'choXacNhan',
+  `ngayTao` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `donthanhtoan`
+--
+
+LOCK TABLES `donthanhtoan` WRITE;
+/*!40000 ALTER TABLE `donthanhtoan` DISABLE KEYS */;
+INSERT INTO `donthanhtoan` VALUES (1,'Nguyễn Đăng Khôi','079657546463','','22 Nguyễn Thị Thập, Quận 7, TP.HCM','Đơn Tùng Áp Thị Hương, Bộ Khải pha trà','1,1','DH36806',1570000,'choXacNhan','2026-01-06 20:24:45');
+/*!40000 ALTER TABLE `donthanhtoan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `email_contact`
 --
 
@@ -147,6 +180,7 @@ CREATE TABLE `luottruycap_ngay` (
 
 LOCK TABLES `luottruycap_ngay` WRITE;
 /*!40000 ALTER TABLE `luottruycap_ngay` DISABLE KEYS */;
+INSERT INTO `luottruycap_ngay` VALUES ('2026-01-04',0),('2026-01-05',28);
 /*!40000 ALTER TABLE `luottruycap_ngay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,6 +264,7 @@ CREATE TABLE `rollup_log` (
 
 LOCK TABLES `rollup_log` WRITE;
 /*!40000 ALTER TABLE `rollup_log` DISABLE KEYS */;
+INSERT INTO `rollup_log` VALUES ('2026-01-04'),('2026-01-05');
 /*!40000 ALTER TABLE `rollup_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,6 +304,35 @@ INSERT INTO `sanphams` VALUES (1,'Đơn Tùng Bát Tiên',700000.00,'240g / hộ
 UNLOCK TABLES;
 
 --
+-- Table structure for table `taikhoan_thanhtoan`
+--
+
+DROP TABLE IF EXISTS `taikhoan_thanhtoan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `taikhoan_thanhtoan` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nganHang` varchar(100) NOT NULL,
+  `soTaiKhoan` varchar(50) NOT NULL,
+  `chuTaiKhoan` varchar(255) NOT NULL,
+  `anhQR` varchar(255) NOT NULL,
+  `trangThai` enum('ACTIVE','HIDE') DEFAULT 'ACTIVE',
+  `ngayTao` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `taikhoan_thanhtoan`
+--
+
+LOCK TABLES `taikhoan_thanhtoan` WRITE;
+/*!40000 ALTER TABLE `taikhoan_thanhtoan` DISABLE KEYS */;
+INSERT INTO `taikhoan_thanhtoan` VALUES (2,'MoMo','07976755','Phonggsfh','/images/payment/qr_1767619590_minhchung20.png','ACTIVE','2026-01-05 20:26:30');
+/*!40000 ALTER TABLE `taikhoan_thanhtoan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `truycap_logs`
 --
 
@@ -280,7 +344,7 @@ CREATE TABLE `truycap_logs` (
   `ip_address` varchar(45) DEFAULT NULL,
   `visited_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,6 +353,7 @@ CREATE TABLE `truycap_logs` (
 
 LOCK TABLES `truycap_logs` WRITE;
 /*!40000 ALTER TABLE `truycap_logs` DISABLE KEYS */;
+INSERT INTO `truycap_logs` VALUES (29,'127.0.0.1','2026-01-06 18:30:30'),(30,'127.0.0.1','2026-01-06 18:30:33'),(31,'127.0.0.1','2026-01-06 18:34:55'),(32,'127.0.0.1','2026-01-06 18:35:53'),(33,'127.0.0.1','2026-01-06 18:41:58'),(34,'127.0.0.1','2026-01-06 18:42:08'),(35,'127.0.0.1','2026-01-06 18:42:08'),(36,'127.0.0.1','2026-01-06 18:51:59'),(37,'127.0.0.1','2026-01-06 18:52:01'),(38,'127.0.0.1','2026-01-06 18:52:42'),(39,'127.0.0.1','2026-01-06 19:07:50'),(40,'127.0.0.1','2026-01-06 19:12:18'),(41,'127.0.0.1','2026-01-06 19:12:29'),(42,'127.0.0.1','2026-01-06 19:12:31'),(43,'127.0.0.1','2026-01-06 19:17:00'),(44,'127.0.0.1','2026-01-06 19:21:46'),(45,'127.0.0.1','2026-01-06 19:22:53'),(46,'127.0.0.1','2026-01-06 19:23:04'),(47,'127.0.0.1','2026-01-06 19:35:54'),(48,'127.0.0.1','2026-01-06 19:36:20'),(49,'127.0.0.1','2026-01-06 19:36:37'),(50,'127.0.0.1','2026-01-06 19:37:39'),(51,'127.0.0.1','2026-01-06 19:37:51'),(52,'127.0.0.1','2026-01-06 19:49:21'),(53,'127.0.0.1','2026-01-06 19:54:48'),(54,'127.0.0.1','2026-01-06 19:54:57'),(55,'127.0.0.1','2026-01-06 19:55:08'),(56,'127.0.0.1','2026-01-06 19:55:53'),(57,'127.0.0.1','2026-01-06 19:55:55'),(58,'127.0.0.1','2026-01-06 19:57:24'),(59,'127.0.0.1','2026-01-06 19:57:25'),(60,'127.0.0.1','2026-01-06 19:57:26'),(61,'127.0.0.1','2026-01-06 19:58:53'),(62,'127.0.0.1','2026-01-06 19:58:56'),(63,'127.0.0.1','2026-01-06 19:59:01'),(64,'127.0.0.1','2026-01-06 19:59:04'),(65,'127.0.0.1','2026-01-06 19:59:06'),(66,'127.0.0.1','2026-01-06 19:59:07'),(67,'127.0.0.1','2026-01-06 19:59:09'),(68,'127.0.0.1','2026-01-06 19:59:11'),(69,'127.0.0.1','2026-01-06 20:00:11'),(70,'127.0.0.1','2026-01-06 20:06:46'),(71,'127.0.0.1','2026-01-06 20:06:54'),(72,'127.0.0.1','2026-01-06 20:06:57'),(73,'127.0.0.1','2026-01-06 20:07:00'),(74,'127.0.0.1','2026-01-06 20:07:04'),(75,'127.0.0.1','2026-01-06 20:07:06'),(76,'127.0.0.1','2026-01-06 20:11:17'),(77,'127.0.0.1','2026-01-06 20:11:29'),(78,'127.0.0.1','2026-01-06 20:16:12'),(79,'127.0.0.1','2026-01-06 20:23:05'),(80,'127.0.0.1','2026-01-06 20:23:08'),(81,'127.0.0.1','2026-01-06 20:23:11'),(82,'127.0.0.1','2026-01-06 20:23:17'),(83,'127.0.0.1','2026-01-06 20:23:23'),(84,'127.0.0.1','2026-01-06 20:23:57'),(85,'127.0.0.1','2026-01-06 20:23:59'),(86,'127.0.0.1','2026-01-06 20:24:02'),(87,'127.0.0.1','2026-01-06 20:24:03'),(88,'127.0.0.1','2026-01-06 20:24:05'),(89,'127.0.0.1','2026-01-06 20:24:08'),(90,'127.0.0.1','2026-01-06 20:24:10'),(91,'127.0.0.1','2026-01-06 20:24:12'),(92,'127.0.0.1','2026-01-06 20:24:47');
 /*!40000 ALTER TABLE `truycap_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -301,4 +366,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-30  8:34:36
+-- Dump completed on 2026-01-06 20:27:03

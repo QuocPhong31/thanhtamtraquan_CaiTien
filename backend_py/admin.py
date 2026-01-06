@@ -79,3 +79,9 @@ def admin_contacts_page():
     if not session.get("admin"):
         return redirect("/admin/login")
     return render_template("admin/contact.html", admin=session.get("admin"))
+
+@admin_bp.get("/admin/payments-page")
+def admin_payments_page():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    return render_template("admin/payments.html", admin=session.get("admin"))

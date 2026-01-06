@@ -300,16 +300,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-function showPage(pageId) {
-  // Ẩn tất cả các trang
-  const pages = document.querySelectorAll('.page');
-  pages.forEach(page => {
-    page.style.display = 'none';
-  });
+// function showPage(pageId) {
+//   // Ẩn tất cả các trang
+//   const pages = document.querySelectorAll('.page');
+//   pages.forEach(page => {
+//     page.style.display = 'none';
+//   });
 
-  // Hiển thị trang được chọn
-  const selectedPage = document.getElementById(pageId);
-  selectedPage.style.display = 'block';
+//   // Hiển thị trang được chọn
+//   const selectedPage = document.getElementById(pageId);
+//   selectedPage.style.display = 'block';
+// }
+
+function showPage(pageId) {
+  const pages = document.querySelectorAll(".page");
+  if (!pages.length) return; // 👉 KHÔNG phải trang product
+
+  pages.forEach(p => p.style.display = "none");
+
+  const el = document.getElementById(pageId);
+  if (el) el.style.display = "block";
 }
 
 // Hiển thị trang A khi trang web được tải
@@ -592,3 +602,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+
+// ================= Xem giỏ hàng =================
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// ===== ADD TO CART =====
+function addToCart(product) {
+  let cart = getCart();
+  let found = cart.find(p => p.id === product.id);
+
+  if (found) {
+    found.qty += product.qty || 1;
+  } else {
+    cart.push({ ...product, qty: product.qty || 1 });
+  }
+
+  saveCart(cart);
+  alert("Đã thêm vào giỏ hàng!");
+}
+
+// ===== TOTAL PRICE =====
+function cartTotal() {
+  return getCart().reduce((sum, p) => sum + p.price * p.qty, 0);
+}
+
+// ===== FORMAT PRICE =====
+function formatPrice(v) {
+  return v.toLocaleString("vi-VN") + "đ";
+}
+/*==========================================*/
