@@ -1,41 +1,41 @@
 from config import get_connection
+from datetime import date, timedelta
 
 def rollup_daily_logs():
     conn = get_connection()
     cur = conn.cursor()
 
-    # 1️. kiểm tra hôm qua đã rollup chưa
+    yesterday = date.today() - timedelta(days=1)
+    # 1. check đã rollup hôm qua chưa
+    cur.execute(
+        "SELECT 1 FROM rollup_log WHERE date=%s",
+        (yesterday,)
+    )
+    if cur.fetchone():
+        cur.close()
+        conn.close()
+        return
+
+    # 2. tổng hợp lượt truy cập hôm qua
     cur.execute("""
-        SELECT 1 FROM rollup_log
-        WHERE date = CURDATE()  
-    """)
-    existed = cur.fetchone()
-
-    if not existed:
-        # 2️. tổng kết hôm qua
-        cur.execute("""
             INSERT INTO luottruycap_ngay (date, total)
-            SELECT
-              CURDATE() - INTERVAL 1 DAY,
-              COUNT(*)
+            SELECT %s, COUNT(*)
             FROM truycap_logs
-            WHERE visited_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)
-              AND visited_at < CURDATE()
-            ON DUPLICATE KEY UPDATE
-              total = VALUES(total);
-        """)
+            WHERE DATE(visited_at) = %s
+            ON DUPLICATE KEY UPDATE total=VALUES(total)
+        """, (yesterday, yesterday))
 
-        # 3️. xóa log cũ
-        cur.execute("""
+    # 3. xóa log cũ hơn hôm qua
+    cur.execute("""
             DELETE FROM truycap_logs
-            WHERE DATE(visited_at) < CURDATE()
-        """)
+            WHERE DATE(visited_at) < %s
+        """, (yesterday,))
 
-        # 4️. đánh dấu đã rollup
-        cur.execute("""
-            INSERT INTO rollup_log (date)
-            VALUES (CURDATE() - INTERVAL 1 DAY)
-        """)
+    # 4. đánh dấu đã rollup
+    cur.execute(
+        "INSERT INTO rollup_log (date) VALUES (%s)",
+        (yesterday,)
+    )
 
     # 5️. CHỈ GIỮ 5 NGÀY GẦN NHẤT
     cur.execute("""
@@ -53,3 +53,6 @@ def rollup_daily_logs():
     conn.commit()
     cur.close()
     conn.close()
+
+if __name__ == "__main__":
+    rollup_daily_logs()

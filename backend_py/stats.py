@@ -58,3 +58,4 @@ def summary_yearly():
         "to": datetime.now().year,
         "total": total
     })
+

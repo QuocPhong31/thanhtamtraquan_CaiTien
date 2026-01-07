@@ -77,6 +77,7 @@ SHOW DATABASES;
 
 USE `thanhtamtraquanp$thanhtamtraquan`;
 SHOW TABLES;
+SELECT * FROM truycap_logs;
 exit;  
 
 8_: Cấu hình lại config

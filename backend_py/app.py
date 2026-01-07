@@ -18,12 +18,6 @@ import os
 app = Flask(__name__)
 app.secret_key = "thanh_tam_tra_quan_secret_key"
 
-# auto rollup khi app start
-try:
-    rollup_daily_logs()
-except Exception as e:
-    print("ROLLUP ERROR:", e)
-
 CORS(
     app,
     supports_credentials=True,
