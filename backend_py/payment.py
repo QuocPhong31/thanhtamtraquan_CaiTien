@@ -18,6 +18,25 @@ def get_payments():
     conn.close()
     return jsonify(data)
 
+@payment_bp.get("/admin/api/orders")
+def get_orders():
+    conn = get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    cur.execute("""
+        SELECT
+            id, hoTen, sdt, email, diaChi,
+            tenSanPham, soLuong, thongTinCK,
+            soTien, trangThai, ngayTao
+        FROM donthanhtoan
+        ORDER BY ngayTao DESC
+    """)
+    data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+    return jsonify(data)
+
 @payment_bp.post("/admin/upload-payment")
 def upload_payment():
     if "image" not in request.files:
@@ -74,6 +93,24 @@ def delete_payment(id):
     conn.commit()
     cur.close()
     conn.close()
+    return {"ok": True}
+
+@payment_bp.put("/admin/orders/<int:id>")
+def update_order_status(id):
+    status = request.json.get("trangThai")
+    if status not in ["daXacNhan", "huyXacNhan"]:
+        return {"msg": "Trạng thái không hợp lệ"}, 400
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE donthanhtoan SET trangThai=%s WHERE id=%s",
+        (status, id)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
     return {"ok": True}
 
 @payment_bp.get("/api/payments/active")

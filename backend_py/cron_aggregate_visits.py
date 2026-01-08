@@ -54,5 +54,5 @@ def rollup_daily_logs():
     cur.close()
     conn.close()
 
-if __name__ == "__main__":
-    rollup_daily_logs()
+# if __name__ == "__main__":
+#     rollup_daily_logs()

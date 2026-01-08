@@ -130,7 +130,7 @@ function renderCart(cart) {
           <img src="${API_BASE + item.image}">
           <div>
             <div><strong>${item.name}</strong></div>
-            <div>${item.qty} × ${item.price.toLocaleString()}đ</div>
+            <div>${item.qty} × ${formatVND(item.price)}</div>
           </div>
         </div>
         <div class="cart-remove" onclick="removeCartItem(${index})">✕</div>
@@ -139,37 +139,16 @@ function renderCart(cart) {
   }).join("");
 
   if (totalBox) {
-    totalBox.textContent = total.toLocaleString("vi-VN") + "đ";
+    totalBox.textContent = formatVND(total);
   }
 }
 
-
-// function removeCartItem(index) {
-//   fetch(API_BASE + "/api/cart/remove", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     credentials: "include",
-//     body: JSON.stringify({ index })
-//   })
-//     .then(res => res.json())
-//     .then(renderCart);
-// }
 function removeCartItem(index) {
   const cart = getCart();
   cart.splice(index, 1);
   saveCart(cart);
 }
 
-// function toggleCart(e) {
-//   e.stopPropagation();
-
-//   const cart = document.getElementById("cart-modal");
-//   cart.classList.toggle("hidden");
-
-//   fetch(API_BASE + "/api/cart", { credentials: "include" })
-//     .then(res => res.json())
-//     .then(renderCart);
-// }
 
 function showAddToCartToast(msg = "Đã thêm vào giỏ hàng") {
   let toast = document.getElementById("cart-toast");
@@ -361,9 +340,10 @@ function buildImageUrl(raw) {
   return API_BASE + "/" + raw.replace(/^\/+/, "");
 }
 
-function formatPrice(number) {
-  if (number == null) return "";
-  return new Intl.NumberFormat('vi-VN').format(Number(number || 0)) + "đ";
+function formatVND(amount) {
+  if (amount == null || isNaN(amount)) return "0 đ";
+
+  return Number(amount).toLocaleString("vi-VN") + " đ";
 }
 
 function escapeHtml(text) {
@@ -380,7 +360,7 @@ function productCardHTML(p) {
   // p là object đã chuẩn hóa ở fetchProducts
   const imgSrc = buildImageUrl(p.image || p.anh || "");
   const title = escapeHtml(p.title || p.tenSanPham || p.ten_san_pham || "Sản phẩm");
-  const price = formatPrice(p.price || p.gia);
+  const price = formatVND(p.price || p.gia);
   const id = p.id || p.ID || "";
   const detailLink = `./Product/product.html?id=${id}`;
 
@@ -475,7 +455,7 @@ let teapotsShowAll = false;
 function teapotCardHTML(p) {
   const imgSrc = buildImageUrl(p.image || p.anh || "");
   const title = escapeHtml(p.tenAmTra || p.title || "Ấm trà");
-  const price = formatPrice(p.gia || p.price);
+  const price = formatVND(p.gia || p.price);
   const id = p.id;
 
   const detailLink = `./Product/productTea.html?id=${id}`;
@@ -633,8 +613,4 @@ function cartTotal() {
   return getCart().reduce((sum, p) => sum + p.price * p.qty, 0);
 }
 
-// ===== FORMAT PRICE =====
-function formatPrice(v) {
-  return v.toLocaleString("vi-VN") + "đ";
-}
 /*==========================================*/

@@ -99,4 +99,5 @@ def static_proxy(path):
     return send_from_directory(STATIC_DIR, path)
 
 if __name__ == "__main__":
+    rollup_daily_logs()
     app.run(debug=True)

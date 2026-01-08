@@ -51,6 +51,34 @@
     </table>
   </div>
 </div>
+
+<div class="card mt-4">
+  <div class="card-header">
+    <strong>Quản lý đơn thanh toán</strong>
+  </div>
+
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Họ tên</th>
+          <th>SĐT</th>
+          <th>Email</th>
+          <th>Địa chỉ</th>
+          <th>Sản phẩm</th>
+          <th>SL</th>
+          <th>CK</th>
+          <th>Số tiền</th>
+          <th>Trạng thái</th>
+          <th>Ngày tạo</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="order-tbl"></tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -134,5 +162,67 @@ async function del(id) {
 }
 
 load();
+    
+async function loadOrders() {
+  const res = await fetch("/admin/api/orders");
+  const data = await res.json();
+
+  const tbl = document.querySelector("#order-tbl");
+  tbl.innerHTML = "";
+
+  data.forEach((o, i) => {
+    let actionHtml = "";
+
+    if (o.trangThai === "choXacNhan") {
+      actionHtml = `
+        <button class="btn btn-success btn-sm me-1"
+          onclick="updateOrder(${o.id}, 'daXacNhan')">
+          Xác nhận
+        </button>
+        <button class="btn btn-danger btn-sm"
+          onclick="updateOrder(${o.id}, 'huyXacNhan')">
+          Hủy
+        </button>
+      `;
+    }
+
+    tbl.innerHTML += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${o.hoTen}</td>
+        <td>${o.sdt}</td>
+        <td>${o.email || ""}</td>
+        <td style="max-width:220px">${o.diaChi}</td>
+        <td>${o.tenSanPham}</td>
+        <td>${o.soLuong}</td>
+        <td>${o.thongTinCK}</td>
+        <td>${Number(o.soTien).toLocaleString()} đ</td>
+        <td>
+          <span class="status-badge
+            ${o.trangThai === 'daXacNhan' ? 'status-active' :
+              o.trangThai === 'huyXacNhan' ? 'status-hide' : ''}">
+            ${o.trangThai}
+          </span>
+        </td>
+        <td>${new Date(o.ngayTao).toLocaleString()}</td>
+        <td>${actionHtml}</td>
+      </tr>
+    `;
+  });
+}
+
+async function updateOrder(id, status) {
+  if (!confirm("Xác nhận thao tác?")) return;
+
+  await fetch(`/admin/orders/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ trangThai: status })
+  });
+
+  loadOrders();
+}
+
+loadOrders();
 </script>
 {% endblock %}

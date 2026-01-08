@@ -34,12 +34,35 @@
     <span class="navbar-brand">Admin</span>
 
     <div class="d-none d-md-flex gap-2 ms-3">
-      <a href="/admin/" class="nav-tab">Tổng quan</a>
-      <a href="/admin/users-page" class="nav-tab">Người dùng</a>
-      <a href="/admin/products-page" class="nav-tab">Sản phẩm</a>
-      <a href="/admin/backgrounds-page" class="nav-tab">Ảnh nền (website)</a>
-      <a href="/admin/contacts-page" class="nav-tab">Liên hệ</a>
-      <a href="/admin/payments-page" class="nav-tab">Thanh toán</a>
+      <a href="/admin/"
+         class="nav-tab {% if request.path == '/admin/' %}active{% endif %}">
+         Tổng quan
+      </a>
+
+      <a href="/admin/users-page"
+         class="nav-tab {% if '/admin/users' in request.path %}active{% endif %}">
+         Người dùng
+      </a>
+
+      <a href="/admin/products-page"
+         class="nav-tab {% if '/admin/products' in request.path %}active{% endif %}">
+         Sản phẩm
+      </a>
+
+      <a href="/admin/backgrounds-page"
+         class="nav-tab {% if '/admin/backgrounds' in request.path %}active{% endif %}">
+         Ảnh nền
+      </a>
+
+      <a href="/admin/contacts-page"
+         class="nav-tab {% if '/admin/contacts' in request.path %}active{% endif %}">
+         Liên hệ
+      </a>
+
+      <a href="/admin/payments-page"
+         class="nav-tab {% if '/admin/payments' in request.path %}active{% endif %}">
+         Thanh toán
+      </a>
     </div>
 
     <div class="ms-auto d-flex align-items-center gap-2">

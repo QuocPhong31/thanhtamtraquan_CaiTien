@@ -170,8 +170,9 @@ const soLuong = cart.map(p => p.qty).join(",");
 let total = 0;
 cart.forEach(p => total += p.price * p.qty);
 
-document.getElementById("amountText").innerText =
-  total.toLocaleString("vi-VN") + " đ";
+// document.getElementById("amountText").innerText =
+//   total.toLocaleString("vi-VN") + " đ";
+document.getElementById("amountText").innerText = formatVND(total);
 
 function renderOrderProducts(cart) {
   const box = document.getElementById("order-products");
@@ -185,7 +186,7 @@ function renderOrderProducts(cart) {
       <div style="flex:1">
         <div style="font-weight:600">${p.name}</div>
         <div style="font-size:13px;color:#555">
-          ${p.qty} × ${p.price.toLocaleString("vi-VN")}đ
+          ${p.qty} × ${formatVND(p.price)}đ
         </div>
       </div>
 

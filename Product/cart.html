@@ -83,7 +83,7 @@ function renderCart() {
 
         <div class="cart-info">
           <h4>${p.name}</h4>
-          <p class="unit-price">${formatPrice(p.price)}</p>
+          <p class="unit-price">${formatVND(p.price)}</p>
 
           <div class="qty">
             <button onclick="updateQty(${i}, -1)">−</button>
@@ -98,7 +98,7 @@ function renderCart() {
         </div>
 
         <div class="item-total">
-          ${formatPrice(itemTotal)}
+          ${formatVND(itemTotal)}
         </div>
       </div>
     `;

@@ -15,7 +15,6 @@ source venv/bin/activate
 4_:
 pip install cloudinary
 pip install flask flask-cors mysql-connector-python
-pip install requests
 
 5_:
 sau đó vào web (nếu chưa có thì phải tạo)
