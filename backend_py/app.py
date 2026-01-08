@@ -3,7 +3,6 @@ from flask_cors import CORS
 from config import get_connection
 
 from routes_public import public_bp
-from cron_aggregate_visits import rollup_daily_logs
 from admin import admin_bp
 from user import user_bp
 from product import product_bp
@@ -99,5 +98,4 @@ def static_proxy(path):
     return send_from_directory(STATIC_DIR, path)
 
 if __name__ == "__main__":
-    rollup_daily_logs()
     app.run(debug=True)
