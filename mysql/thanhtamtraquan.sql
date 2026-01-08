@@ -130,7 +130,7 @@ CREATE TABLE `donthanhtoan` (
 
 LOCK TABLES `donthanhtoan` WRITE;
 /*!40000 ALTER TABLE `donthanhtoan` DISABLE KEYS */;
-INSERT INTO `donthanhtoan` VALUES (1,'Nguyễn Đăng Khôi','079657546463','','22 Nguyễn Thị Thập, Quận 7, TP.HCM','Đơn Tùng Áp Thị Hương, Bộ Khải pha trà','1,1','DH36806',1570000,'choXacNhan','2026-01-06 20:24:45');
+INSERT INTO `donthanhtoan` VALUES (1,'Nguyễn Đăng Khôi','079657546463','','22 Nguyễn Thị Thập, Quận 7, TP.HCM','Đơn Tùng Áp Thị Hương, Bộ Khải pha trà','1,1','DH36806',1570000,'daXacNhan','2026-01-06 20:24:45');
 /*!40000 ALTER TABLE `donthanhtoan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,6 +180,7 @@ CREATE TABLE `luottruycap_ngay` (
 
 LOCK TABLES `luottruycap_ngay` WRITE;
 /*!40000 ALTER TABLE `luottruycap_ngay` DISABLE KEYS */;
+INSERT INTO `luottruycap_ngay` VALUES ('2026-01-07',1);
 /*!40000 ALTER TABLE `luottruycap_ngay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,6 +264,7 @@ CREATE TABLE `rollup_log` (
 
 LOCK TABLES `rollup_log` WRITE;
 /*!40000 ALTER TABLE `rollup_log` DISABLE KEYS */;
+INSERT INTO `rollup_log` VALUES ('2026-01-07');
 /*!40000 ALTER TABLE `rollup_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -364,4 +366,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-07 18:24:06
+-- Dump completed on 2026-01-08 13:59:47
