@@ -1,0 +1,32 @@
+name: Daily Rollup Visits
+
+on:
+  schedule:
+    - cron: '5 17 * * *'   # 00:05 giờ Việt Nam
+  workflow_dispatch:      # cho phép bấm Run thủ công
+
+jobs:
+  rollup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install mysql-connector-python cloudinary
+
+      - name: Run rollup script
+        env:
+          DB_HOST: thanhtamtraquanp.mysql.pythonanywhere-services.com
+          DB_USER: thanhtamtraquanp
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: thanhtamtraquanp$thanhtamtraquan
+        run: |
+          python backend_py/cron_aggregate_visits.py
