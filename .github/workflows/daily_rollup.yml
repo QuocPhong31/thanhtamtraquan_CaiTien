@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install mysql-connector-python cloudinary
+          pip install mysql-connector-python cloudinary pytz
 
       - name: Run rollup script
         env:

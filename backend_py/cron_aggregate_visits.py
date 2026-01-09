@@ -1,11 +1,14 @@
 from config import get_connection
-from datetime import date, timedelta
+from datetime import datetime, timedelta
+import pytz
 
 def rollup_daily_logs():
     conn = get_connection()
     cur = conn.cursor()
 
-    yesterday = date.today() - timedelta(days=1)
+    VN_TZ = pytz.timezone("Asia/Ho_Chi_Minh")
+    now_vn = datetime.now(VN_TZ)
+    yesterday = (now_vn - timedelta(days=1)).date()
     # 1. check đã rollup hôm qua chưa
     cur.execute(
         "SELECT 1 FROM rollup_log WHERE date=%s",

@@ -180,7 +180,6 @@ CREATE TABLE `luottruycap_ngay` (
 
 LOCK TABLES `luottruycap_ngay` WRITE;
 /*!40000 ALTER TABLE `luottruycap_ngay` DISABLE KEYS */;
-INSERT INTO `luottruycap_ngay` VALUES ('2026-01-07',1);
 /*!40000 ALTER TABLE `luottruycap_ngay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,7 +263,6 @@ CREATE TABLE `rollup_log` (
 
 LOCK TABLES `rollup_log` WRITE;
 /*!40000 ALTER TABLE `rollup_log` DISABLE KEYS */;
-INSERT INTO `rollup_log` VALUES ('2026-01-07');
 /*!40000 ALTER TABLE `rollup_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -344,7 +342,7 @@ CREATE TABLE `truycap_logs` (
   `ip_address` varchar(45) DEFAULT NULL,
   `visited_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -353,7 +351,6 @@ CREATE TABLE `truycap_logs` (
 
 LOCK TABLES `truycap_logs` WRITE;
 /*!40000 ALTER TABLE `truycap_logs` DISABLE KEYS */;
-INSERT INTO `truycap_logs` VALUES (1,'127.0.0.1','2026-01-07 18:13:59');
 /*!40000 ALTER TABLE `truycap_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -366,4 +363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-08 13:59:47
+-- Dump completed on 2026-01-09 19:21:36
