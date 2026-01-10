@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, session, redirect
+from cron_aggregate_visits import rollup_daily_logs
 from config import get_connection
 from utils import hash_password
 
@@ -39,6 +40,7 @@ def admin_login():
             "taiKhoan": admin.get("taiKhoan"),
             "hoTen": admin.get("hoTen")
         }
+        rollup_daily_logs()
         # nếu request là form, redirect về /admin/, nếu ajax/json trả JSON
         if request.is_json:
             return jsonify({"msg": "Đăng nhập thành công", "admin": session["admin"]})

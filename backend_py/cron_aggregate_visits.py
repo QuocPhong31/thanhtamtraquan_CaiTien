@@ -56,3 +56,6 @@ def rollup_daily_logs():
     conn.commit()
     cur.close()
     conn.close()
+
+if __name__ == "__main__":
+    rollup_daily_logs()

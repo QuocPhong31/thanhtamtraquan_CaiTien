@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, render_template, redirect, session, request
 from flask_cors import CORS
 from config import get_connection
-
+from cron_aggregate_visits import rollup_daily_logs
 from routes_public import public_bp
 from admin import admin_bp
 from user import user_bp
