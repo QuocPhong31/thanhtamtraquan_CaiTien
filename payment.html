@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <base href="../">
+  <!-- <base href="../"> -->
   <title>Thanh toán</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -152,7 +152,7 @@
 <script src="app.js"></script>
 
 <script>
-fetch("./header.html")
+fetch("header.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("site-header").innerHTML = html;
@@ -168,7 +168,7 @@ if (!cart || cart.length === 0) {
 
 if (!cart || cart.length === 0) {
   alert("Không có đơn hàng");
-  location.href = "/Product/cart.html";
+  location.href = "cart.html";
 }
 renderOrderProducts(cart);
 
