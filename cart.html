@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <base href="../">
   <title>Giỏ hàng</title>
-  <link rel="stylesheet" href="../Style/styleProduct.css">
-  <link rel="stylesheet" href="../style.css">
-  <script src="../app.js"></script>
-  <link rel="stylesheet" href="../Style/cart.css">
+  <link rel="stylesheet" href="./Style/styleProduct.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js"></script>
+  <link rel="stylesheet" href="./Style/cart.css">
 </head>
 
 <body>
@@ -42,7 +42,7 @@
 </div>
 
 <script>
-fetch("../header.html")
+fetch("./header.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("site-header").innerHTML = html;
