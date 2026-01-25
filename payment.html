@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+  <base href="../">
   <title>Thanh toán</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -148,9 +149,16 @@
 
 
 <!-- ✅ DÙNG CHUNG app.js -->
-<script src="../app.js"></script>
+<script src="app.js"></script>
 
 <script>
+fetch("../header.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("site-header").innerHTML = html;
+      renderCart(getCart()); // đảm bảo badge + modal đúng
+    });
+    
 /* ================= CART ================= */
 let cart = JSON.parse(localStorage.getItem("checkout_cart") || "null");
 

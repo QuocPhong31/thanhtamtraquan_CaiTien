@@ -362,7 +362,7 @@ function productCardHTML(p) {
   const title = escapeHtml(p.title || p.tenSanPham || p.ten_san_pham || "Sản phẩm");
   const price = formatVND(p.price || p.gia);
   const id = p.id || p.ID || "";
-  const detailLink = `./Product/product.html?id=${id}`;
+  const detailLink = `product.html?id=${id}`;
 
   return `
   <article class="product">
@@ -458,7 +458,7 @@ function teapotCardHTML(p) {
   const price = formatVND(p.gia || p.price);
   const id = p.id;
 
-  const detailLink = `./Product/productTea.html?id=${id}`;
+  const detailLink = `productTea.html?id=${id}`;
 
   return `
   <article class="product">

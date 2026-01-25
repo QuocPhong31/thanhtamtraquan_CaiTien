@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <base href="../">
   <title>Giỏ hàng</title>
   <link rel="stylesheet" href="../Style/styleProduct.css">
   <link rel="stylesheet" href="../style.css">
@@ -121,7 +122,7 @@ document.getElementById("checkoutBtn").onclick = () => {
   // lưu tổng tiền + cart để trang payment dùng
   localStorage.setItem("checkout_cart", JSON.stringify(cart));
 
-  window.location.href = "/Product/payment.html";
+  window.location.href = "/payment.html";
 };
 
 
