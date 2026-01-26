@@ -97,6 +97,7 @@ function addToCart(item) {
   }
 
   saveCart(cart);
+  alert("Đã thêm vào giỏ hàng!");
 }
 
 // ================= Giỏ hàng =================
@@ -356,26 +357,86 @@ function escapeHtml(text) {
     .replaceAll("'", "&#039;");
 }
 
+// function productCardHTML(p) {
+//   // p là object đã chuẩn hóa ở fetchProducts
+//   const imgSrc = buildImageUrl(p.image || p.anh || "");
+//   const title = escapeHtml(p.title || p.tenSanPham || p.ten_san_pham || "Sản phẩm");
+//   const price = formatVND(p.price || p.gia);
+//   const id = p.id || p.ID || "";
+//   const detailLink = `product.html?id=${id}`;
+
+//   return `
+//   <article class="product">
+//     <a href="${detailLink}" class="product-link">
+//       <img src="${imgSrc}" alt="${title}" class="product-img" loading="lazy"/>
+//       <span class="details-overlay">Chi tiết</span>
+//     </a>
+//     <a href="${detailLink}" class="product-link">
+//       <h3 class="product-title">${title}</h3>
+//     </a>
+//     <h3 class="product-price">${price}</h3>
+//   </article>`;
+// }
+
+function syncCartBadge() {
+  const badge = document.getElementById("cart-count");
+  if (!badge) return; // header chưa load xong
+
+  const cart = getCart();
+  const totalQty = cart.reduce((sum, item) => sum + Number(item.qty || 0), 0);
+  badge.textContent = totalQty;
+}
+
 function productCardHTML(p) {
-  // p là object đã chuẩn hóa ở fetchProducts
   const imgSrc = buildImageUrl(p.image || p.anh || "");
-  const title = escapeHtml(p.title || p.tenSanPham || p.ten_san_pham || "Sản phẩm");
+  const title = escapeHtml(p.title || p.tenSanPham || "Sản phẩm trà");
   const price = formatVND(p.price || p.gia);
-  const id = p.id || p.ID || "";
+  const id = p.id;
+
   const detailLink = `product.html?id=${id}`;
 
   return `
-  <article class="product">
+  <div class="product-card">
+
+    <!-- CLICK ẢNH -->
     <a href="${detailLink}" class="product-link">
-      <img src="${imgSrc}" alt="${title}" class="product-img" loading="lazy"/>
-      <span class="details-overlay">Chi tiết</span>
+      <img src="${imgSrc}" alt="${title}" loading="lazy">
     </a>
-    <a href="${detailLink}" class="product-link">
-      <h3 class="product-title">${title}</h3>
-    </a>
-    <h3 class="product-price">${price}</h3>
-  </article>`;
+
+    <div class="product-body">
+      <div class="product-brand">Thanh Tâm Trà Quán</div>
+
+      <!-- CLICK TÊN -->
+      <a href="${detailLink}" class="product-link">
+        <div class="product-name">${title}</div>
+      </a>
+
+      <div class="product-footer">
+        <div class="product-price-red">${price}</div>
+
+        <!-- NÚT + KHÔNG CHUYỂN TRANG -->
+        <button class="add-btn"
+          onclick='
+            addToCart({
+              id: ${id},
+              name: "${title}",
+              price: ${p.price || p.gia},
+              image: "${p.image || p.anh}",
+              qty: 1,
+              type: "TEA"
+            });
+            syncCartBadge();
+            showAddToCartToast();
+          '>
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+  `;
 }
+
+
 
 function renderProducts() {
   const container = document.getElementById("products-container");
@@ -461,17 +522,46 @@ function teapotCardHTML(p) {
   const detailLink = `productTea.html?id=${id}`;
 
   return `
-  <article class="product">
+  <div class="product-card">
+
+    <!-- CLICK ẢNH -->
     <a href="${detailLink}" class="product-link">
-      <img src="${imgSrc}" alt="${title}" class="product-img" loading="lazy"/>
-      <span class="details-overlay">Chi tiết</span>
+      <img src="${imgSrc}" alt="${title}" loading="lazy">
     </a>
-    <a href="${detailLink}" class="product-link">
-      <h3 class="product-title">${title}</h3>
-    </a>
-    <h3 class="product-price">${price}</h3>
-  </article>`;
+
+    <div class="product-body">
+      <div class="product-brand">Thanh Tâm Trà Quán</div>
+
+      <!-- CLICK TÊN -->
+      <a href="${detailLink}" class="product-link">
+        <div class="product-name">${title}</div>
+      </a>
+
+      <div class="product-footer">
+        <div class="product-price-red">${price}</div>
+
+        <!-- NÚT + THÊM GIỎ -->
+        <button class="add-btn"
+          onclick='
+            addToCart({
+              id: ${id},
+              name: "${title}",
+              price: ${p.gia || p.price},
+              image: "${p.image || p.anh}",
+              qty: 1,
+              type: "TEAPOT"
+            });
+            syncCartBadge();
+            showAddToCartToast("Đã thêm ấm trà vào giỏ");
+          '>
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+  `;
 }
+
 
 function renderTeapots() {
   const container = document.getElementById("teapots-container");
@@ -584,33 +674,33 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// ================= Xem giỏ hàng =================
-function getCart() {
-  return JSON.parse(localStorage.getItem("cart") || "[]");
-}
+// // ================= Xem giỏ hàng =================
+// function getCart() {
+//   return JSON.parse(localStorage.getItem("cart") || "[]");
+// }
 
-function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
+// function saveCart(cart) {
+//   localStorage.setItem("cart", JSON.stringify(cart));
+// }
 
-// ===== ADD TO CART =====
-function addToCart(product) {
-  let cart = getCart();
-  let found = cart.find(p => p.id === product.id);
+// // ===== ADD TO CART =====
+// function addToCart(product) {
+//   let cart = getCart();
+//   let found = cart.find(p => p.id === product.id);
 
-  if (found) {
-    found.qty += product.qty || 1;
-  } else {
-    cart.push({ ...product, qty: product.qty || 1 });
-  }
+//   if (found) {
+//     found.qty += product.qty || 1;
+//   } else {
+//     cart.push({ ...product, qty: product.qty || 1 });
+//   }
 
-  saveCart(cart);
-  alert("Đã thêm vào giỏ hàng!");
-}
+//   saveCart(cart);
+//   alert("Đã thêm vào giỏ hàng!");
+// }
 
-// ===== TOTAL PRICE =====
-function cartTotal() {
-  return getCart().reduce((sum, p) => sum + p.price * p.qty, 0);
-}
+// // ===== TOTAL PRICE =====
+// function cartTotal() {
+//   return getCart().reduce((sum, p) => sum + p.price * p.qty, 0);
+// }
 
 /*==========================================*/
