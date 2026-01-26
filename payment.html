@@ -127,7 +127,7 @@
     </div>
 
     <!-- RIGHT: PAYMENT INFO -->
-    <div style="flex:1; min-width:260px">
+    <div style="flex:1; min-width:450px">
       <div class="title">Thông tin chuyển khoản</div>
 
       <div class="amount" id="amountText">0 đ</div>
@@ -256,6 +256,19 @@ document.getElementById("confirmBtn").onclick = async () => {
     );
     return;
   }
+
+   // HỘP XÁC NHẬN CUỐI
+    const isConfirmed = confirm(
+      "Bạn đã chắc chắn rằng:\n\n" +
+      "• Tất cả thông tin đã được điền đúng\n" +
+      "• Bạn đã chuyển khoản đúng số tiền\n\n" +
+      "Nhấn OK để gửi yêu cầu thanh toán, hoặc Cancel để kiểm tra lại."
+    );
+
+    // Nếu người dùng bấm Cancel
+    if (!isConfirmed) {
+      return;
+    }
 
   await fetch(API_BASE + "api/order/create", {
     method: "POST",

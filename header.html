@@ -14,20 +14,25 @@
       <a href="index.html#contact">Liên hệ</a>
 
       <div class="cart-icon" onclick="toggleCart(event)">
-        🛒 Giỏ hàng
+        <img 
+          src="https://bizweb.dktcdn.net/100/487/455/themes/917232/assets/cart_icon.png?1769076966976"
+          alt="Giỏ hàng"
+          class="cart-img"
+        />
+        <span class="cart-text">Giỏ hàng</span>
         <span id="cart-count" class="cart-badge">0</span>
 
         <div id="cart-modal" class="cart-dropdown hidden">
           <div class="cart-box">
             <div class="cart-header">
-              <h3>🛒 Giỏ hàng</h3>
+              <h3> Giỏ hàng:</h3>
             </div>
 
             <div id="cart-items" class="cart-items"></div>
 
             <div class="cart-footer">
               <div class="cart-total">
-                <span>TỔNG TIỀN:</span>
+                <span>Tổng tiền tạm tính:</span>
                 <strong id="cart-total">0đ</strong>
               </div>
               <div class="cart-actions">

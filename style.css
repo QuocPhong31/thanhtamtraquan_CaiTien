@@ -161,7 +161,12 @@ body {
 
 /* CART DROPDOWN (top-right) */
 .cart-icon {
+  display: inline-flex;      /* QUAN TRỌNG */
+  align-items: center;       /* canh giữa icon & chữ */
+  gap: 6px;                  /* khoảng cách icon – chữ */
+  cursor: pointer;
   position: relative;
+  white-space: nowrap;       /* tránh xuống dòng */
 }
 
 /* dropdown container */
@@ -770,6 +775,11 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
 
 .cart-items::-webkit-scrollbar-thumb:hover {
   background: #999;
+}
+
+.product-link:hover .product-name,
+.product-card:hover .product-name {
+  color: #1e88e5;
 }
 
 /* tablet */
