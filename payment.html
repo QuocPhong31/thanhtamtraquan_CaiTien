@@ -9,6 +9,7 @@
   <!-- font giống product -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Inter, sans-serif;
@@ -95,12 +96,12 @@
 </head>
 
 <body>
-
+<div id="site-header" style="flex:1; min-width:260px; margin-top: 50px;"></div>
 <div class="box" style="max-width: 900px;">
   <div style="display:flex; gap:24px; flex-wrap:wrap">
 
     <!-- LEFT: CONTACT INFO -->
-    <div style="flex:1; min-width:260px">
+    <div style="flex:1; min-width:260px;">
       <h3>Thông tin liên hệ</h3>
 
       <div class="form-group">
@@ -153,12 +154,16 @@
 
 <script>
 fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("site-header").innerHTML = html;
-      renderCart(getCart()); // đảm bảo badge + modal đúng
-    });
-    
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("site-header").innerHTML = html;
+
+    // cập nhật badge giỏ hàng nếu có
+    if (typeof updateCartBadge === "function") {
+      updateCartBadge(getCart());
+    }
+  });
+
 /* ================= CART ================= */
 let cart = JSON.parse(localStorage.getItem("checkout_cart") || "null");
 
@@ -279,7 +284,7 @@ document.getElementById("confirmBtn").onclick = async () => {
   alert("Đã gửi yêu cầu thanh toán. Shop sẽ xác nhận!");
 
   // quay về trang chủ
-  location.href = "/";
+  location.href = "index.html";
 };
 
 </script>
