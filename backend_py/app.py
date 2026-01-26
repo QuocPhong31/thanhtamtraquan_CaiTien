@@ -55,6 +55,18 @@ app.register_blueprint(payment_bp)
 def home():
     return "API chạy OK + Admin OK"
 
+def has_pending_order():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT 1 FROM donthanhtoan WHERE trangThai = 'choXacNhan' LIMIT 1"
+    )
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return result is not None
+
+
 @app.post("/api/track-view")
 def track_view():
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
@@ -79,7 +91,7 @@ def admin_page():
     if not session.get("admin"):
         return redirect("/admin/login")
     # truyền admin từ session vào template (để Jinja có biến admin)
-    return render_template("admin/index.html", admin=session.get("admin"))
+    return render_template("admin/index.html", admin=session.get("admin"),hasPendingOrder=has_pending_order())
 
 @app.route('/images/<path:filename>')
 def serve_image(filename):
