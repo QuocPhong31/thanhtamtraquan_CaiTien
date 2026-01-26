@@ -95,23 +95,62 @@ def delete_payment(id):
     conn.close()
     return {"ok": True}
 
-@payment_bp.put("/admin/orders/<int:id>")
-def update_order_status(id):
-    status = request.json.get("trangThai")
-    if status not in ["daXacNhan", "huyXacNhan"]:
-        return {"msg": "Trạng thái không hợp lệ"}, 400
+@payment_bp.route("/admin/orders/<int:order_id>", methods=["PUT"])
+def update_order(order_id):
+    if not session.get("admin"):
+        return {"msg": "Unauthorized"}, 401
+
+    data = request.get_json()
+    new_status = data.get("trangThai")
 
     conn = get_connection()
-    cur = conn.cursor()
-    cur.execute(
-        "UPDATE donthanhtoan SET trangThai=%s WHERE id=%s",
-        (status, id)
-    )
+    cur = conn.cursor(dictionary=True)
+
+    # 1. Lấy đơn hàng
+    cur.execute("SELECT * FROM donthanhtoan WHERE id=%s", (order_id,))
+    order = cur.fetchone()
+
+    if not order:
+        return {"msg": "Order not found"}, 404
+
+    old_status = order["trangThai"]
+
+    # 2. CHỈ trừ kho khi chuyển từ choXacNhan → daXacNhan
+    if old_status == "choXacNhan" and new_status == "daXacNhan":
+
+        ten_san_phams = order["tenSanPham"].split(",")
+        so_luongs = order["soLuong"].split(",")
+
+        for ten_sp, sl in zip(ten_san_phams, so_luongs):
+            ten_sp = ten_sp.strip()
+            sl = int(sl)
+
+            # 2.1 Trừ bảng sanphams
+            cur.execute("""
+                UPDATE sanphams
+                SET soLuong = soLuong - %s
+                WHERE tenSanPham = %s
+            """, (sl, ten_sp))
+
+            # 2.2 Trừ bảng amtras (nếu có)
+            cur.execute("""
+                UPDATE amtras
+                SET soLuong = soLuong - %s
+                WHERE tenAmTra = %s
+            """, (sl, ten_sp))
+
+    # 3. Update trạng thái đơn
+    cur.execute("""
+        UPDATE donthanhtoan
+        SET trangThai=%s
+        WHERE id=%s
+    """, (new_status, order_id))
+
     conn.commit()
     cur.close()
     conn.close()
 
-    return {"ok": True}
+    return {"msg": "Order updated"}
 
 @payment_bp.get("/api/payments/active")
 def get_active_payment():
