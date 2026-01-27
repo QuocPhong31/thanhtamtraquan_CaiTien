@@ -283,3 +283,16 @@ body {
 .cart-toast.hidden{
   display: none;
 }
+
+.add-cart-btn.disabled {
+  background: #bdbdbd !important;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  opacity: 0.8;
+}
+
+.qty-line.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}

@@ -1,241 +1,299 @@
 {% extends "admin/base.html" %}
 
 {% block content %}
-<div class="row" id="edit-layout">
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+    <button class="nav-link active" id="tab-overview">Tổng quan</button>
+  </li>
+  <li class="nav-item">
+    <button class="nav-link" id="tab-stock">Nhập kho</button>
+  </li>
+</ul>
+<div id="overview-section">
+  <div class="row" id="edit-layout">
 
-  <!-- ===== CỘT TRÁI: FORM SỬA ===== -->
-  <div class="col-lg-4 hide" id="edit-column">
+    <!-- ===== CỘT TRÁI: FORM SỬA ===== -->
+    <div class="col-lg-4 hide" id="edit-column">
 
-    <!-- ===== SỬA SẢN PHẨM ===== -->
-    <div id="card-product-edit" class="card mb-4 hide">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <strong>Sửa sản phẩm</strong>
-        <small id="edit-product-id"></small>
-      </div>
+      <!-- ===== SỬA SẢN PHẨM ===== -->
+      <div id="card-product-edit" class="card mb-4 hide">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Sửa sản phẩm</strong>
+          <small id="edit-product-id"></small>
+        </div>
 
-      <div class="card-body">
-        <input id="edit-title" class="form-control mb-2" placeholder="Tên sản phẩm">
-        <input id="edit-price" type="number" class="form-control mb-2" placeholder="Giá">
-        <input id="edit-soLuong" type="number" class="form-control mb-2" placeholder="Số lượng">
-        <textarea id="edit-moTa" class="form-control mb-2" placeholder="Mô tả"></textarea>
+        <div class="card-body">
+          <input id="edit-title" class="form-control mb-2" placeholder="Tên sản phẩm">
+          <input id="edit-price" type="number" class="form-control mb-2" placeholder="Giá">
+          <input id="edit-soLuong" type="number" class="form-control mb-2" placeholder="Số lượng">
+          <textarea id="edit-moTa" class="form-control mb-2" placeholder="Mô tả"></textarea>
+          <textarea id="edit-huongVi" class="form-control mb-2" placeholder="Hương vị"></textarea>
+          <textarea id="edit-congDung" class="form-control mb-2" placeholder="Công dụng"></textarea>
+          <textarea id="edit-cachPha" class="form-control mb-2" placeholder="Cách pha"></textarea>
 
-        <select id="edit-trangThai" class="form-select mb-3">
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="HIDE">HIDE</option>
-        </select>
+          <select id="edit-trangThai" class="form-select mb-3">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="HIDE">HIDE</option>
+          </select>
 
-        <div class="text-end">
-          <button class="btn btn-secondary" onclick="closeEditLayout()">Hủy</button>
-          <button id="btn-update-product" class="btn btn-primary">Cập nhật</button>
+          <div class="text-end">
+            <button class="btn btn-secondary" onclick="closeEditLayout()">Hủy</button>
+            <button id="btn-update-product" class="btn btn-primary">Cập nhật</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ===== SỬA BỘ TRÀ ===== -->
-    <div id="card-teapot-edit" class="card hide">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <strong>Sửa bộ trà</strong>
-        <small id="edit-teapot-id"></small>
-      </div>
+      <!-- ===== SỬA BỘ TRÀ ===== -->
+      <div id="card-teapot-edit" class="card hide">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Sửa bộ trà</strong>
+          <small id="edit-teapot-id"></small>
+        </div>
 
-      <div class="card-body">
-        <input id="edit-t-name" class="form-control mb-2" placeholder="Tên bộ trà">
-        <input id="edit-t-price" type="number" class="form-control mb-2" placeholder="Giá">
-        <input id="edit-t-qty" type="number" class="form-control mb-2" placeholder="Số lượng">
-        <input id="edit-t-origin" class="form-control mb-2" placeholder="Xuất xứ">
+        <div class="card-body">
+          <input id="edit-t-name" class="form-control mb-2" placeholder="Tên bộ trà">
+          <input id="edit-t-price" type="number" class="form-control mb-2" placeholder="Giá">
+          <input id="edit-t-qty" type="number" class="form-control mb-2" placeholder="Số lượng">
+          <input id="edit-t-origin" class="form-control mb-2" placeholder="Xuất xứ">
 
-        <textarea id="edit-t-desc" class="form-control mb-2" placeholder="Mô tả"></textarea>
-        <textarea id="edit-t-material" class="form-control mb-2" placeholder="Chất liệu"></textarea>
-        <textarea id="edit-t-design" class="form-control mb-2" placeholder="Thiết kế"></textarea>
-        <textarea id="edit-t-usage" class="form-control mb-2" placeholder="Cách sử dụng"></textarea>
+          <textarea id="edit-t-desc" class="form-control mb-2" placeholder="Mô tả"></textarea>
+          <textarea id="edit-t-material" class="form-control mb-2" placeholder="Chất liệu"></textarea>
+          <textarea id="edit-t-design" class="form-control mb-2" placeholder="Thiết kế"></textarea>
+          <textarea id="edit-t-usage" class="form-control mb-2" placeholder="Cách sử dụng"></textarea>
 
-        <input id="edit-t-image" class="form-control mb-2" placeholder="URL ảnh">
+          <input id="edit-t-image" class="form-control mb-2" placeholder="URL ảnh">
 
-        <select id="edit-t-status" class="form-select mb-3">
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="HIDE">HIDE</option>
-        </select>
+          <select id="edit-t-status" class="form-select mb-3">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="HIDE">HIDE</option>
+          </select>
 
-        <div class="text-end">
-          <button class="btn btn-secondary" onclick="closeEditLayout()">Hủy</button>
-          <button class="btn btn-success" onclick="updateTeapot()">Cập nhật</button>
+          <div class="text-end">
+            <button class="btn btn-secondary" onclick="closeEditLayout()">Hủy</button>
+            <button class="btn btn-success" onclick="updateTeapot()">Cập nhật</button>
+          </div>
         </div>
       </div>
+
     </div>
 
-  </div>
+    <!-- ===== CỘT PHẢI: DANH SÁCH ===== -->
+    <div class="col-lg-12" id="list-column">
+      <!-- ================== QUẢN LÝ SẢN PHẨM ================== -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>Quản lý Sản phẩm</strong>
+          <button class="btn btn-sm btn-success" id="btn-show-add-product">Thêm product</button>
+        </div>
 
-  <!-- ===== CỘT PHẢI: DANH SÁCH ===== -->
-  <div class="col-lg-12" id="list-column">
-    <!-- ================== QUẢN LÝ SẢN PHẨM ================== -->
-    <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <strong>Quản lý Sản phẩm</strong>
-        <button class="btn btn-sm btn-success" id="btn-show-add-product">Thêm product</button>
-      </div>
+        <div class="card-body">
 
-      <div class="card-body">
+          <!-- FORM ADD PRODUCT -->
+          <div id="product-form" class="mb-3 hide">
+            <div class="row g-2">
 
-        <!-- FORM ADD PRODUCT -->
-        <div id="product-form" class="mb-3 hide">
-          <div class="row g-2">
-
-            <div class="col-md-6">
-              <input id="p-title" class="form-control" placeholder="Tên sản phẩm">
-            </div>
-            <div class="col-md-3">
-              <input id="p-price" type="number" class="form-control" placeholder="Giá">
-            </div>
-            <div class="col-md-3">
-              <input id="p-khoiLuongHop" class="form-control" placeholder="Khối lượng (vd: 125g)">
-            </div>
-
-            <div class="col-md-3">
-              <input id="p-soLuong" type="number" class="form-control" placeholder="Số lượng">
-            </div>
-            <div class="col-md-3">
-              <input id="p-xuatXu" class="form-control" placeholder="Xuất xứ">
-            </div>
-
-            <!-- IMAGE UPLOAD -->
-            <div class="col-12">
-              <div class="d-flex gap-2 align-items-center">
-                <div id="img-preview"
-                  style="width:100px;height:100px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-                  <span>Chọn ảnh</span>
-                </div>
-                <input id="file-image" type="file" accept="image/*" class="d-none">
-                <input id="p-image" type="hidden">
+              <div class="col-md-6">
+                <input id="p-title" class="form-control" placeholder="Tên sản phẩm">
               </div>
-              <div id="upload-status" class="small text-muted mt-1"></div>
-            </div>
+              <div class="col-md-3">
+                <input id="p-price" type="number" class="form-control" placeholder="Giá">
+              </div>
+              <div class="col-md-3">
+                <input id="p-khoiLuongHop" class="form-control" placeholder="Khối lượng (vd: 125g)">
+              </div>
 
-            <div class="col-12">
-              <textarea id="p-desc" class="form-control" placeholder="Mô tả"></textarea>
-            </div>
-            <div class="col-12">
-              <textarea id="p-huongVi" class="form-control" placeholder="Hương vị"></textarea>
-            </div>
-            <div class="col-12">
-              <textarea id="p-congDung" class="form-control" placeholder="Công dụng"></textarea>
-            </div>
-            <div class="col-12">
-              <textarea id="p-cachPha" class="form-control" placeholder="Cách pha"></textarea>
-            </div>
+              <div class="col-md-3">
+                <input id="p-soLuong" type="number" class="form-control" placeholder="Số lượng">
+              </div>
+              <div class="col-md-3">
+                <input id="p-xuatXu" class="form-control" placeholder="Xuất xứ">
+              </div>
 
-            <div class="col-md-4">
-              <select id="p-trangThai" class="form-select">
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="HIDE">HIDE</option>
-              </select>
-            </div>
+              <!-- IMAGE UPLOAD -->
+              <div class="col-12">
+                <div class="d-flex gap-2 align-items-center">
+                  <div id="img-preview"
+                    style="width:100px;height:100px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                    <span>Chọn ảnh</span>
+                  </div>
+                  <input id="file-image" type="file" accept="image/*" class="d-none">
+                  <input id="p-image" type="hidden">
+                </div>
+                <div id="upload-status" class="small text-muted mt-1"></div>
+              </div>
 
-            <div class="col-12 text-end">
-              <button id="btn-create-product" class="btn btn-primary mt-2">Tạo sản phẩm</button>
+              <div class="col-12">
+                <textarea id="p-desc" class="form-control" placeholder="Mô tả"></textarea>
+              </div>
+              <div class="col-12">
+                <textarea id="p-huongVi" class="form-control" placeholder="Hương vị"></textarea>
+              </div>
+              <div class="col-12">
+                <textarea id="p-congDung" class="form-control" placeholder="Công dụng"></textarea>
+              </div>
+              <div class="col-12">
+                <textarea id="p-cachPha" class="form-control" placeholder="Cách pha"></textarea>
+              </div>
+
+              <div class="col-md-4">
+                <select id="p-trangThai" class="form-select">
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="HIDE">HIDE</option>
+                </select>
+              </div>
+
+              <div class="col-12 text-end">
+                <button id="btn-create-product" class="btn btn-primary mt-2">Tạo sản phẩm</button>
+              </div>
             </div>
           </div>
+
+          <!-- TABLE PRODUCT -->
+          <div class="table-responsive">
+            <table class="table table-hover" id="tbl-products">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Ảnh</th>
+                  <th>Tên</th>
+                  <th>Giá</th>
+                  <th>Số lượng</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
         </div>
-
-        <!-- TABLE PRODUCT -->
-        <div class="table-responsive">
-          <table class="table table-hover" id="tbl-products">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Ảnh</th>
-                <th>Tên</th>
-                <th>Giá</th>
-                <th>Số lượng</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ================== QUẢN LÝ BỘ TRÀ ================== -->
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <strong>Quản lý Bộ Trà</strong>
-        <button class="btn btn-sm btn-success" id="btn-show-add-teapot">Thêm bộ trà</button>
       </div>
 
-      <div class="card-body">
+      <!-- ================== QUẢN LÝ BỘ TRÀ ================== -->
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <strong>Quản lý Bộ Trà</strong>
+          <button class="btn btn-sm btn-success" id="btn-show-add-teapot">Thêm bộ trà</button>
+        </div>
 
-        <!-- FORM ADD TEAPOT -->
-        <div id="teapot-form" class="mb-3 hide">
-          <div class="row g-2">
-            <div class="col-md-6">
-              <input id="t-name" class="form-control" placeholder="Tên bộ trà">
-            </div>
-            <div class="col-md-3">
-              <input id="t-price" type="number" class="form-control" placeholder="Giá">
-            </div>
-            <div class="col-md-3">
-              <input id="t-qty" type="number" class="form-control" placeholder="Số lượng">
-            </div>
+        <div class="card-body">
 
-            <div class="col-md-6">
-              <input id="t-origin" class="form-control" placeholder="Xuất xứ">
-            </div>
+          <!-- FORM ADD TEAPOT -->
+          <div id="teapot-form" class="mb-3 hide">
+            <div class="row g-2">
+              <div class="col-md-6">
+                <input id="t-name" class="form-control" placeholder="Tên bộ trà">
+              </div>
+              <div class="col-md-3">
+                <input id="t-price" type="number" class="form-control" placeholder="Giá">
+              </div>
+              <div class="col-md-3">
+                <input id="t-qty" type="number" class="form-control" placeholder="Số lượng">
+              </div>
 
-            <div class="col-12">
-              <textarea id="t-desc" class="form-control" placeholder="Mô tả"></textarea>
-            </div>
-            <div class="col-12">
-              <textarea id="t-material" class="form-control" placeholder="Chất liệu"></textarea>
-            </div>
-            <div class="col-12">
-              <textarea id="t-design" class="form-control" placeholder="Thiết kế"></textarea>
-            </div>
-            <div class="col-12">
-              <textarea id="t-usage" class="form-control" placeholder="Cách sử dụng"></textarea>
-            </div>
+              <div class="col-md-6">
+                <input id="t-origin" class="form-control" placeholder="Xuất xứ">
+              </div>
 
-            <div class="col-12">
-              <input id="t-file" type="file" class="form-control">
-              <input id="t-image" type="hidden">
-            </div>
+              <div class="col-12">
+                <textarea id="t-desc" class="form-control" placeholder="Mô tả"></textarea>
+              </div>
+              <div class="col-12">
+                <textarea id="t-material" class="form-control" placeholder="Chất liệu"></textarea>
+              </div>
+              <div class="col-12">
+                <textarea id="t-design" class="form-control" placeholder="Thiết kế"></textarea>
+              </div>
+              <div class="col-12">
+                <textarea id="t-usage" class="form-control" placeholder="Cách sử dụng"></textarea>
+              </div>
 
-            <div class="col-md-4">
-              <select id="t-status" class="form-select">
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="HIDE">HIDE</option>
-              </select>
-            </div>
+              <div class="col-12">
+                <input id="t-file" type="file" class="form-control">
+                <input id="t-image" type="hidden">
+              </div>
 
-            <div class="col-12 text-end">
-              <button class="btn btn-primary" onclick="addTeapot()">Lưu bộ trà</button>
+              <div class="col-md-4">
+                <select id="t-status" class="form-select">
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="HIDE">HIDE</option>
+                </select>
+              </div>
+
+              <div class="col-12 text-end">
+                <button class="btn btn-primary" onclick="addTeapot()">Lưu bộ trà</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- TABLE TEAPOT -->
-        <div class="table-responsive">
-          <table class="table table-hover" id="tbl-teapots">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Ảnh</th>
-                <th>Tên</th>
-                <th>Giá</th>
-                <th>Số lượng</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
+          <!-- TABLE TEAPOT -->
+          <div class="table-responsive">
+            <table class="table table-hover" id="tbl-teapots">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Ảnh</th>
+                  <th>Tên</th>
+                  <th>Giá</th>
+                  <th>Số lượng</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
 
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<div id="stock-section" class="hide">
+  <div class="card mb-4">
+    <div class="card-header">
+      <strong>Nhập kho sản phâm</strong>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table class="table table-hover" id="tbl-stock-product">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng hiện tại</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== NHẬP KHO ẤM TRÀ ===== -->
+  <div class="card">
+    <div class="card-header">
+      <strong>Nhập kho Ấm trà</strong>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover" id="tbl-stock-teapot">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ảnh</th>
+            <th>Tên ấm trà</th>
+            <th>Số lượng hiện tại</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -345,6 +403,9 @@ async function openEditProduct(id) {
   el("#edit-price").value = p.gia;
   el("#edit-soLuong").value = p.soLuong;
   el("#edit-moTa").value = p.moTa || "";
+  el("#edit-huongVi").value = p.huongVi || "";
+  el("#edit-congDung").value = p.congDung || "";
+  el("#edit-cachPha").value = p.cachPha || "";
   el("#edit-trangThai").value = p.trangThai;
 
   openEditLayout();
@@ -360,6 +421,9 @@ el("#btn-update-product").onclick = async () => {
     gia: el("#edit-price").value,
     soLuong: el("#edit-soLuong").value,
     moTa: el("#edit-moTa").value,
+    huongVi: el("#edit-huongVi").value,
+    congDung: el("#edit-congDung").value,
+    cachPha: el("#edit-cachPha").value,
     trangThai: el("#edit-trangThai").value
   };
 
@@ -552,5 +616,177 @@ async function deleteTeapot(id){
   await fetch(`/admin/teapots/${id}`,{method:"DELETE",credentials:"same-origin"});
   loadTeapots();
 }
+
+// ===== TAB chuyển trang qua lại  =====
+const tabOverview = el("#tab-overview");
+const tabStock = el("#tab-stock");
+const overviewSection = el("#overview-section");
+const stockSection = el("#stock-section");
+
+tabOverview.onclick = () => {
+  tabOverview.classList.add("active");
+  tabStock.classList.remove("active");
+
+  overviewSection.classList.remove("hide");
+  stockSection.classList.add("hide");
+};
+
+tabStock.onclick = () => {
+  tabStock.classList.add("active");
+  tabOverview.classList.remove("active");
+
+  overviewSection.classList.add("hide");
+  stockSection.classList.remove("hide");
+
+  loadStock();
+};
+
+// -----------------------------------------------------
+
+// Xử lý nhập kho ở sa phẩm
+async function loadStockProducts() {
+  const res = await fetch("/admin/products", { credentials: "same-origin" });
+  const data = await res.json();
+  const tbody = el("#tbl-stock-product tbody");
+  tbody.innerHTML = "";
+
+  data.forEach((p, i) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${i + 1}</td>
+        <td><img src="${p.anh || ''}" style="width:50px;height:50px;object-fit:cover"></td>
+        <td>${p.tenSanPham}</td>
+        <td>${p.soLuong}</td>
+        <td>
+          <button class="btn btn-sm btn-success" onclick="openStockProduct(${p.id}, 'NHAP', ${p.soLuong})">Nhập</button>
+          <button class="btn btn-sm btn-warning" onclick="openStockProduct(${p.id}, 'DIEU_CHINH', ${p.soLuong})">Điều chỉnh</button>
+          <button class="btn btn-sm btn-danger" onclick="openStockProduct(${p.id}, 'TRA_HANG', ${p.soLuong})">Trả hàng</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function openStockProduct(id, type, currentQty) {
+  let msg = "";
+
+  if (type === "NHAP") {
+    msg = "Nhập số lượng cần nhập:";
+  } else if (type === "TRA_HANG") {
+    msg = "Nhập số lượng muốn trả hàng:";
+  } else if (type === "DIEU_CHINH") {
+    msg = `Hiện tại còn ${currentQty}. Bạn muốn điều chỉnh còn bao nhiêu?`;
+  }
+
+  const soLuong = prompt(msg);
+  if (soLuong === null || isNaN(soLuong) || Number(soLuong) < 0) return;
+
+  const res = await fetch("/admin/stock", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      sanPhamId: id,
+      soLuong: Number(soLuong),
+      loai: type
+    })
+  });
+
+  if (res.ok) {
+    alert("Thao tác kho thành công");
+    loadProducts();
+    loadStockProducts();
+  } else {
+    const err = await res.json();
+    alert(err.msg || "Lỗi nhập kho");
+  }
+}
+
+
+// xử lý nhập kho ở bộ trà
+async function loadStockTeapots() {
+  const res = await fetch("/admin/teapots", { credentials: "same-origin" });
+  const data = await res.json();
+  const tbody = el("#tbl-stock-teapot tbody");
+  tbody.innerHTML = "";
+
+  data.forEach((t, i) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>
+          <img src="${t.anh || ''}"
+               style="width:50px;height:50px;object-fit:cover">
+        </td>
+        <td>${t.tenAmTra}</td>
+        <td>${t.soLuong}</td>
+        <td>
+          <button class="btn btn-sm btn-success"
+            onclick="openStockTeapot(${t.id}, 'NHAP', ${t.soLuong})">
+            Nhập
+          </button>
+
+          <button class="btn btn-sm btn-warning"
+            onclick="openStockTeapot(${t.id}, 'DIEU_CHINH', ${t.soLuong})">
+            Điều chỉnh
+          </button>
+
+          <button class="btn btn-sm btn-danger"
+            onclick="openStockTeapot(${t.id}, 'TRA_HANG', ${t.soLuong})">
+            Trả hàng
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+
+async function openStockTeapot(id, type, currentQty) {
+  let msg = "";
+
+  if (type === "NHAP") {
+    msg = "Nhập số lượng cần nhập:";
+  } else if (type === "TRA_HANG") {
+    msg = "Nhập số lượng muốn trả hàng:";
+  } else if (type === "DIEU_CHINH") {
+    msg = `Hiện tại còn ${currentQty}. Bạn muốn điều chỉnh còn bao nhiêu?`;
+  }
+
+  const soLuong = prompt(msg);
+  if (soLuong === null || isNaN(soLuong) || Number(soLuong) < 0) return;
+
+  const res = await fetch("/admin/stock/teapot", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      amTraId: id,
+      soLuong: Number(soLuong),
+      loai: type
+    })
+  });
+
+  if (res.ok) {
+    alert("Thao tác kho thành công");
+    loadTeapots();
+    loadStockTeapots();
+  } else {
+    const err = await res.json();
+    alert(err.msg || "Lỗi nhập kho ấm trà");
+  }
+}
+
+
+tabStock.onclick = () => {
+  tabStock.classList.add("active");
+  tabOverview.classList.remove("active");
+
+  overviewSection.classList.add("hide");
+  stockSection.classList.remove("hide");
+
+  loadStockProducts();
+  loadStockTeapots();
+};
 </script>
 {% endblock %}

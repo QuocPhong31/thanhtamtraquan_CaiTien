@@ -12,6 +12,7 @@ from contact import contact_bp
 from cart import cart_bp
 from stats import stats_bp
 from payment import payment_bp
+from stock import stock_bp
 import os
 
 app = Flask(__name__)
@@ -50,6 +51,7 @@ app.register_blueprint(contact_bp)
 app.register_blueprint(cart_bp)
 app.register_blueprint(stats_bp)
 app.register_blueprint(payment_bp)
+app.register_blueprint(stock_bp)
 
 @app.get("/")
 def home():

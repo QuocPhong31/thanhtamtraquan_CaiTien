@@ -84,6 +84,11 @@ function saveCart(cart) {
 }
 
 function addToCart(item) {
+  if (item.qty <= 0 || item.soLuong === 0) {
+    alert("Sản phẩm đã hết hàng");
+    return;
+  }
+  
   const cart = getCart();
 
   const exist = cart.find(
@@ -392,21 +397,21 @@ function productCardHTML(p) {
   const title = escapeHtml(p.title || p.tenSanPham || "Sản phẩm trà");
   const price = formatVND(p.price || p.gia);
   const id = p.id;
+  const outOfStock = p.soLuong <= 0;
 
   const detailLink = `product.html?id=${id}`;
 
   return `
-  <div class="product-card">
+  <div class="product-card ${outOfStock ? "out-of-stock" : ""}">
 
-    <!-- CLICK ẢNH -->
     <a href="${detailLink}" class="product-link">
       <img src="${imgSrc}" alt="${title}" loading="lazy">
+      ${outOfStock ? `<span class="out-stock-badge">Hết hàng</span>` : ""}
     </a>
 
     <div class="product-body">
       <div class="product-brand">Thanh Tâm Trà Quán</div>
 
-      <!-- CLICK TÊN -->
       <a href="${detailLink}" class="product-link">
         <div class="product-name">${title}</div>
       </a>
@@ -414,22 +419,25 @@ function productCardHTML(p) {
       <div class="product-footer">
         <div class="product-price-red">${price}</div>
 
-        <!-- NÚT + KHÔNG CHUYỂN TRANG -->
-        <button class="add-btn"
-          onclick='
-            addToCart({
-              id: ${id},
-              name: "${title}",
-              price: ${p.price || p.gia},
-              image: "${p.image || p.anh}",
-              qty: 1,
-              type: "TEA"
-            });
-            syncCartBadge();
-            showAddToCartToast();
-          '>
-          +
-        </button>
+        ${
+          outOfStock
+            ? `<button class="add-btn disabled" disabled>+</button>`
+            : `<button class="add-btn"
+                onclick='
+                  addToCart({
+                    id: ${id},
+                    name: "${title}",
+                    price: ${p.price || p.gia},
+                    image: "${p.image || p.anh}",
+                    qty: 1,
+                    type: "TEA"
+                  });
+                  syncCartBadge();
+                  showAddToCartToast();
+                '>
+                +
+              </button>`
+        }
       </div>
     </div>
   </div>
@@ -486,7 +494,8 @@ async function fetchProducts() {
       price: item.gia || item.price,
       description: item.moTa || item.description,
       anh: item.anh,        // raw path từ DB (vd '/images/products/xxx.jpg')
-      image: item.anh || item.image || ""
+      image: item.anh || item.image || "",
+      soLuong: Number(item.soLuong || 0)
     }));
 
     renderProducts();

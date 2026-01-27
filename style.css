@@ -599,21 +599,7 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
     font-family: 'Roboto', sans-serif;
     color: #d35400; /* Màu sắc nổi bật cho giá sản phẩm */
   }
-  /* @media screen and (min-width: 768px) {
-    .product {
-      float: left;
-      width: 50%;
-      padding: 2rem 1rem;
-    }
-    .products-info {
-      padding: 2rem 1rem;
-    }
-  } */
-  /* @media screen and (min-width: 992px) {
-    .product {
-      width: 33.3%;
-    }
-  } */
+
   .details-overlay {
     position: absolute;
     top: 50%;
@@ -635,19 +621,7 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
     
     display: flex;
   }
-  /* @media screen and (min-width: 1200px) {
-    .products-info {
-      float: left;
-      width: 30%;
-    }
-    .products-inventory {
-      float: left;
-      width: 70%;
-    }
-    .product {
-      padding: 1.5rem 1rem 0 1rem;
-    }
-  } */
+
   .product-link {
     position: relative;
     display: flex;
@@ -657,6 +631,32 @@ padding: 10px 15px; /* Giảm padding cho các nút để phù hợp hơn với 
     color: var(--mainWhite); /* Màu trắng */
     letter-spacing: var(--letterSpacing);
     font-family: var(--slantedText);
+  }
+
+  .product-card.out-of-stock {
+    opacity: 0.45;
+    pointer-events: auto;
+  }
+
+  .product-card.out-of-stock img {
+    filter: grayscale(100%);
+  }
+
+  .out-stock-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+    z-index: 2;
+  }
+
+  .add-btn.disabled {
+    background: #ccc;
+    cursor: not-allowed;
   }
 
   /* ===== MODERN PRODUCT CARD ===== */

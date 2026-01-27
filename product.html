@@ -143,7 +143,7 @@
         root.innerHTML = html;
 
         // Đoạn thêm vào giỏ hàng
-        const stock = Number(p.soLuong || 1);
+        const stock = Number(p.soLuong ?? 0);
 
         const qtyInput = document.getElementById("qty");
         document.getElementById("minus").onclick = () => {
@@ -155,21 +155,63 @@
           if(v < stock) qtyInput.value = v+1;
         };
 
-        document.getElementById("addCartBtn").onclick = () => {
+        const addBtn = document.getElementById("addCartBtn");
+        const qtyLine = document.querySelector(".qty-line");
+
+        // ===== HẾT HÀNG =====
+        if (stock <= 0) {
+          // khóa số lượng
+          qtyInput.value = 0;
+          qtyInput.disabled = true;
+
+          // khóa nút thêm giỏ
+          addBtn.innerText = "HẾT HÀNG";
+          addBtn.classList.add("disabled");
+          addBtn.disabled = true;
+
+          // khóa +/- 
+          if (qtyLine) qtyLine.classList.add("disabled");
+        }
+
+        // document.getElementById("addCartBtn").onclick = () => {
+        //   const qty = Number(qtyInput.value);
+        //   if(qty < 1 || qty > stock){
+        //     alert("Số lượng không hợp lệ!");
+        //     return;
+        //   }
+
+        //   // addToCartAPI({
+        //   //   type: "tea",
+        //   //   id: p.id,
+        //   //   name: p.title,
+        //   //   price: p.price,
+        //   //   image: p.image,
+        //   //   qty: qty
+        //   // });
+        //   addToCart({
+        //     type: "tea",
+        //     id: p.id,
+        //     name: p.title || p.tenSanPham,
+        //     price: p.price || p.gia,
+        //     image: p.image || p.anh,
+        //     qty: qty
+        //   });
+        //   showAddToCartToast();
+        // };
+        //=================================================
+
+        addBtn.onclick = () => {
+          if (stock <= 0) {
+            alert("Sản phẩm đã hết hàng");
+            return;
+          }
+
           const qty = Number(qtyInput.value);
-          if(qty < 1 || qty > stock){
+          if (qty < 1 || qty > stock) {
             alert("Số lượng không hợp lệ!");
             return;
           }
 
-          // addToCartAPI({
-          //   type: "tea",
-          //   id: p.id,
-          //   name: p.title,
-          //   price: p.price,
-          //   image: p.image,
-          //   qty: qty
-          // });
           addToCart({
             type: "tea",
             id: p.id,
@@ -178,9 +220,9 @@
             image: p.image || p.anh,
             qty: qty
           });
+
           showAddToCartToast();
         };
-        //=================================================
 
         // đảm bảo các section ẩn thực sự bị ẩn (phòng CSS load muộn)
         document.querySelectorAll('[data-hidden="1"]').forEach(w => w.classList.add('hidden-section'));

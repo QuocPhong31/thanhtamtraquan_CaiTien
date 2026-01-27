@@ -157,21 +157,36 @@ if(!productId){
       if(v < stock) qtyInput.value = v+1;
       };
 
-      document.getElementById("addCartBtn").onclick = () => {
-        const qty = Number(qtyInput.value);
-        if(qty < 1 || qty > stock){
-          alert("Số lượng không hợp lệ!");
+      const addBtn = document.getElementById("addCartBtn");
+      const qtyLine = document.querySelector(".qty-line");
+
+      // ===== HẾT HÀNG =====
+      if (stock <= 0) {
+        // khóa input số lượng
+        qtyInput.value = 0;
+        qtyInput.disabled = true;
+
+        // khóa nút thêm giỏ
+        addBtn.innerText = "HẾT HÀNG";
+        addBtn.classList.add("disabled");
+        addBtn.disabled = true;
+
+        // khóa nút +/- 
+        if (qtyLine) qtyLine.classList.add("disabled");
+      }
+
+
+      addBtn.onclick = () => {
+        if (stock <= 0) {
+          alert("Sản phẩm đã hết hàng");
           return;
         }
 
-        // addToCartAPI({
-        //   type: "teapot", // KHÁC SO VỚI product.html
-        //   id: p.id,
-        //   name: p.title,
-        //   price: p.price,
-        //   image: p.image,
-        //   qty: qty
-        // });
+        const qty = Number(qtyInput.value);
+        if (qty < 1 || qty > stock) {
+          alert("Số lượng không hợp lệ!");
+          return;
+        }
 
         addToCart({
           type: "teapot",
@@ -181,8 +196,10 @@ if(!productId){
           image: p.image || p.anh,
           qty: qty
         });
+
         showAddToCartToast();
       };
+
 
 
       document.querySelectorAll('[data-hidden="1"]').forEach(w => w.classList.add('hidden-section'));
