@@ -57,6 +57,39 @@
       </div>
     </div>
 
+    <div class="card mt-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Thống kê Doanh thu</strong>
+
+        <select id="revenueFilter" class="form-select w-auto">
+          <option value="month">Theo tháng</option>
+          <option value="quarter">Theo quý</option>
+          <option value="year">Theo năm</option>
+        </select>
+      </div>
+
+      <div class="card-body">
+        <div class="row text-center align-items-center">
+          <div class="col-md-6">
+            <h6>Booking</h6>
+            <div class="chart-wrapper">
+              <canvas id="bookingChart"></canvas>
+            </div>
+            <div class="fs-5 fw-bold mt-2" id="bookingTotal">0 đơn</div>
+          </div>
+
+          <div class="col-md-6">
+            <h6>Revenue</h6>
+            <div class="chart-wrapper">
+              <canvas id="revenueChart"></canvas>
+            </div>
+            <div class="fs-5 fw-bold text-success mt-2" id="revenueTotal">0 ₫</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
 {% endblock %}
@@ -64,6 +97,7 @@
 {% block scripts %}
 <!-- scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   //hàm thống ke
   async function loadSummary() {
@@ -96,10 +130,6 @@
   // TABS handlers + (không còn nút top-right nên không điều khiển hiển thị chúng nữa)
   function showView(name) {
     el("#view-overview")?.classList.toggle("hide", name !== "overview");
-<!--    el("#view-users")?.classList.toggle("hide", name !== "users");-->
-<!--    el("#view-products")?.classList.toggle("hide", name !== "products");-->
-<!--    el("#view-backgrounds")?.classList.toggle("hide", name !== "backgrounds");-->
-<!--    el("#view-contact")?.classList.toggle("hide", name !== "contact");-->
 
     ["overview","users","products","backgrounds","contact"].forEach(n => {
       el("#tab-" + n)?.classList.toggle("active", n === name);
@@ -113,10 +143,6 @@
 
   // desktop tabs (in navbar)
   el("#tab-overview")?.addEventListener("click", ()=> showView("overview"));
-<!--  el("#tab-users")?.addEventListener("click", ()=> showView("users"));-->
-<!--  el("#tab-products")?.addEventListener("click", ()=> showView("products"));-->
-<!--  el("#tab-backgrounds")?.addEventListener("click", () => showView("backgrounds"));-->
-<!--  el("#tab-contact")?.addEventListener("click", () => showView("contact"));-->
 
   // mobile dropdown menu items
   els(".mobile-tab").forEach(a => {
@@ -144,44 +170,108 @@
 
 
   // login/logout (giữ nguyên logic như trước)
-  el("#btn-login").addEventListener("click", async () => {
-    const username = el("#login-username").value.trim();
-    const password = el("#login-password").value.trim();
-    if(!username || !password){ el("#login-msg").innerText = "Nhập tài khoản và mật khẩu"; return; }
-    try {
-      const res = await fetch("/admin/login", {
-        method: "POST",
-        headers: { "Content-Type":"application/json" },
-        credentials: "same-origin",
-        body: JSON.stringify({ username, password })
-      });
-      const j = await res.json();
-      if(!res.ok){ el("#login-msg").innerText = j.msg || "Lỗi login"; return; }
-      window.location.href = "/admin/";
-    } catch(e){ console.error(e); el("#login-msg").innerText = "Không thể kết nối server"; }
+  const btnLogin = el("#btn-login");
+  if (btnLogin) {
+    btnLogin.addEventListener("click", async () => {
+      const username = el("#login-username").value.trim();
+      const password = el("#login-password").value.trim();
+      if(!username || !password){ el("#login-msg").innerText = "Nhập tài khoản và mật khẩu"; return; }
+      try {
+        const res = await fetch("/admin/login", {
+          method: "POST",
+          headers: { "Content-Type":"application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ username, password })
+        });
+        const j = await res.json();
+        if(!res.ok){ el("#login-msg").innerText = j.msg || "Lỗi login"; return; }
+        window.location.href = "/admin/";
+      } catch(e){ console.error(e); el("#login-msg").innerText = "Không thể kết nối server"; }
+    });
+  }
+
+  const btnLogout = el("#btn-logout");
+  if (btnLogout) {
+    el("#btn-logout").addEventListener("click", async ()=> {
+      try { await fetch("/admin/logout", { method: "GET", credentials: "same-origin" }); } catch(e) { console.error(e); }
+      window.location.href = "/admin/login";
+    });
+  }
+
+  //thống kê doanh thu
+  let bookingChart, revenueChart;
+  async function loadRevenue() {
+    const mode = document.getElementById("revenueFilter").value;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const quarter = Math.floor((month - 1) / 3) + 1;
+
+    let url = `/admin/stats/revenue?mode=${mode}&year=${year}`;
+    if (mode === "month") url += `&month=${month}`;
+    if (mode === "quarter") url += `&quarter=${quarter}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    // TEXT
+    document.getElementById("bookingTotal").innerText =
+      `${data.booking} đơn`;
+
+    document.getElementById("revenueTotal").innerText =
+      data.revenue.toLocaleString("vi-VN") + " ₫";
+
+    const unconfirmed = data.booking - data.confirmed;
+
+    // DESTROY OLD CHARTS
+    bookingChart?.destroy();
+    revenueChart?.destroy();
+
+    // BOOKING CHART
+    bookingChart = new Chart(
+      document.getElementById("bookingChart"),
+      {
+        type: "doughnut",
+        data: {
+          labels: ["Tổng đơn"],
+          datasets: [{
+            data: [data.booking],
+            backgroundColor: ["#1db954"]
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } }
+        }
+      }
+    );
+
+    // REVENUE CHART
+    revenueChart = new Chart(
+      document.getElementById("revenueChart"),
+      {
+        type: "doughnut",
+        data: {
+          labels: ["Đã xác nhận", "Chưa / Huỷ"],
+          datasets: [{
+            data: [data.confirmed, unconfirmed],
+            backgroundColor: ["#1db954", "#e5e7eb"]
+          }]
+        },
+        options: {
+          plugins: { legend: { position: "bottom" } }
+        }
+      }
+    );
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadRevenue();
+
+    const filter = document.getElementById("revenueFilter");
+    if (filter) {
+      filter.addEventListener("change", loadRevenue);
+    }
   });
-  el("#btn-logout").addEventListener("click", async ()=> {
-    try { await fetch("/admin/logout", { method: "GET", credentials: "same-origin" }); } catch(e) { console.error(e); }
-    window.location.href = "/admin/login";
-  });
-
-  async function loadVisitStats() {
-  const [daily, monthly, yearly] = await Promise.all([
-    fetch("/admin/stats/summary/daily").then(r => r.json()),
-    fetch("/admin/stats/summary/monthly").then(r => r.json()),
-    fetch("/admin/stats/summary/yearly").then(r => r.json())
-  ]);
-
-  // CHỈ HIỂN THỊ SỐ – KHÔNG MAP
-  document.getElementById("daily-total").innerText =
-    daily.total + " lượt";
-
-  document.getElementById("monthly-total").innerText =
-    monthly.total + " lượt";
-
-  document.getElementById("yearly-total").innerText =
-    `Tổng ${yearly.from} – ${yearly.to}: ${yearly.total} lượt`;
-}
 
 </script>
 {% endblock %}
